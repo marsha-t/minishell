@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/09 08:40:05 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/10 06:19:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include "libft/libft.h"
 
 # define TOKEN_TEMP 0
 # define TOKEN_CMD 1
@@ -27,11 +28,10 @@
 # define TOKEN_HEREDOC 7
 # define TOKEN_FILE 8
 
-
 typedef struct	s_token
 {
 	char			*str;
-	int				token_code;
+	int				code;
 	struct s_token	*next;
 }	t_token;
 
@@ -127,6 +127,7 @@ char	*ft_strtrim(char *s1, char *set) // remove const
 	return (ptr);
 }
 ///
+
 char	*ft_strdup(const char *src)
 {
 	char		*ptr;
@@ -143,6 +144,7 @@ char	*ft_strdup(const char *src)
 	ptr[i] = '\0';
 	return (ptr);
 }
+
 /*	strdup_range duplicates str based on start and end pointers*/
 char *strdup_range(char *start, char *end)
 {
@@ -179,7 +181,7 @@ t_token	*new_token(char *str, int code)
 		free(new); // error
 		return (0);
 	}
-	new->token_code = code;
+	new->code = code;
 	new->next = 0;
 	return (new);
 }
@@ -254,11 +256,62 @@ void	tokenise_misc(char **input, t_token **tokens)
 	while (**input)
 	{
 		quote = check_quote(**input);
-		if (quote == 0 && ft_strchr(" \t|<>", **input))
+		if (quote == 0 && ft_strchr(" \t\n|<>", **input))
 			return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
 		(*input)++;
 	}
 	add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP);
+}
+
+void	sort_heredoc(t_token **tokens) // what if no delimiter
+{
+	t_token *delimiter1;
+	t_token *delimiter2;
+
+	delimiter1 = *tokens;
+	(*tokens) = (*tokens)->next;
+	while ((*tokens)->code == TOKEN_TEMP && ft_strcmp((*tokens)->str, delimiter1->str) != 0)
+	{
+		(*tokens)->code = TOKEN_FILE;
+		(*tokens) = (*tokens)->next;
+	}
+	if (!(*tokens) || (*tokens)->code != TOKEN_TEMP)
+		return (1);
+	else if (ft_strcmp((*tokens)->str, delimiter1->str) == 0)
+		delimiter2 = *tokens;
+	tidy_heredoc(delimiter1)
+	
+}
+
+void	sort_temp_tokens(t_token *tokens) // use this to check for further syntax issues/assumed order/ add check at start
+{
+	t_token	*start;
+
+	start = tokens;
+	while (tokens)
+	{
+		if ((tokens == start) && tokens->code == TOKEN_TEMP)
+			tokens->code = TOKEN_CMD;
+		else if (tokens->code == TOKEN_PIPE &&  \
+			tokens->next->code == TOKEN_TEMP)
+			tokens->next->code = TOKEN_CMD;
+		if ((tokens->code == TOKEN_CMD || \
+			tokens->code == TOKEN_ARG) && \
+			tokens->next && tokens->next->code == TOKEN_TEMP)
+			tokens->next->code = TOKEN_ARG;
+		if ((tokens->code == TOKEN_INPUT || \
+			tokens->code == TOKEN_OUTPUT || \
+			tokens->code == TOKEN_APPEND) && \
+			tokens->next->code == TOKEN_TEMP)
+			tokens->next->code = TOKEN_FILE;
+		if (tokens->code == TOKEN_HEREDOC)
+		{
+			if (sort_heredoc(&tokens) != 0)
+				return (1);
+		}
+		tokens = tokens->next;
+	}
+	// another check for temp tokens?
 }
 
 /*	tokenise creates linked list of tokens from input
@@ -271,15 +324,16 @@ t_token	*tokenise(char *input) // double pointer to change input?
 	input = ft_strtrim(input, " \t");
 	while (*input)
 	{
-		while (ft_strchr(" \t", *input)) // to add new line for heredoc?
+		while (ft_strchr(" \t\n", *input)) // to add new line for heredoc?
 			input++;
 		printf("%c, %d\n", *input, *input);
 		if (ft_strchr("|<>", *input))
 			tokenise_op(&input, &tokens);
 		else
 			tokenise_misc(&input, &tokens);
-			// input++;
 	}
+	if (sort_temp_tokens(tokens) != 0)
+		free_token_list(tokens);
 	return (tokens);
 }
 
@@ -289,7 +343,7 @@ void	print_token(t_token *tokens)
 		printf("empty\n");
 	while (tokens)
 	{
-		printf("str: %s, code: %d\n", tokens->str, tokens->token_code);
+		printf("str: %s, code: %d\n", tokens->str, tokens->code);
 		tokens = tokens->next;
 	}
 }
@@ -300,9 +354,10 @@ int main(void)
 	// print_token(tokenise(ft_strdup("echo \"abc\" | cat")));
 	// print_token(tokenise(ft_strdup("echo \"abc\" | cat ")));
 	// print_token(tokenise(ft_strdup("echo \"abc\" | cat\t")));
-	print_token(tokenise(ft_strdup("echo \"abc\" | cat\ta"))); 
+	print_token(tokenise(ft_strdup("echo \"abc\" | cat\t < input.txt"))); 
 	// print_token(tokenise(ft_strdup("ech\"o\" \"abc\" | cat\t"))); // can add flag to node to remove quote
 
+	// print_token(tokenise(ft_strdup("cat << eof this is line 1 \n this is line 2\n eof"))); 
 
 	// printf("ori: .%s.\ntrimmed: .%s.\n", ft_strdup(" ab "), ft_strtrim(ft_strdup(" ab\t"), "\t "));
 	// printf("ori: .%s.\ntrimmed: .%s.\n", ft_strdup("  cat\t "), ft_strtrim(ft_strdup("  cat\t "), "\t "));

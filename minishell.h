@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/09 07:12:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/10 05:56:11 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@
 # define TOKEN_APPEND 6
 # define TOKEN_HEREDOC 7
 # define TOKEN_FILE 8
-
+# define TOKEN_DELIMIT 9
 typedef struct	s_token
 {
 	char			*str;
-	int				token_code;
+	int				code;
 	struct s_token	*next;
 }	t_token;
 
