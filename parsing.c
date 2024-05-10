@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:28:19 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/05/08 17:33:16 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/05/10 06:37:21 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/readline.h>
-#include <stdio.h>
-#include <unistd.h>
+# include "minishell.h"
+
 int check_direct(char *line)
 {
 	int i;
@@ -87,14 +86,3 @@ int check_all(char *line)
 	else
 		return(0);
 }
-int main(void)
-{
-	char *line;
-	while(1)
-	{
-		line = readline("minishell$");
-		printf("%d\n",check_all(line));
-
-	}
-}
-

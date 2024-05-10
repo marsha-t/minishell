@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 09:43:33 by mateo             #+#    #+#             */
-/*   Updated: 2024/01/04 09:43:33 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/10 06:41:22 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	ft_is_set(char c, char const *set)
 	return (0);
 }
 
-static size_t	ft_strtrimlen(char const *s1, char const *set)
+static size_t	ft_strtrimlen(char *s1, char *set)
 {
 	int	len;
 
@@ -50,14 +50,16 @@ static size_t	ft_strtrimlen(char const *s1, char const *set)
 	return ((size_t)len);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char *s1, char *set)
 {
 	size_t	len;
 	size_t	i;
 	char	*ptr;
+	char	*ori; // new
 
 	if ((!s1) || (!set))
 		return (0);
+	ori = s1;
 	len = ft_strtrimlen(s1, set);
 	ptr = (char *)malloc(sizeof(char) * (len + 1));
 	if (!ptr)
@@ -72,5 +74,6 @@ char	*ft_strtrim(char const *s1, char const *set)
 		s1++;
 	}
 	ptr[i] = '\0';
+	free(ori);
 	return (ptr);
 }
