@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/10 09:36:29 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/10 15:09:10 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,13 @@ char	*strdup_range(char *start, char *end);
 t_token	*new_token(char *str, int code);
 void	add_token(t_token **tokens, char *str, int code);
 void	tokenise_op(char **input, t_token **tokens);
-int		check_quote(char input);
 void	tokenise_misc(char **input, t_token **tokens);
-int		sort_heredoc(t_token **tokens);
-// int	sort_temp_tokens(t_token *tokens);
 t_token	*tokenise(char *input);
-void	print_token(t_token *tokens);
 
+void	print_token(t_token *tokens); // to remove?
+
+// tokenise_utils.c
+int		check_quote(char input);
+void	print_tokens(t_token *tokens);
+void	free_tokens(t_token *tokens);
 #endif
