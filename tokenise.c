@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenisation.c                                     :+:      :+:    :+:   */
+/*   tokenise.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/10 06:54:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/10 09:59:49 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,26 +140,6 @@ void	tokenise_misc(char **input, t_token **tokens)
 	add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP);
 }
 
-// int	sort_heredoc(t_token **tokens) // what if no delimiter
-// {
-// 	t_token *delimiter1;
-// 	t_token *delimiter2;
-
-// 	delimiter1 = *tokens;
-// 	(*tokens) = (*tokens)->next;
-// 	while ((*tokens)->code == TOKEN_TEMP && ft_strcmp((*tokens)->str, delimiter1->str) != 0)
-// 	{
-// 		(*tokens)->code = TOKEN_FILE;
-// 		(*tokens) = (*tokens)->next;
-// 	}
-// 	if (!(*tokens) || (*tokens)->code != TOKEN_TEMP)
-// 		return (1);
-// 	else if (ft_strcmp((*tokens)->str, delimiter1->str) == 0)
-// 		delimiter2 = *tokens;
-// 	// tidy_heredoc(delimiter1);
-	
-// }
-
 int	sort_temp_tokens(t_token *tokens) // use this to check for further syntax issues/assumed order/ add check at start
 {
 	t_token	*start;
@@ -181,19 +161,13 @@ int	sort_temp_tokens(t_token *tokens) // use this to check for further syntax is
 			tokens->code == TOKEN_APPEND) && \
 			tokens->next->code == TOKEN_TEMP)
 			tokens->next->code = TOKEN_FILE;
-		// if (tokens->code == TOKEN_HEREDOC)
-		// {
-		// 	if (sort_heredoc(&tokens) != 0)
-		// 		return (1);
-		// }
 		tokens = tokens->next;
 	}
-	// another check for temp tokens?
 	return (0);
 }
 
 /*	tokenise creates linked list of tokens from input
-	- tokens separated by whitespace, pipe or redirect*/
+	- tokens separated by whitespace, pipe or redirect */
 t_token	*tokenise(char *input) // double pointer to change input?
 {
 	t_token	*tokens;
@@ -202,21 +176,20 @@ t_token	*tokenise(char *input) // double pointer to change input?
 	input = ft_strtrim(input, " \t");
 	while (*input)
 	{
-		while (ft_strchr(" \t\n", *input)) // to add new line for heredoc?
+		while (ft_strchr(" \t", *input))
 			input++;
 		if (ft_strchr("|<>", *input))
 			tokenise_op(&input, &tokens);
 		else
 			tokenise_misc(&input, &tokens);
 	}
-	// if (sort_temp_tokens(tokens) != 0)
-	// 	free_token_list(tokens);
+	sort_temp_tokens(tokens);
 	return (tokens);
 }
 
 void	print_token(t_token *tokens)
 {
-	printf("printing tokens: ");
+	printf("printing tokens: \n");
 	if (!tokens)
 		printf("empty\n");
 	while (tokens)

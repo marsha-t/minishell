@@ -2,3 +2,5 @@
 # Let's keep adding to this as and when we think of something
 
 ech"o"
+norminette ***.c
+ls "'"
