@@ -1,5 +1,5 @@
 NAME = minishell
-CFILES =  main.c syntax_err.c tokenise.c syntax_err_bo.c#add files here 
+CFILES =  main.c syntax_err.c tokenise.c tokenise_token_utils.c tokenise_misc_utils.c syntax_err_bo.c#add files here 
 OFILES = ${CFILES:.c=.o}
 
 LIBFT = libft.a

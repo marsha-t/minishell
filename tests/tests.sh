@@ -2,10 +2,11 @@
 # Let's keep adding to this as and when we think of something
 
 # spaces
-   echo abc   
-# operators
+   echo abc   # 3 spaces after abc
+# operators: |, ||, <, <<, >, >>, &&, ()
 cat file.txt |< echo "Hello world"
 
+# unsupport operators: 
 # quotes
 ech"o" "ab""bc""$SHLVL"'$SHLVL'
 ls "'"
