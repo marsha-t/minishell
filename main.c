@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/13 13:57:04 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/13 15:56:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int main(void)
 	{
 		line = readline("minishell$");
 		printf("check_all: %d\n",check_all(line));
-		if (check_all(line) != 0) // handle check failures
+		if (check_all(line) != 1) // handle check failures
 			return (1);
 		tokens = tokenise(line);
-		print_tokens(tokenise(line));
+		print_tokens(tokens);
 		if (!tokens) // handle tokenisation failures
 			return (1);
 	}
