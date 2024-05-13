@@ -49,6 +49,10 @@ int	check_direct(char *line);
 int check_quotes(char *line);
 int check_pipes(char *line);
 int check_all(char *line);
+int check_or(char *line);
+int check_and(char *line);
+int check_op_para(char *line);
+int check_close_para(char *line);
 
 // tokenisation.c
 char	*strdup_range(char *start, char *end);
