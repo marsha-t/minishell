@@ -1,15 +1,15 @@
 NAME = minishell
-CFILES =  main.c syntax_err.c tokenise.c tokenise_token_utils.c tokenise_misc_utils.c syntax_err_bo.c#add files here 
+CFILES =  main.c syntax_err.c tokenise.c tokenise_token_utils.c tokenise_misc_utils.c syntax_err_bo.c invalid_chars.c#add files here
 OFILES = ${CFILES:.c=.o}
 
 LIBFT = libft.a
 LIBFT_DIR = libft
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-%o: %c 
+%o: %c
 	cc ${CFLAGS} -c $< -o ${<:.c=.o}
 
 $(NAME): $(OFILES) $(LIBFT)
@@ -24,7 +24,7 @@ clean:
 
 fclean: clean
 	make fclean -C $(LIBFT_DIR)
-	rm -f $(NAME) 
+	rm -f $(NAME)
 
 re: fclean all
 

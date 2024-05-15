@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:28:19 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/05/13 17:33:08 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/15 08:47:29 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,24 @@ int	check_direct(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if ((line[i] == '>' || line[i] == '<') && (line[i + 1] == '\0' ))
-			return (0);
-		else if (((line[i] == '>' && line[i + 1] == '>') || (line[i] == '<' && line[i + 1] == '<')) && line[i + 2] == '\0')
-			return (0);
+		if ((line[i] == '>'&& line[i+1] == '<') || (line[i] == '<' && line[i+1] == '>'))
+			return(0);
+		else if (((line[i] == '>' && line[i + 1] == '>') || (line[i] == '<' && line[i + 1] == '<')))
+		{
+			i = i + 2;
+			while (line [i] == ' ' || line[i] == '\t')
+				i++;
+			if(line[i] == '\0')
+				return (0);
+		}
+		else if ((line[i] == '>' || line[i] == '<' ))
+		{
+			i++;
+			while (line [i] == ' ' || line[i] == '\t')
+				i++;
+			if(line[i] == '\0')
+				return (0);
+		}
 		i++;
 	}
 	return (1);
@@ -68,7 +82,7 @@ int	pipe_mid(int i, char *line)
 	return (1);
 }
 
-/*	check_pipes returns 0 if 
+/*	check_pipes returns 0 if
 	- | starts line (with or without whitespace before |)
 	- prompts for more input if | ends line (with or without whitespace) */
 int	check_pipes(char *line)
@@ -104,7 +118,7 @@ int	check_all(char *line)
 {
 	if (check_quotes(line) == 1 && check_pipes(line) == 1 && check_direct(line) == 1
 		&& check_and(line) == 1 && check_or(line) == 1 && check_op_para(line) == 1
-		&&check_close_para(line) == 1)
+		&&check_close_para(line) == 1  && check_single_and(line) == 1)
 		return (1);
 	else
 		return (0);
