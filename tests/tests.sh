@@ -3,10 +3,16 @@
 
 # spaces
    echo abc   # 3 spaces after abc
+
 # operators: |, ||, <, <<, >, >>, &&, ()
 cat file.txt |< echo "Hello world"
 
 # unsupport operators: 
+
+# parenthesis
+cat input.txt && echo abc || echo def
+cat input.txt && (echo abc || echo def)
+
 # quotes
 ech"o" "ab""bc""$SHLVL"'$SHLVL'
 ls "'"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/15 08:51:56 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/05/16 17:57:17 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,19 @@ typedef struct	s_token
 	int				code;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_ast
+{
+	char	*cmd;
+	int		n_args;
+	char	**args; // store in double pointer
+	int		code;
+	t_ast	*root;
+	t_ast	*next;
+	t_ast	*left;
+	t_ast	*right;
+}	t_ast;
+
 
 // parsing.c
 int	check_direct(char *line);
