@@ -57,7 +57,7 @@ int	tokenise_op(char **input, t_token **tokens)
 	else if (**input == '(')
 		rval = add_token(tokens, ft_strdup("("), TOKEN_OBRACKET);
 	else if (**input == ')')
-		rval = add_token(tokens, ft_strdup("("), TOKEN_CBRACKET);
+		rval = add_token(tokens, ft_strdup(")"), TOKEN_CBRACKET);
 	(*input)++;
 	return (rval);
 }
@@ -74,7 +74,7 @@ int	tokenise_misc(char **input, t_token **tokens)
 	start = *input;
 	while (**input)
 	{
-		quote = check_quote(**input);
+		quote = check_quote(quote, **input);
 		if (quote == 0 && ft_strchr(" \t|<>&()", **input))
 			return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
 		(*input)++;

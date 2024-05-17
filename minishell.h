@@ -45,15 +45,17 @@ typedef struct	s_token
 typedef struct s_ast
 {
 	char	*cmd;
-	int		n_args;
-	char	**args; // store in double pointer
 	int		code;
-	t_ast	*root;
-	t_ast	*next;
-	t_ast	*left;
-	t_ast	*right;
-}	t_ast;
-
+	int		n_args;
+	char	**args;
+	char	*input;
+	char	*output;
+	char	*append;
+	struct s_ast	*root;
+	struct s_ast	*next;
+	struct s_ast	*left;
+	struct s_ast	*right;
+} t_ast;
 
 // parsing.c
 int	check_direct(char *line);
@@ -83,6 +85,6 @@ int		ft_strcmp(const char *s1, const char *s2);
 char	*strdup_range(char *start, char *end);
 int	is_file_op(int code);
 int	is_cmdorder_op(int code);
-int		check_quote(char input);
+int		check_quote(int quote, char input);
 
 #endif
