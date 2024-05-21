@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/16 17:57:17 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/21 18:12:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,25 @@ char	*strdup_range(char *start, char *end);
 int	is_file_op(int code);
 int	is_cmdorder_op(int code);
 int		check_quote(int quote, char input);
+
+// parse.c
+t_ast	*parse_tokens(t_token **tokens);
+
+// parse_ast_list.c
+t_ast	*ast_node_init(void);
+int		ast_node_add(t_token **tokens, t_ast **start, t_ast **current);
+int		count_args(t_token *tokens);
+int		ast_node_append_arg(t_token **tokens, t_ast *current);
+int		ast_node_append_misc(t_token **tokens, t_ast *current);
+t_ast	*ast_list_new(t_token **tokens);
+void	ast_list_print(t_ast *node);
+void	ast_list_free(t_ast *node);
+
+// parse_ast_tree.c
+t_ast	*ast_tree_new(t_ast **node);
+void	ast_tree_print(t_ast *node);
+
+//execute_ast_tree.c
+int	execute_ast(t_ast *node);
 
 #endif

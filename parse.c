@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/21 18:09:09 by mateo            ###   ########.fr       */
+/*   Created: 2024/05/21 18:06:07 by mateo             #+#    #+#             */
+/*   Updated: 2024/05/21 18:07:42 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(void)
+/* NOTE: PARSING CODE DOESN'T CATER FOR HEREDOCS*/
+
+/*	parse_tokens 
+	- parses tokens linked list into "ast" linked list
+	- parses ast linked list into ast 
+	- returns 1 if malloc error creating ast nodes or strdup*/
+t_ast	*parse_tokens(t_token **tokens)
 {
-	char *line;
-	t_token *tokens;
+	t_ast	*ast_list;
 	t_ast	*root;
 
-	while(1)
-	{
-		line = readline("minishell$");
-		printf("check_all: %d\n",check_all(line));
-		// if (check_all(line) != 1) // handle check failures
-		// 	return (1);
-		tokens = tokenise(line);
-		if (!tokens) // handle tokenisation failures
-			return (1);
-		// print_tokens(tokens);
-		root = parse_tokens(&tokens);
-		(void) root;
-		// execute_ast(root);
-	}
+	ast_list = ast_list_new(tokens);
+	if (!ast_list)
+		return (NULL);
+	// ast_list_print(ast_list);
+	root = ast_tree_new(&ast_list);
+	ast_tree_print(root);
+	return (root);
 }

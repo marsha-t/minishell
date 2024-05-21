@@ -65,9 +65,10 @@ int	is_file_op(int code)
 		though technically it doesn't affect command order */
 int	is_cmdorder_op(int code)
 {
-	if (code == TOKEN_PIPE || code == TOKEN_OR || code == TOKEN_AND \
-		|| code == TOKEN_OBRACKET)
+	if (code == TOKEN_PIPE || code == TOKEN_OR || code == TOKEN_AND)
 		return (1);
+	else if (code == TOKEN_OBRACKET)
+		return (2);
 	return (0);
 }
 
