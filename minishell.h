@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/16 17:57:17 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/22 18:31:40 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include "libft/libft.h"
+# include "printf/ft_printf.h"
 
 # define TOKEN_TEMP 0
 # define TOKEN_CMD 1
@@ -42,18 +43,25 @@ typedef struct	s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_ast
-{
-	char	*cmd;
-	int		n_args;
-	char	**args; // store in double pointer
-	int		code;
-	t_ast	*root;
-	t_ast	*next;
-	t_ast	*left;
-	t_ast	*right;
-}	t_ast;
+// typedef struct s_ast
+// {
+// 	char	*cmd;
+// 	int		n_args;
+// 	char	**args; // store in double pointer
+// 	int		code;
+// 	t_ast	*root;
+// 	t_ast	*next;
+// 	t_ast	*left;
+// 	t_ast	*right;
+// }	t_ast;
 
+// environment variables
+typedef struct s_var
+{
+	char *content;
+	int	flag;
+	struct s_var *next;
+} t_var;
 
 // parsing.c
 int	check_direct(char *line);
@@ -85,4 +93,20 @@ int	is_file_op(int code);
 int	is_cmdorder_op(int code);
 int		check_quote(char input);
 
+// envirinment_variables
+void env_ops(t_var **list, t_token *token);
+t_var *create_list(char **envp);
+int is_var(char *str);
+char  *expand_var(t_var **env,char *key);
+char  *search_for_key(char *key,char *str);
+char *value(char *str , t_var **envp);
+void print_envp(char *str, t_var **envp);
+void export(char *s1,char *s2, t_var **envp);
+int num_of_tokens(t_token *token);
+char *return_key(char *str);
+t_var *search_for_node(char *s2, t_var **list);
+void unset(char *s1,char *s2, t_var **envp);
+void print_export(char *str, t_var **envp);
+t_var *search_for_node(char *s2, t_var **list);
+t_var *check_exist(char *word, t_var *list);
 #endif
