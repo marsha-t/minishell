@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 10:14:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/21 18:12:24 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/23 12:08:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,7 @@ t_ast	*ast_tree_new(t_ast **node)
 		{
 			(*node)->left = root;
 			root = *node;
-			*node = (*node)->next; // new
-		}
-		else if ((*node)->code == TOKEN_OBRACKET)
-		{
-			root = *node;
 			*node = (*node)->next;
-			root->right = ast_tree_new(node);
 		}
 		else if ((*node)->code == TOKEN_CBRACKET)
 		{
