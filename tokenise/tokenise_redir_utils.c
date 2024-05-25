@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 06:42:13 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:17:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:44:42 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	redir_code returns the redirection token code 
 	when given the redirection string

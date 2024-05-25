@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/22 06:44:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:43:23 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int main(void)
 			return (1);
 		print_tokens(tokens);
 		// root = parse_tokens(&tokens);
+		// ast_tree_print(root);
 		// (void) root;
 		// execute_ast(root);
 	}

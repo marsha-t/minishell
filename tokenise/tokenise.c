@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:19:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:44:48 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	tokenise_op tokenises operators (pipes and redirects)
 	- returns rval = 1 if error adding token; 0 if successful */

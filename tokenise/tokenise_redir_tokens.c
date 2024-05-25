@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 06:43:57 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:21:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:44:39 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	check_redir_token returns -1 if there isn't an unquoted redirection operator
 	otherwise, it returns i (index of first unquoted redirection operator) */

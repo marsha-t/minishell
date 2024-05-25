@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:53:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/22 06:44:21 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:39:42 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	ft_strcmp compares two strings
 	- returns non-zero if they are different;

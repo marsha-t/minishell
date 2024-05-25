@@ -6,12 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 10:14:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/23 12:08:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:44:31 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
+#include "../minishell.h"
 
 /*	ast_tree_new generates AST from AST linked list 
 	- recursively calls itself for brackets (to create whole subtree) */

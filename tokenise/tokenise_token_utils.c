@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:16:35 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:44:46 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	new_token generates a new token
 	- str is an allocated str 
