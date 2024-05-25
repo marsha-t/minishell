@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenisation_token_utils.c                         :+:      :+:    :+:   */
+/*   tokenise_token_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/13 14:07:26 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:16:35 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,48 @@ t_token	*new_token(char *str, int code)
 	return (new);
 }
 
+/*	insert_token inserts a new token in the middle of list
+	- new token contains str and code
+	- new token inserted right after node
+	- shifts token pointer to newly inserted token */
+int	insert_token(t_token **node, char *str, int code)
+{
+	t_token	*next;
+	t_token	*new;
+
+	if (!str)
+		return (1);
+	new = new_token(str, code);
+	if (!new)
+	{
+		free(str);
+		return (1);
+	}
+	next = (*node)->next;
+	(*node)->next = new;
+	new->next = next;
+	*node = (*node)->next;
+	return (0);
+}
+
 /*	add_token adds a new token to end of list
 	- new token contains str and code 
 	- str in token is the address given (i.e., str given is not duplicated)
-	- returns 1 if error creating token; 0 if successful */
+	- returns 1 if error creating token and frees str; 
+	- returns 0 if successful */
 int	add_token(t_token **tokens, char *str, int code)
 {
 	t_token	*current;
 	t_token	*new;
 
+	if (!str)
+		return (1);
 	new = new_token(str, code);
 	if (!new)
+	{
+		free(str);
 		return (1);
+	}
 	if (!*tokens)
 		*tokens = new;
 	else

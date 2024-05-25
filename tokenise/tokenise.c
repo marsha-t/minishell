@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/13 15:08:10 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:19:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,6 @@ int	tokenise_op(char **input, t_token **tokens)
 		}
 		else
 			rval = add_token(tokens, ft_strdup("|"), TOKEN_PIPE);
-	}
-	else if (**input == '<')
-	{
-		if (*(*input + 1) == '<')
-		{
-			rval = add_token(tokens, ft_strdup("<<"), TOKEN_HEREDOC);
-			(*input)++;
-		}
-		else
-			rval = add_token(tokens, ft_strdup("<"), TOKEN_INPUT);
-	}
-	else if (**input == '>')
-	{
-		if (*(*input + 1) == '>')
-		{
-			rval = add_token(tokens, ft_strdup(">>"), TOKEN_APPEND);
-			(*input)++;
-		}
-		else
-			rval = add_token(tokens, ft_strdup(">"), TOKEN_OUTPUT);
 	}
 	else if (**input == '&' && *(*input + 1) == '&')
 	{
@@ -75,11 +55,43 @@ int	tokenise_misc(char **input, t_token **tokens)
 	while (**input)
 	{
 		quote = check_quote(quote, **input);
-		if (quote == 0 && ft_strchr(" \t|<>&()", **input))
+		if (quote == 0 && ft_strchr(" \t|&()", **input)) // remove <>
 			return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
 		(*input)++;
 	}
 	return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
+}
+
+
+
+/*	parse_redir_tokens checks whether TOKEN_TEMP tokens contain redirections 
+	if so, it splits them using split_redir_token */
+int	parse_redir_tokens(t_token **start) // possible to add syntax check here
+{
+	t_token	*current;
+	int		redir_start;
+
+	current = *start;
+	while (current)
+	{
+		if (current->code != TOKEN_TEMP)
+				current = current->next;
+		else 
+		{
+			redir_start = check_redir_token(current->str);
+			if (redir_start > -1)
+			{
+				if (split_redir_token(&current, redir_start) == 1)
+				{
+					free_tokens(*start);
+					return (1);
+				}
+			}
+			else
+				current = current->next;
+		}
+	}
+	return (0);
 }
 
 /*	sort_temp_tokens recategorises TOKEN_TEMP tokens 
@@ -122,7 +134,7 @@ t_token	*tokenise(char *input)
 	{
 		while (ft_strchr(" \t", *input))
 			input++;
-		if (ft_strchr("|<>&()", *input))
+		if (ft_strchr("|&()", *input)) // remove <>
 		{
 			if (tokenise_op(&input, &tokens) == 1)
 				return (free_tokens(tokens), NULL);
@@ -133,6 +145,7 @@ t_token	*tokenise(char *input)
 				return (free_tokens(tokens), NULL);
 		}
 	}
+	parse_redir_tokens(&tokens);
 	sort_temp_tokens(tokens);
 	return (tokens);
 }
