@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/21 18:03:33 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/21 18:22:17 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,19 +115,19 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 	- returns 1 if malloc error for strdup*/
 int	ast_node_append_misc(t_token **tokens, t_ast *current)
 {
-	if ((*tokens)->code == TOKEN_INPUT && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE) // does it have to be followed by file?
+	if ((*tokens)->code == TOKEN_INPUT && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE) 
 	{
 		current->input = ft_strdup((*tokens)->next->str);
 		if (!current->input)
 			return (1);
 	}
-	else if ((*tokens)->code == TOKEN_OUTPUT && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE) // does it have to be followed by file?
+	else if ((*tokens)->code == TOKEN_OUTPUT && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE) 
 	{
 		current->output = ft_strdup((*tokens)->next->str);
 		if (!current->output)
 			return (1);
 	}
-	else if ((*tokens)->code == TOKEN_APPEND && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE) // does it have to be followed by file?
+	else if ((*tokens)->code == TOKEN_APPEND && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE)
 	{
 		current->append = ft_strdup((*tokens)->next->str);
 		if (!current->append)

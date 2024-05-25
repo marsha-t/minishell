@@ -2,7 +2,8 @@ NAME = minishell
 CFILES =  main.c \
 		syntax_err.c syntax_err_bo.c invalid_chars.c \
 		tokenise.c tokenise_token_utils.c tokenise_misc_utils.c \
-		parse.c parse_ast_list.c parse_ast_tree.c #add files here
+		tokenise_redir_tokens.c tokenise_redir_utils.c \
+		parse.c parse_ast_list.c parse_ast_tree.c 
 OFILES = ${CFILES:.c=.o}
 
 LIBFT = libft.a

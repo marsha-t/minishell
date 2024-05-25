@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/21 18:09:09 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/22 06:44:44 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int main(void)
 {
 	char *line;
 	t_token *tokens;
-	t_ast	*root;
+	// t_ast	*root;
 
 	while(1)
 	{
@@ -27,9 +27,9 @@ int main(void)
 		tokens = tokenise(line);
 		if (!tokens) // handle tokenisation failures
 			return (1);
-		// print_tokens(tokens);
-		root = parse_tokens(&tokens);
-		(void) root;
+		print_tokens(tokens);
+		// root = parse_tokens(&tokens);
+		// (void) root;
 		// execute_ast(root);
 	}
 }

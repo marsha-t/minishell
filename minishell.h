@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/21 18:12:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:26:15 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define TOKEN_AND 10
 # define TOKEN_OBRACKET 11
 # define TOKEN_CBRACKET 12
+# define TOKEN_IONUM 13
 
 typedef struct	s_token
 {
@@ -67,25 +68,38 @@ int check_and(char *line);
 int check_op_para(char *line);
 int check_close_para(char *line);
 int check_single_and(char *line);
-// tokenisation.c
+
+// tokenise.c
 int		tokenise_op(char **input, t_token **tokens);
 int		tokenise_misc(char **input, t_token **tokens);
+int		parse_redir_tokens(t_token **start);
 int		sort_temp_tokens(t_token *tokens);
 t_token	*tokenise(char *input);
-void	print_token(t_token *tokens); // to remove?
 
 // tokenise_token_utils.c
 t_token	*new_token(char *str, int code);
 int		add_token(t_token **tokens, char *str, int code);
 void	free_tokens(t_token *tokens);
 void	print_tokens(t_token *tokens);
+int		insert_token(t_token **node, char *str, int code);
 
 // tokenise_misc_utils.c
 int		ft_strcmp(const char *s1, const char *s2);
 char	*strdup_range(char *start, char *end);
-int	is_file_op(int code);
-int	is_cmdorder_op(int code);
+int		is_file_op(int code);
+int		is_cmdorder_op(int code);
 int		check_quote(int quote, char input);
+
+// tokenise_redir_tokens.c
+int		check_redir_token(char *str);
+int		pre_redir_token(t_token **token, int redir_start);
+int		redir_file_token(t_token **token);
+int		split_redir_token(t_token **token, int redir_start);
+
+// tokenise_redir_utils.c
+int		redir_code(char *str);
+char	*redir_str(t_token *token);
+int		str_is_num(char *str);
 
 // parse.c
 t_ast	*parse_tokens(t_token **tokens);
@@ -105,6 +119,6 @@ t_ast	*ast_tree_new(t_ast **node);
 void	ast_tree_print(t_ast *node);
 
 //execute_ast_tree.c
-int	execute_ast(t_ast *node);
+int		execute_ast(t_ast *node);
 
 #endif
