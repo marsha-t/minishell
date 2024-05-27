@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:53:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/13 14:08:04 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/25 18:39:42 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	ft_strcmp compares two strings
 	- returns non-zero if they are different;
@@ -65,21 +65,40 @@ int	is_file_op(int code)
 		though technically it doesn't affect command order */
 int	is_cmdorder_op(int code)
 {
-	if (code == TOKEN_PIPE || code == TOKEN_OR || code == TOKEN_AND \
-		|| code == TOKEN_OBRACKET)
+	if (code == TOKEN_PIPE || code == TOKEN_OR || code == TOKEN_AND)
 		return (1);
+	else if (code == TOKEN_OBRACKET)
+		return (2);
 	return (0);
 }
 
-/*	check_quote returns 1 if input is single quote;
-	2 for double quote;
-	0 for no quote*/
-int	check_quote(char input)
+/*	check_quote 
+	- if quote is 0: 
+		- returns 1 if input is single quote
+		- 2 if double
+		- 0 if not in quote
+	- if quote is not 0
+		- return 0 if quote is closed 
+		- return value of quote otherwise
+*/
+int	check_quote(int quote, char input)
 {
-	if (input == '\'')
-		return (1);
-	else if (input == '\"')
-		return (2);
+	if (quote == 0)
+	{
+		if (input == '\'')
+			return (1);
+		else if (input == '\"')
+			return (2);
+		else
+			return (0);
+	}
 	else
-		return (0);
+	{
+		if (quote == 1 && input == '\'')
+			return (0);
+		else if (quote == 2 && input == '\"')
+			return (0);
+		else
+			return (quote);
+	}
 }

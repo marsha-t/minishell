@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/13 15:08:10 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/27 11:54:57 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	tokenise_op tokenises operators (pipes and redirects)
 	- returns rval = 1 if error adding token; 0 if successful */
@@ -29,26 +29,6 @@ int	tokenise_op(char **input, t_token **tokens)
 		else
 			rval = add_token(tokens, ft_strdup("|"), TOKEN_PIPE);
 	}
-	else if (**input == '<')
-	{
-		if (*(*input + 1) == '<')
-		{
-			rval = add_token(tokens, ft_strdup("<<"), TOKEN_HEREDOC);
-			(*input)++;
-		}
-		else
-			rval = add_token(tokens, ft_strdup("<"), TOKEN_INPUT);
-	}
-	else if (**input == '>')
-	{
-		if (*(*input + 1) == '>')
-		{
-			rval = add_token(tokens, ft_strdup(">>"), TOKEN_APPEND);
-			(*input)++;
-		}
-		else
-			rval = add_token(tokens, ft_strdup(">"), TOKEN_OUTPUT);
-	}
 	else if (**input == '&' && *(*input + 1) == '&')
 	{
 		rval = add_token(tokens, ft_strdup("&&"), TOKEN_AND);
@@ -57,7 +37,7 @@ int	tokenise_op(char **input, t_token **tokens)
 	else if (**input == '(')
 		rval = add_token(tokens, ft_strdup("("), TOKEN_OBRACKET);
 	else if (**input == ')')
-		rval = add_token(tokens, ft_strdup("("), TOKEN_CBRACKET);
+		rval = add_token(tokens, ft_strdup(")"), TOKEN_CBRACKET);
 	(*input)++;
 	return (rval);
 }
@@ -74,12 +54,62 @@ int	tokenise_misc(char **input, t_token **tokens)
 	start = *input;
 	while (**input)
 	{
-		quote = check_quote(**input);
-		if (quote == 0 && ft_strchr(" \t|<>&()", **input))
+		quote = check_quote(quote, **input);
+		if (quote == 0 && ft_strchr(" \t|&()", **input)) // remove <>
 			return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
 		(*input)++;
 	}
 	return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
+}
+
+/*	parse_redir_tokens checks whether TOKEN_TEMP tokens contain redirections 
+	if so, it splits them using split_redir_token */
+int	parse_redir_tokens(t_token **start) // possible to add syntax check here
+{
+	t_token	*current;
+	int		redir_start;
+
+	current = *start;
+	while (current)
+	{
+		if (current->code != TOKEN_TEMP)
+				current = current->next;
+		else 
+		{
+			redir_start = check_redir_token(current->str);
+			if (redir_start > -1)
+			{
+				if (split_redir_token(&current, redir_start) == 1)
+				{
+					// free_tokens(*start);
+					return (1);
+				}
+			}
+			else
+				current = current->next;
+		}
+	}
+	return (0);
+}
+
+/*	add_default_io_tokens finds redirection tokens that are not preceded by IO_NUM tokens
+	and calls insert_default_io_token to manually add the default IO_NUM in linked list */
+int	add_default_io_tokens(t_token **tokens) // doesn't cater for redirection at start 
+{
+	t_token *current;
+
+	current = *tokens;
+	while (current->next)
+	{
+		if (is_file_op(current->next->code) == 1 && current->code != TOKEN_IONUM)
+		{
+			printf("here\n");
+			if (insert_default_io_token(&current, current->next->code) == 1)
+				return (1);
+		}
+		current = current->next;
+	}
+	return (0);
 }
 
 /*	sort_temp_tokens recategorises TOKEN_TEMP tokens 
@@ -122,7 +152,7 @@ t_token	*tokenise(char *input)
 	{
 		while (ft_strchr(" \t", *input))
 			input++;
-		if (ft_strchr("|<>&()", *input))
+		if (ft_strchr("|&()", *input)) // remove <>
 		{
 			if (tokenise_op(&input, &tokens) == 1)
 				return (free_tokens(tokens), NULL);
@@ -133,6 +163,10 @@ t_token	*tokenise(char *input)
 				return (free_tokens(tokens), NULL);
 		}
 	}
+	if (parse_redir_tokens(&tokens) != 0)
+		return (free_tokens(tokens), NULL);
+	if (add_default_io_tokens(&tokens) != 0)
+		return (free_tokens(tokens), NULL);
 	sort_temp_tokens(tokens);
 	return (tokens);
 }
