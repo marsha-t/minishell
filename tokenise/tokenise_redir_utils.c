@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 06:42:13 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/27 10:21:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/27 11:54:34 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	redir_code(char *str)
 {
 	if (ft_strcmp(str, ">") == 0)
 		return (TOKEN_OUTPUT);
-	else if (ft_strcmp(str, ">") == 0)
+	else if (ft_strcmp(str, "<") == 0)
 		return (TOKEN_INPUT);
 	else if (ft_strcmp(str, ">>") == 0)
 		return (TOKEN_APPEND);

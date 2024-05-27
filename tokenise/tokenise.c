@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:48 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/27 11:54:57 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int	tokenise_misc(char **input, t_token **tokens)
 	return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
 }
 
-
-
 /*	parse_redir_tokens checks whether TOKEN_TEMP tokens contain redirections 
 	if so, it splits them using split_redir_token */
 int	parse_redir_tokens(t_token **start) // possible to add syntax check here
@@ -83,13 +81,33 @@ int	parse_redir_tokens(t_token **start) // possible to add syntax check here
 			{
 				if (split_redir_token(&current, redir_start) == 1)
 				{
-					free_tokens(*start);
+					// free_tokens(*start);
 					return (1);
 				}
 			}
 			else
 				current = current->next;
 		}
+	}
+	return (0);
+}
+
+/*	add_default_io_tokens finds redirection tokens that are not preceded by IO_NUM tokens
+	and calls insert_default_io_token to manually add the default IO_NUM in linked list */
+int	add_default_io_tokens(t_token **tokens) // doesn't cater for redirection at start 
+{
+	t_token *current;
+
+	current = *tokens;
+	while (current->next)
+	{
+		if (is_file_op(current->next->code) == 1 && current->code != TOKEN_IONUM)
+		{
+			printf("here\n");
+			if (insert_default_io_token(&current, current->next->code) == 1)
+				return (1);
+		}
+		current = current->next;
 	}
 	return (0);
 }
@@ -145,7 +163,10 @@ t_token	*tokenise(char *input)
 				return (free_tokens(tokens), NULL);
 		}
 	}
-	parse_redir_tokens(&tokens);
+	if (parse_redir_tokens(&tokens) != 0)
+		return (free_tokens(tokens), NULL);
+	if (add_default_io_tokens(&tokens) != 0)
+		return (free_tokens(tokens), NULL);
 	sort_temp_tokens(tokens);
 	return (tokens);
 }

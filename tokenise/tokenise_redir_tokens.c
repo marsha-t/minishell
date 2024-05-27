@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 06:43:57 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:39 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/27 11:53:36 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,3 +137,31 @@ int	split_redir_token(t_token **token, int redir_start)
 	return (0);
 }
 
+/*	insert_default_io_token inserts IO_NUM token ahead of redirection tokens that omitted it
+	- default IO number for input is 0
+	- default IO number for output and append is 1 */
+int	insert_default_io_token(t_token **current, int redir_code)
+{
+	if (redir_code == TOKEN_INPUT)
+	{
+		printf("in\n");
+		if (insert_token(current, "0", TOKEN_IONUM) == 1)
+			return (1);
+	}
+	else if (redir_code == TOKEN_OUTPUT)
+	{
+		printf("out\n");
+		
+		if (insert_token(current, "1", TOKEN_IONUM) == 1)
+			return (1);
+	}
+	else if (redir_code == TOKEN_APPEND)
+	{
+		printf("app\n");
+		
+		if (insert_token(current, "1", TOKEN_IONUM) == 1)
+			return (1);
+	}
+	*current = (*current)->next; // skip past redirection and to file node // assume syntax checks are done
+	return (0);
+}
