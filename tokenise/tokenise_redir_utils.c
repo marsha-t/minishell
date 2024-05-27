@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 06:42:13 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:42 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/27 10:21:44 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	*redir_str(t_token *token)
 {
 	char	*redir;
 	
+	redir = 0;
 	if (token->str[0] == '>' && token->str[1] == '>')
 		redir = ft_strdup(">>");
 	else if (token->str[0] =='>' && token->str[1] != '>')
