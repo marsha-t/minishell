@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
 /*   Updated: 2024/05/27 11:27:24 by mateo            ###   ########.fr       */
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include "libft/libft.h"
+# include "printf/ft_printf.h"
 
 # define TOKEN_TEMP 0
 # define TOKEN_CMD 1
@@ -61,6 +62,14 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 } t_ast;
+
+// environment variables
+typedef struct s_var
+{
+	char *content;
+	int	flag;
+	struct s_var *next;
+} t_var;
 
 // parsing.c
 int	check_direct(char *line);
@@ -127,4 +136,20 @@ void	ast_tree_print(t_ast *node);
 //execute_ast_tree.c
 int		execute_ast(t_ast *node);
 
+// envirinment_variables
+void env_ops(t_var **list, t_token *token);
+t_var *create_list(char **envp);
+int is_var(char *str);
+char  *expand_var(t_var **env,char *key);
+char  *search_for_key(char *key,char *str);
+char *value(char *str , t_var **envp);
+void print_envp(char *str, t_var **envp);
+void export(char *s1,char *s2, t_var **envp);
+int num_of_tokens(t_token *token);
+char *return_key(char *str);
+t_var *search_for_node(char *s2, t_var **list);
+void unset(char *s1,char *s2, t_var **envp);
+void print_export(char *str, t_var **envp);
+t_var *search_for_node(char *s2, t_var **list);
+t_var *check_exist(char *word, t_var *list);
 #endif

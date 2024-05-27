@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/18 10:16:09 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/22 18:49:40 by ryagoub          ###   ########.fr       */
+/*   Created: 2023/11/25 10:07:14 by ryagoub           #+#    #+#             */
+/*   Updated: 2023/11/29 10:47:48 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_putchar(int a)
 {
-	size_t	i;
+	char	c;
 
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	c = (char)a;
+	write(1, &c, 1);
+	return (1);
 }
