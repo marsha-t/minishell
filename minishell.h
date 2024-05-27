@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:26:15 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/27 11:09:19 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,13 @@ typedef struct s_ast
 	int		code;
 	int		n_args;
 	char	**args;
-	char	*input;
-	char	*output;
-	char	*append;
+	int		n_input;
+	int		*io_input;	// io_input[0] will contain io number for first input redirection
+	char	**file_input; // file_input[0] will contain file for first input redirection
+	int		n_output_append; // number of output and append redirections 
+	int		*io_output_append; // io_output_append[0] will contain io number for first output/append redirection
+	int		*is_append;// 0 if output; 1 if append
+	char	**file_output_append; // file_output_append[0] will contain file for first output/append redirection
 	struct s_ast	*root;
 	struct s_ast	*next;
 	struct s_ast	*left;

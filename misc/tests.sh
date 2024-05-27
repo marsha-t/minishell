@@ -62,7 +62,8 @@ echo 1>>a.txt # appends to a.txt
 echo 2>>a.txt # abc in output; nothing in a.txt
 echo af >>a.txt >>b.txt #appends only once to b.txt
 echo af >>a.txt >> a.txt # appends only once in a.txt (i.e., the last one)
-
+echo abc >a.txt>>b.txt #both files created and appended to b.txt
+echo abc >>b.txt>a.txt #both files created and output directed to a.txt
 # REDIRECTION AND QUOTES
 echo b '>c.txt' # prints b >c.txt
 echo b \>c.txt # prints b >c.txt
