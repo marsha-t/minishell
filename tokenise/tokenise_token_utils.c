@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/28 15:03:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,12 @@ void	free_tokens(t_token *tokens)
 	- used for debugging */
 void	print_tokens(t_token *tokens)
 {
-	printf("printing tokens: \n");
+	ft_printf("printing tokens: \n");
 	if (!tokens)
-		printf("empty\n");
+		ft_printf("empty\n");
 	while (tokens)
 	{
-		printf("str: %s, code: %d\n", tokens->str, tokens->code);
+		ft_printf("str: %s, code: %d\n", tokens->str, tokens->code);
 		tokens = tokens->next;
 	}
 }
