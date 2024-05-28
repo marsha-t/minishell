@@ -96,7 +96,7 @@ echo abc && (echo def || echo ghi) # abc + def
 echo a ( || echo c && echo d) #error near (
 
 #############################################################################
-# VARIABLE EXPANSIONS #######################################################
+# VARIABLE ASSIGNMENT & EXPANSIONS ##########################################
 #############################################################################
 var=a
 ech$abc a #output: a
@@ -115,6 +115,19 @@ echo $var
 
 var=in
 cat <"$var"put.txt
+
+var"="abc #error: var=abc command not found
+var'='abc #error: var=abc command not found
+va"r"=abc #error: var=abc command not found
+
+var=ab"c"
+echo $var #abc
+
+var=abc=
+echo $var #abc=
+
+var=abc=def
+echo $var #abc=def
 
 #############################################################################
 # ENVIRONMENT VARIABLE EXPANSIONS ########################################### 
