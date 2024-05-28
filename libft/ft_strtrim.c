@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 09:43:33 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/10 06:41:22 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/28 14:50:05 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_strtrim(char *s1, char *set)
 	size_t	len;
 	size_t	i;
 	char	*ptr;
-	char	*ori; // new
+	char	*ori;
 
 	if ((!s1) || (!set))
 		return (0);

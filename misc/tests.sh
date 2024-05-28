@@ -120,7 +120,12 @@ cat <"$var"put.txt
 # ENVIRONMENT VARIABLE EXPANSIONS ########################################### 
 #############################################################################
 export hello=world test
+export #test='' listed
 env #hello=world but test is not added
+
+export hello=world test=
+export #test='' listed
+env #test='' added
 
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
