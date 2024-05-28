@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/27 11:27:24 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/28 15:14:30 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,15 @@ typedef struct s_var
 	int	flag;
 	struct s_var *next;
 } t_var;
+
+// shell structure to hold all variables/data
+typedef struct s_shell
+{
+	t_var	*evar_list; 	// pointer to environment variable linked list
+	t_var	*var_list;	//pointer to normal variable linked list
+	char	*line;
+	t_ast	*root; 	// root node of ast tree
+}	t_shell;
 
 // parsing.c
 int	check_direct(char *line);

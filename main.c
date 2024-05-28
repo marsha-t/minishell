@@ -6,11 +6,29 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/28 14:55:18 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/28 15:14:20 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*	init_shell initialises t_shell
+	- creates linked list of environment variables
+	- initialises the rest to 0/NULL */
+int	init_shell(char **envp)
+{
+	t_shell	*shell;
+
+	shell = malloc(sizeof(t_shell));
+	if (!shell)
+		return (1);
+	
+	// create list for environment var
+	// create list for normal var
+	shell->var_list = 0;
+	shell->line = 0;
+	return (0);	
+}
 
 int main(int ac, char **av, char **envp)
 {
