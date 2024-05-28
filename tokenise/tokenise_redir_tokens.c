@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 06:43:57 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/27 11:53:36 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/28 15:03:30 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,21 +144,16 @@ int	insert_default_io_token(t_token **current, int redir_code)
 {
 	if (redir_code == TOKEN_INPUT)
 	{
-		printf("in\n");
 		if (insert_token(current, "0", TOKEN_IONUM) == 1)
 			return (1);
 	}
 	else if (redir_code == TOKEN_OUTPUT)
 	{
-		printf("out\n");
-		
 		if (insert_token(current, "1", TOKEN_IONUM) == 1)
 			return (1);
 	}
 	else if (redir_code == TOKEN_APPEND)
 	{
-		printf("app\n");
-		
 		if (insert_token(current, "1", TOKEN_IONUM) == 1)
 			return (1);
 	}
