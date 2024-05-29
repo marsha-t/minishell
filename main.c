@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/03 17:41:26 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/03 17:41:54 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ int main(int ac, char **av, char **envp)
 		}
 	}
 	free(list);
+	rl_clear_history();
 }
