@@ -18,6 +18,7 @@ echo '"'  # "
 echo 'It'"'"'s' # It's
 echo "'"
 echo "\"" # Output is " but here, \ is unsupported
+ech"o" "a"b"cd'ef" 1> a".txt" #abcd'ef in a.txt
 
 #############################################################################
 # PIPES #####################################################################
@@ -64,6 +65,7 @@ echo af >>a.txt >>b.txt #appends only once to b.txt
 echo af >>a.txt >> a.txt # appends only once in a.txt (i.e., the last one)
 echo abc >a.txt>>b.txt #both files created and appended to b.txt
 echo abc >>b.txt>a.txt #both files created and output directed to a.txt
+
 # REDIRECTION AND QUOTES
 echo b '>c.txt' # prints b >c.txt
 echo b \>c.txt # prints b >c.txt
@@ -129,16 +131,8 @@ echo $var #abc=
 var=abc=def
 echo $var #abc=def
 
-#############################################################################
-# ENVIRONMENT VARIABLE EXPANSIONS ########################################### 
-#############################################################################
-export hello=world test
-export #test='' listed
-env #hello=world but test is not added
-
-export hello=world test=
-export #test='' listed
-env #test='' added
+var==abc
+echo $var #=abc
 
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
@@ -159,7 +153,13 @@ VAR=123
 VAR=123 echo "Hello $VAR" > a.txt # Hello 123 in a.txt
 
 #############################################################################
-# OPTIONS ###################################################################
+# FILES #####################################################################
+#############################################################################
+chmod 0 a.txt
+echo abc > a.txt # error msg: Permission denied
+
+#############################################################################
+# ECHO ######################################################################
 #############################################################################
 echo -n abc       # output: abc without new line
 echo -nnnnnn abc  # output: abc without new line
@@ -168,3 +168,16 @@ echo abc -n       # output: abc -n
 echo abc -n def   #output: abc -n def
 echo -n -invalid abc  #output: -invalid abc without new line
 echo -invalid -n abc  #output: -invalid -n abc with new line
+echo # new line printed 
+echo -n #no new line printed
+
+#############################################################################
+# EXPORT #################################################################### 
+#############################################################################
+export hello=world test
+export #test='' listed
+env #hello=world but test is not added
+
+export hello=world test=
+export #test='' listed
+env #test='' added
