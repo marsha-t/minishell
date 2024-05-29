@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/29 08:34:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/29 15:46:36 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,25 +33,32 @@ int	valid_varname(char *name)
 	return (1);
 }
 
-/*	run_assign */
-// work in progress
-int	run_assign(t_ast *node, t_shell *shell)
+/*	run_assign_str runs the assignment given (either in cmd or arg)
+	- if variable name already exists, replaces definition 
+	- else checks if variable name is valid 
+		if yes, new variable added to end of linked list
+		if not, error msg */
+// work in progress pending structure of variable linked list and shell
+int	run_assign_str(char *cmd, t_shell *shell)
 {
 	int		equal;
 	char	*varname;
 	char	*definition;
 	
-	run_assign_cmd(node->cmd);
-	run_assign_arg(node->cmd);
-	equal = ft_strchr(node->cmd, '=');
-	varname = strdup_range(node->cmd, equal - 1]);
-	definition = strdup_range(equal + 1, strdup_range(node->cmd[ft_strlen(node->cmd) - 1]));
+	equal = ft_strchr(cmd, '=');
+	varname = strdup_range(cmd, equal - 1);
 	if (!varname)
 	{
 		// error message: malloc error
 		return (1);
 	}
-	if (/*in var list*/)
+	definition = strdup_range(equal + 1, cmd + ft_strlen(cmd));
+	if (!definition)
+	{
+		// error message: malloc error
+		return (1);
+	}
+	if (/*varname in var list*/)
 	{
 		// replace in list 
 	}
@@ -68,6 +75,26 @@ int	run_assign(t_ast *node, t_shell *shell)
 	{
 		//error message: varname is not a valid identifier
 		return (1);
+	}
+}
+
+/*	run_assign runs the assignments in cmd and args (if any) 
+	- returns 1 if failure (malloc) */
+int	run_assign(t_ast *node, t_shell *shell)
+{
+	int		i;
+	
+	if (run_assign_str(node->cmd, shell) == 1)
+		return (1);
+	if (node->n_args > 0)
+	{
+		i = 0;
+		while (i < node->n_args)
+		{
+			if (run_assign_str(node->args[i]) == 1)
+				return (1);
+			i++;
+		}
 	}
 	return (0);
 }

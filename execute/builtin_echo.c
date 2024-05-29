@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 07:43:19 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/29 08:48:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/05/29 16:05:05 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	builtin_echo(t_ast *node, int in_fd, int out_fd)
 	
 	i = 0;
 	newline = 1;
-	if (n_args == 0 || (n_args > 0 && is_newline_arg(args[0]) == 1))
+	if (node->n_args == 0 || (node->n_args > 0 && is_newline_arg(node->args[0]) == 1))
 	{
 		newline = 0;
 		i = 1;
@@ -46,7 +46,7 @@ int	builtin_echo(t_ast *node, int in_fd, int out_fd)
 	while (i < node->n_args)
 	{
 		if (write(out_fd, node->args[i], ft_strlen(node->args[i])) == -1);
-			return (1)
+			return (1);
 		if (i != node->n_args - 1)
 		{
 			if (write(out_fd, " ", 1) == -1)
