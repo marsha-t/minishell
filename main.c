@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/27 12:46:07 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/01 19:47:09 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ int main(int ac, char **av, char **envp)
 {
 	char *line;
 	t_token *tokens;
-	// t_ast	*root;
+	t_ast	*root;
 	(void)ac;
 	(void)av;
 	t_token *token;
@@ -38,8 +38,8 @@ int main(int ac, char **av, char **envp)
 		print_tokens(tokens);
 		if (!tokens) // handle tokenisation failures
 			return (1);
-		// root = parse_tokens(&tokens);
-		// ast_tree_print(root);
+		root = parse_tokens(&tokens);
+		ast_tree_print(root);
 		// execute_ast(root);
 	}
 	free(list);
