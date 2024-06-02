@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/29 05:53:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 05:04:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ int check_single_and(char *line);
 // tokenise.c
 int		tokenise_op(char **input, t_token **tokens);
 int		tokenise_misc(char **input, t_token **tokens);
-int		parse_redir_tokens(t_token **start);
-int		add_default_io_tokens(t_token **tokens);
 int		sort_temp_tokens(t_token *tokens);
 t_token	*tokenise(char *input);
 
@@ -112,18 +110,6 @@ char	*strdup_range(char *start, char *end);
 int		is_file_op(int code);
 int		is_cmdorder_op(int code);
 int		check_quote(int quote, char input);
-
-// tokenise_redir_tokens.c
-int		check_redir_token(char *str);
-int		pre_redir_token(t_token **token, int redir_start);
-int		redir_file_token(t_token **token);
-int		split_redir_token(t_token **token, int redir_start);
-int		insert_default_io_token(t_token **current, int redir_code);
-
-// tokenise_redir_utils.c
-int		redir_code(char *str);
-char	*redir_str(t_token *token);
-int		str_is_num(char *str);
 
 // parse.c
 t_ast	*parse_tokens(t_token **tokens);
