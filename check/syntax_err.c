@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:28:19 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/05/15 08:47:29 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/02 14:27:52 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	check_direct returns 0 if
 	- line ends with >, >>, < or << */
@@ -118,7 +118,7 @@ int	check_all(char *line)
 {
 	if (check_quotes(line) == 1 && check_pipes(line) == 1 && check_direct(line) == 1
 		&& check_and(line) == 1 && check_or(line) == 1 && check_op_para(line) == 1
-		&&check_close_para(line) == 1  && check_single_and(line) == 1)
+		&& check_close_para(line) == 1)
 		return (1);
 	else
 		return (0);

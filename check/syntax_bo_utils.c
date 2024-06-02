@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_bo_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:55:21 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/05/13 22:03:11 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/02 12:46:17 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int para_found(int i, char *line, int op_count)
 {

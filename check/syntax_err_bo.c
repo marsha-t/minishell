@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_err_bo.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 14:25:58 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/05/13 22:53:51 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/02 16:23:13 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	and_mid returns 0 if only whitespace follow line[i]
 	i.e., && ends the line (with or without whitespace)
@@ -100,8 +100,7 @@ int	check_or(char *line)
 	return (1);
 }
 
-/*	check_op_para returns 0 if
-	i.e., if open parenthesis ends the line
+/*	check_op_para returns 0 if open parenthesis is not closed
 	in this case, there is a prompt for more input */
 int	check_op_para(char *line)
 {
@@ -150,11 +149,11 @@ int	check_close_para(char *line)
 			close_p++;
 		i++;
 	}
-	if(close_p > open_p)
+	if (close_p > open_p)
 	{
 		write(2,"minishell: syntax error near unexpected token `)'\n", 51);
-
 		return(0);
 	}
 	return (1);
 }
+
