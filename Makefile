@@ -1,7 +1,6 @@
 NAME = minishell
 TOKENISE_DIR = tokenise
-TOKENISE_CFILES = tokenise.c tokenise_token_utils.c tokenise_misc_utils.c \
-					tokenise_redir_tokens.c tokenise_redir_utils.c 
+TOKENISE_CFILES = tokenise.c tokenise_token_utils.c tokenise_misc_utils.c
 PARSE_DIR = parse
 PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c 
 EXECUTE_DIR = execute
