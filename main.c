@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/02 05:04:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 12:09:00 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int main(int ac, char **av, char **envp)
 	// t_ast	*root;
 	(void)ac;
 	(void)av;
-	t_token *token;
+	// t_token *token;
 	t_var **list;
-
+	
 	list = malloc(sizeof(t_var*));
 	*list = create_list(envp);
 	while(1)
@@ -58,14 +58,13 @@ int main(int ac, char **av, char **envp)
 			// 	return (1);
 			tokens = tokenise(line);
 			free(line);
-			// int size = num_of_tokens(token);
-			token = tokens;
-			// environment variables operations
-			env_ops(list, token);
-			print_tokens(tokens);
 			if (!tokens) // handle tokenisation failures
 				return (1);
-			print_tokens(tokens);
+			// int size = num_of_tokens(token);
+			// token = tokens;
+			// environment variables operations
+			// env_ops(list, token);
+			// print_tokens(tokens);
 			// root = parse_tokens(&tokens);
 			// ast_tree_print(root);
 			// execute_ast(root);
