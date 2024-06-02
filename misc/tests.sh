@@ -33,6 +33,7 @@ echo a > a.txt | wc - l # results in 0; a is directed to a.txt
 >> a.txt # same as above
 < a.txt # error if a.txt doesn't exist but otherwise okay (and a.txt is unchanged regardless of what was in it)
 > a.txt echo abc # abc is directed into a.txt
+> a.txt echo >b.txt abc # a.txt and b.txt created; abc directed to b.txt
 
 # IO NUMBER OUTPUT
 echo 1 > exists.txt # 1 in exists.txt

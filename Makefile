@@ -1,4 +1,6 @@
 NAME = minishell
+CHECK_DIR = check
+CHECK_CFILES = syntax_err.c syntax_err_bo.c syntax_bo_utils.c invalid_chars.c 
 TOKENISE_DIR = tokenise
 TOKENISE_CFILES = tokenise.c tokenise_token_utils.c tokenise_misc_utils.c
 PARSE_DIR = parse
@@ -7,7 +9,7 @@ EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c
 
 CFILES =  main.c \
-		syntax_err.c syntax_err_bo.c syntax_bo_utils.c invalid_chars.c \
+		$(addprefix $(CHECK_DIR)/, $(CHECK_CFILES)) \
 		$(addprefix $(TOKENISE_DIR)/, $(TOKENISE_CFILES)) \
      env_variables.c env_var_utils.c var_modif.c nums_of_tokens.c environment_vars_op.c unset_and_export_utils.c		
 		# $(addprefix $(PARSE_DIR)/, $(PARSE_CFILES)) \
