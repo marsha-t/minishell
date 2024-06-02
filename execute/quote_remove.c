@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/29 08:31:27 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 12:47:04 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	ft_strjoin_free joins str as ft_strjoin would except
 	- returns s2 if s1 is null

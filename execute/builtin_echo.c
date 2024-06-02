@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 07:43:19 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/29 13:02:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 12:47:13 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	is_newline_arg returns 1 if arg is a newline argument for echo
 	"-n" and "-nnnnnn" are newline arguments */
