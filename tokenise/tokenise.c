@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/03 17:44:09 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/03 17:44:46 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	tokenise_op(char **input, t_token **tokens)
 		rval = add_token(tokens, ft_strdup("("), TOKEN_OBRACKET);
 	else if (**input == ')')
 		rval = add_token(tokens, ft_strdup(")"), TOKEN_CBRACKET);
+	else
+		rval = add_token(tokens, strdup_range(*input, *input + 1), TOKEN_TEMP);
 	(*input)++;
 	return (rval);
 }
@@ -87,7 +89,7 @@ int	tokenise_misc(char **input, t_token **tokens)
 		simple commands refer to the commands that are between &&, || or |
 	- simple commands cannot start with &&, || or |
 	- redirection tokens must be followed by another TOKEN_TEMP
-	- input cannot end with &&, || or | */
+	- input cannot end with &&, ||, | or ( */
 int	check_syntax_tokens(t_token *tokens)
 {
 	t_token *start;
@@ -100,7 +102,7 @@ int	check_syntax_tokens(t_token *tokens)
 		else if (is_file_op(tokens->code) && \
 			(!tokens->next || tokens->next->code != TOKEN_TEMP))
 			return (ft_putstr_fd("Syntax error: Redirection not followed by file\n", 2), 1);
-		else if (is_cmdorder_op(tokens->code) == 1)
+		else if (is_cmdorder_op(tokens->code) > 0)
 		{
 			start = tokens->next;
 			if (!start)
@@ -169,6 +171,7 @@ t_token	*tokenise(char *input)
 				return (free_tokens(tokens), NULL);
 		}
 	}
+	print_tokens(tokens);
 	if (check_syntax_tokens(tokens) == 1)
 		return (free_tokens(tokens), NULL);
 	sort_temp_tokens(tokens);

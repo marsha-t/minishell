@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/02 12:43:20 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:37:07 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,11 @@ int check_or(char *line);
 int check_and(char *line);
 int check_op_para(char *line);
 int check_close_para(char *line);
-int check_single_and(char *line);
 
 // tokenise.c
 int		tokenise_op(char **input, t_token **tokens);
 int		tokenise_misc(char **input, t_token **tokens);
-int	check_syntax_tokens(t_token *tokens);
+int		check_syntax_tokens(t_token *tokens);
 int		sort_temp_tokens(t_token *tokens);
 t_token	*tokenise(char *input);
 
