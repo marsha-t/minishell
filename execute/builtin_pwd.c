@@ -6,11 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:03:01 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/29 13:38:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 12:47:10 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "../minishell.h"
 
 /*	builtin_pwd runs the pwd command
 	- error if 
