@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:28:19 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/05/15 08:47:29 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/02 17:28:34 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /*	check_direct returns 0 if
 	- line ends with >, >>, < or << */
@@ -70,18 +70,6 @@ int	check_quotes(char *line)
 	return (1);
 }
 
-/*	pipe_mid returns 1 if line[i] (a pipe) is in the middle of a line
-	- if pipe is at end of line, it prompts for more input and returns 0 */
-int	pipe_mid(int i, char *line)
-{
-	i++;
-	while (line[i] == 32 || line[i] == 9)
-		i++;
-	if (line[i] == '\0')
-		return (write(1, ">\n", 2), 0);
-	return (1);
-}
-
 /*	check_pipes returns 0 if
 	- | starts line (with or without whitespace before |)
 	- prompts for more input if | ends line (with or without whitespace) */
@@ -118,7 +106,7 @@ int	check_all(char *line)
 {
 	if (check_quotes(line) == 1 && check_pipes(line) == 1 && check_direct(line) == 1
 		&& check_and(line) == 1 && check_or(line) == 1 && check_op_para(line) == 1
-		&&check_close_para(line) == 1  && check_single_and(line) == 1)
+		&& check_close_para(line) == 1)
 		return (1);
 	else
 		return (0);

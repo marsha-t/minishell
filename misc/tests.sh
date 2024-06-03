@@ -18,6 +18,7 @@ echo '"'  # "
 echo 'It'"'"'s' # It's
 echo "'"
 echo "\"" # Output is " but here, \ is unsupported
+ech"o" "a"b"cd'ef" 1> a".txt" #abcd'ef in a.txt
 
 #############################################################################
 # PIPES #####################################################################
@@ -32,6 +33,7 @@ echo a > a.txt | wc - l # results in 0; a is directed to a.txt
 >> a.txt # same as above
 < a.txt # error if a.txt doesn't exist but otherwise okay (and a.txt is unchanged regardless of what was in it)
 > a.txt echo abc # abc is directed into a.txt
+> a.txt echo >b.txt abc # a.txt and b.txt created; abc directed to b.txt
 
 # IO NUMBER OUTPUT
 echo 1 > exists.txt # 1 in exists.txt
@@ -64,6 +66,7 @@ echo af >>a.txt >>b.txt #appends only once to b.txt
 echo af >>a.txt >> a.txt # appends only once in a.txt (i.e., the last one)
 echo abc >a.txt>>b.txt #both files created and appended to b.txt
 echo abc >>b.txt>a.txt #both files created and output directed to a.txt
+
 # REDIRECTION AND QUOTES
 echo b '>c.txt' # prints b >c.txt
 echo b \>c.txt # prints b >c.txt
@@ -96,7 +99,7 @@ echo abc && (echo def || echo ghi) # abc + def
 echo a ( || echo c && echo d) #error near (
 
 #############################################################################
-# VARIABLE EXPANSIONS #######################################################
+# VARIABLE ASSIGNMENT & EXPANSIONS ##########################################
 #############################################################################
 var=a
 ech$abc a #output: a
@@ -116,11 +119,21 @@ echo $var
 var=in
 cat <"$var"put.txt
 
-#############################################################################
-# ENVIRONMENT VARIABLE EXPANSIONS ########################################### 
-#############################################################################
-export hello=world test
-env #hello=world but test is not added
+var"="abc #error: var=abc command not found
+var'='abc #error: var=abc command not found
+va"r"=abc #error: var=abc command not found
+
+var=ab"c"
+echo $var #abc
+
+var=abc=
+echo $var #abc=
+
+var=abc=def
+echo $var #abc=def
+
+var==abc
+echo $var #=abc
 
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
@@ -141,7 +154,13 @@ VAR=123
 VAR=123 echo "Hello $VAR" > a.txt # Hello 123 in a.txt
 
 #############################################################################
-# OPTIONS ###################################################################
+# FILES #####################################################################
+#############################################################################
+chmod 0 a.txt
+echo abc > a.txt # error msg: Permission denied
+
+#############################################################################
+# ECHO ######################################################################
 #############################################################################
 echo -n abc       # output: abc without new line
 echo -nnnnnn abc  # output: abc without new line
@@ -150,3 +169,24 @@ echo abc -n       # output: abc -n
 echo abc -n def   #output: abc -n def
 echo -n -invalid abc  #output: -invalid abc without new line
 echo -invalid -n abc  #output: -invalid -n abc with new line
+echo # new line printed 
+echo -n #no new line printed
+
+#############################################################################
+# PWD #######################################################################
+#############################################################################
+pwd -n # error: invalid option
+pwd a # prints working dir
+pwd a b a b # prints working dir
+pwd a -n # prints working dir
+
+#############################################################################
+# EXPORT #################################################################### 
+#############################################################################
+export hello=world test
+export #test='' listed
+env #hello=world but test is not added
+
+export hello=world test=
+export #test='' listed
+env #test='' added
