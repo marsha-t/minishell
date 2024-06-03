@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/02 16:37:07 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/03 13:04:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,29 +66,48 @@ typedef struct s_ast
 // environment variables
 typedef struct s_var
 {
-	char *content;
-	int	flag;
+	char	*key;
+	char	*value;
+	int		flag;
+	int		env;
 	struct s_var *next;
 } t_var;
 
 // shell structure to hold all variables/data
 typedef struct s_shell
 {
-	t_var	*evar_list; 	// pointer to environment variable linked list
-	t_var	*var_list;	//pointer to normal variable linked list
+	t_var	*var_list;
 	char	*line;
-	t_ast	*root; 	// root node of ast tree
+	t_token	*tokens;
+	t_ast	*root;
 }	t_shell;
 
-// parsing.c
+// shell.c
+void	free_safe(void *pointer);
+t_shell	*init_shell(char **envp);
+void	free_shell(t_shell *shell);
+
+// env_var.c
+int create_node(t_var **v, char *str);
+t_var *create_list(char **envp);
+void	free_var_list(t_var *var);
+
+// syntax_err.c
 int	check_direct(char *line);
 int check_quotes(char *line);
 int check_pipes(char *line);
 int check_all(char *line);
-int check_or(char *line);
+
+// syntax_err_bo.c
 int check_and(char *line);
+int check_or(char *line);
 int check_op_para(char *line);
 int check_close_para(char *line);
+
+// syntax_bo_utils.c
+int	pipe_mid(int i, char *line);
+int	and_mid(int i, char *line);
+int	or_mid(int i, char *line);
 
 // tokenise.c
 int		tokenise_op(char **input, t_token **tokens);
@@ -130,20 +149,27 @@ void	ast_tree_print(t_ast *node);
 //execute_ast_tree.c
 int		execute_ast(t_ast *node);
 
-// envirinment_variables
-void env_ops(t_var **list, t_token *token);
-t_var *create_list(char **envp);
-int is_var(char *str);
+// env_var_utils.c
 char  *expand_var(t_var **env,char *key);
+int key_len(char *str);
+char *return_key(char *str);
 char  *search_for_key(char *key,char *str);
+int var_length(char *str);
+int ft_strlen_b_$(char *str);
 char *value(char *str , t_var **envp);
+int is_var(char *str);
+
+// environment_vars_op.c
+void env_ops(t_var **list, t_token *token);
+
+// var_modif.c 
+void print_export(char *str, t_var **envp);
 void print_envp(char *str, t_var **envp);
 void export(char *s1,char *s2, t_var **envp);
-int num_of_tokens(t_token *token);
-char *return_key(char *str);
-t_var *search_for_node(char *s2, t_var **list);
 void unset(char *s1,char *s2, t_var **envp);
-void print_export(char *str, t_var **envp);
-t_var *search_for_node(char *s2, t_var **list);
+
+// unset_and_export_utils.c
 t_var *check_exist(char *word, t_var *list);
+t_var *search_for_node(char *s2, t_var **list);
+
 #endif
