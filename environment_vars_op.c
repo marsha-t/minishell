@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   environment_vars_op.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:53:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/05/22 12:51:43 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/03 06:19:35 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 void env_ops(t_var **list, t_token *token)
 {
 	while(token!= NULL)
