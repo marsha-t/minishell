@@ -6,24 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 14:25:58 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/02 16:23:13 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 17:28:11 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/*	and_mid returns 0 if only whitespace follow line[i]
-	i.e., && ends the line (with or without whitespace)
-	- before returning 0, it prompts for more input*/
-int	and_mid(int i, char *line)
-{
-	i = i + 2;
-	while (line[i] == 32 || line[i] == 9)
-		i++;
-	if (line[i] == '\0')
-		return (write(1, ">\n", 2), 0);
-	return (1);
-}
 
 /*	check_and returns 0 if
 	- line starts with && (with or without whitespace)
@@ -53,19 +40,6 @@ int	check_and(char *line)
 		}
 		i++;
 	}
-	return (1);
-}
-
-/*	or_mid returns 0 if only whitespace follow line[i]
-	i.e., || ends the line (with or without whitespace)
-	- before returning 0, it prompts for more input*/
-int	or_mid(int i, char *line)
-{
-	i = i + 2;
-	while (line[i] == 32 || line[i] == 9)
-		i++;
-	if (line[i] == '\0')
-		return (write(1, ">\n", 2), 0);
 	return (1);
 }
 
