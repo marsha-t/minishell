@@ -6,29 +6,46 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:55:21 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/02 12:46:17 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 17:28:41 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int para_found(int i, char *line, int op_count)
+/*	pipe_mid returns 1 if line[i] (a pipe) is in the middle of a line
+	- if pipe is at end of line, it prompts for more input and returns 0 */
+int	pipe_mid(int i, char *line)
 {
 	i++;
-	while(line[i] == '(')
-	{
+	while (line[i] == 32 || line[i] == 9)
 		i++;
-		op_count++;
-	}
-	while (line[i] != '\0' && op_count != 0)
-	{
-		i++;
-		if(line[i] == ')')
-			op_count--;
-	}
 	if (line[i] == '\0')
 		return (write(1, ">\n", 2), 0);
-	else
+	return (1);
+}
+
+/*	and_mid returns 0 if only whitespace follow line[i]
+	i.e., && ends the line (with or without whitespace)
+	- before returning 0, it prompts for more input*/
+int	and_mid(int i, char *line)
+{
+	i = i + 2;
+	while (line[i] == 32 || line[i] == 9)
 		i++;
-	return(1);
+	if (line[i] == '\0')
+		return (write(1, ">\n", 2), 0);
+	return (1);
+}
+
+/*	or_mid returns 0 if only whitespace follow line[i]
+	i.e., || ends the line (with or without whitespace)
+	- before returning 0, it prompts for more input*/
+int	or_mid(int i, char *line)
+{
+	i = i + 2;
+	while (line[i] == 32 || line[i] == 9)
+		i++;
+	if (line[i] == '\0')
+		return (write(1, ">\n", 2), 0);
+	return (1);
 }

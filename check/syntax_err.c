@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:28:19 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/02 14:27:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 17:28:34 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,6 @@ int	check_quotes(char *line)
 		else
 			i++;
 	}
-	return (1);
-}
-
-/*	pipe_mid returns 1 if line[i] (a pipe) is in the middle of a line
-	- if pipe is at end of line, it prompts for more input and returns 0 */
-int	pipe_mid(int i, char *line)
-{
-	i++;
-	while (line[i] == 32 || line[i] == 9)
-		i++;
-	if (line[i] == '\0')
-		return (write(1, ">\n", 2), 0);
 	return (1);
 }
 
