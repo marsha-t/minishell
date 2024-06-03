@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:53:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/28 13:20:49 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/03 06:10:48 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*strdup_range(char *start, char *end)
 	size_t	n;
 	int		i;
 
-	n = end - start;
+	n = end - start + 1;
 	ptr = malloc(sizeof(char) * (n + 1));
 	if (!ptr)
 		return (0);
