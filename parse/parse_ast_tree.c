@@ -72,4 +72,3 @@ void	ast_tree_print(t_ast *node)
 	if (node->right)
 		ast_tree_print(node->right);
 }
-

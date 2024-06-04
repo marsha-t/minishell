@@ -21,14 +21,14 @@ int	check_direct(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if ((line[i] == '>'&& line[i+1] == '<') || (line[i] == '<' && line[i+1] == '>'))
-			return(0);
+		if ((line[i] == '>' && line[i + 1] == '<') || (line[i] == '<' && line[i + 1] == '>'))
+			return (0);
 		else if (((line[i] == '>' && line[i + 1] == '>') || (line[i] == '<' && line[i + 1] == '<')))
 		{
 			i = i + 2;
 			while (line [i] == ' ' || line[i] == '\t')
 				i++;
-			if(line[i] == '\0')
+			if (line[i] == '\0')
 				return (0);
 		}
 		else if ((line[i] == '>' || line[i] == '<' ))
@@ -36,7 +36,7 @@ int	check_direct(char *line)
 			i++;
 			while (line [i] == ' ' || line[i] == '\t')
 				i++;
-			if(line[i] == '\0')
+			if (line[i] == '\0')
 				return (0);
 		}
 		i++;
@@ -104,8 +104,9 @@ int	check_pipes(char *line)
 /*	check_all returns 1 if all checks are passed */
 int	check_all(char *line)
 {
-	if (check_quotes(line) == 1 && check_pipes(line) == 1 && check_direct(line) == 1
-		&& check_and(line) == 1 && check_or(line) == 1 && check_op_para(line) == 1
+	if (check_quotes(line) == 1 && check_pipes(line) == 1
+		&& check_direct(line) == 1 && check_and(line) == 1
+		&& check_or(line) == 1 && check_op_para(line) == 1
 		&& check_close_para(line) == 1)
 		return (1);
 	else

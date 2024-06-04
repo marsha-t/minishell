@@ -88,12 +88,12 @@ int	check_op_para(char *line)
 		if (line[i] == '(')
 		{
 			i++;
-			while(line[i++] == '(')
+			while (line[i++] == '(')
 				op_count++;
 			while (line[i] != '\0' && op_count != 0)
 			{
 				i++;
-				if(line[i] == ')')
+				if (line[i] == ')')
 					op_count--;
 			}
 			if (line[i] == '\0')
@@ -125,9 +125,8 @@ int	check_close_para(char *line)
 	}
 	if (close_p > open_p)
 	{
-		write(2,"minishell: syntax error near unexpected token `)'\n", 51);
-		return(0);
+		write(2, "minishell: syntax error near unexpected token `)'\n", 51);
+		return (0);
 	}
 	return (1);
 }
-

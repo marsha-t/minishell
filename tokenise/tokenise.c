@@ -92,7 +92,7 @@ int	tokenise_misc(char **input, t_token **tokens)
 	- input cannot end with &&, ||, | or ( */
 int	check_syntax_tokens(t_token *tokens)
 {
-	t_token *start;
+	t_token	*start;
 
 	start = tokens;
 	while (tokens)
@@ -108,7 +108,7 @@ int	check_syntax_tokens(t_token *tokens)
 			if (!start)
 				return (ft_putstr_fd("Syntax error: Incomplete command\n", 2), 1);
 		}
-		tokens = tokens->next;	
+		tokens = tokens->next;
 	}
 	return (0);
 }
@@ -122,7 +122,7 @@ int	check_syntax_tokens(t_token *tokens)
 int	sort_temp_tokens(t_token *tokens)
 {
 	int		cmd;
-	
+
 	cmd = 0;
 	while (tokens)
 	{
@@ -155,7 +155,6 @@ t_token	*tokenise(char *input)
 	t_token	*tokens;
 
 	tokens = 0;
-	// input = ft_strtrim(input, " \t");
 	while (*input)
 	{
 		while (ft_strchr(" \t", *input))
