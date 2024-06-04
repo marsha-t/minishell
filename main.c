@@ -44,12 +44,12 @@ int main(int ac, char **av, char **envp)
 			if (!shell->tokens) // handle tokenisation failures
 				return (1);
 			print_tokens(shell->tokens);
-			token = shell->tokens;
-			env_ops(shell->list, token);
+			// token = shell->tokens;
+			// env_ops(shell->list, token);
 			shell->root = parse_tokens(&shell->tokens);
-      printf("\nprinting ast_tree\n");
+      		printf("\nprinting ast_tree\n");
 			ast_tree_print(shell->root);
-			execute_ast(shell->root);
+			// execute_ast(shell->root);
     }
 	}
 	free_shell(shell);

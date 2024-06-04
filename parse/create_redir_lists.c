@@ -25,7 +25,7 @@ int create_in_list(t_token *token, t_ast **node)
     if (!new->file_name)
         return (ft_putstr_fd("Malloc error creating t_file->file_name for in_list\n", 2), 1);
     new ->next = NULL;
-     current = (*node)-> input_list;
+    current = (*node)-> input_list;
     if( current == 0)
     { 
         (*node)->input_list = new;

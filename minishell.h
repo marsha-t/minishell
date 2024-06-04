@@ -146,11 +146,13 @@ t_ast	*parse_tokens(t_token **tokens);
 t_ast	*ast_node_init(void);
 int		ast_node_add(t_token **tokens, t_ast **start, t_ast **current);
 int		count_args(t_token *tokens);
+int	ast_node_append_cmd(t_token **tokens, t_ast *current);
 int		ast_node_append_arg(t_token **tokens, t_ast *current);
-int		ast_node_append_misc(t_token **tokens, t_ast *current);
+int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current);
 t_ast	*ast_list_new(t_token **tokens);
 void	ast_list_print(t_ast *node);
 void	ast_list_free(t_ast *node);
+
 int create_in_list(t_token *token, t_ast **node);
 int create_heredoc_list(t_token *token, t_ast **node);
 int create_output_append_list(int code, t_token *token, t_ast **node);
