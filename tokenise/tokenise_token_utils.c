@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/02 12:08:45 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,6 @@ t_token	*new_token(char *str, int code)
 	return (new);
 }
 
-/*	insert_token inserts a new token in the middle of list
-	- new token contains str and code
-	- new token inserted right after node
-	- shifts token pointer to newly inserted token */
-int	insert_token(t_token **node, char *str, int code)
-{
-	t_token	*next;
-	t_token	*new;
-
-	if (!str)
-		return (1);
-	new = new_token(str, code);
-	if (!new)
-	{
-		free(str);
-		return (1);
-	}
-	next = (*node)->next;
-	(*node)->next = new;
-	new->next = next;
-	*node = (*node)->next;
-	return (0);
-}
-
 /*	add_token adds a new token to end of list
 	- new token contains str and code 
 	- str in token is the address given (i.e., str given is not duplicated)
@@ -63,11 +39,12 @@ int	add_token(t_token **tokens, char *str, int code)
 	t_token	*new;
 
 	if (!str)
-		return (1);
+		return (ft_putstr_fd("Malloc error: string creation\n", 2), 1);
 	new = new_token(str, code);
 	if (!new)
 	{
 		free(str);
+		ft_putstr_fd("Malloc error: token creation\n", 2);
 		return (1);
 	}
 	if (!*tokens)
@@ -93,7 +70,7 @@ void	free_tokens(t_token *tokens)
 	while (current)
 	{
 		next = current->next;
-		free(tokens->str);
+		free(current->str);
 		free(current);
 		current = next;
 	}
@@ -103,12 +80,12 @@ void	free_tokens(t_token *tokens)
 	- used for debugging */
 void	print_tokens(t_token *tokens)
 {
-	printf("printing tokens: \n");
+	ft_printf("printing tokens: \n");
 	if (!tokens)
-		printf("empty\n");
+		ft_printf("empty\n");
 	while (tokens)
 	{
-		printf("str: %s, code: %d\n", tokens->str, tokens->code);
+		ft_printf("str: %s, code: %d\n", tokens->str, tokens->code);
 		tokens = tokens->next;
 	}
 }

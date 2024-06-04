@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:53:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:39:42 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/03 06:10:48 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-/*	strdup_range duplicates str based on start and end pointers
-	- function needed to add non-operators to token list */
+/*	strdup_range duplicates str based on start and end pointers */
 char	*strdup_range(char *start, char *end)
 {
 	char	*ptr;
