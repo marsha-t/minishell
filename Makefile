@@ -6,7 +6,7 @@ CHECK_CFILES = syntax_err.c syntax_err_bo.c syntax_bo_utils.c
 TOKENISE_DIR = tokenise
 TOKENISE_CFILES = tokenise.c tokenise_token_utils.c tokenise_misc_utils.c
 PARSE_DIR = parse
-PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c 
+PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c create_redir_lists.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c
 

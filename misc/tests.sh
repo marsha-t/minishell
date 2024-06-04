@@ -169,6 +169,7 @@ echo abc -n       # output: abc -n
 echo abc -n def   #output: abc -n def
 echo -n -invalid abc  #output: -invalid abc without new line
 echo -invalid -n abc  #output: -invalid -n abc with new line
+# ( <in echo >out "r")in this case is not working
 echo # new line printed 
 echo -n #no new line printed
 
@@ -190,3 +191,4 @@ env #hello=world but test is not added
 export hello=world test=
 export #test='' listed
 env #test='' added
+

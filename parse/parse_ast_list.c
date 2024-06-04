@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:29 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/04 14:59:45 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,12 @@ t_ast	*ast_node_init(void)
 	new->code = 0;
 	new->n_args = 0;
 	new->args = 0;
-	new->input = 0;
-	new->output = 0;
-	new->append = 0;
+	// new->input = 0;
+	// new->output = 0;
+	// new->append = 0;
+	new -> input_list=0;
+	new -> output_list=0;
+	new-> heredoc_list =0;
 	new->root = 0;
 	new->next = 0;
 	new->left = 0;
@@ -47,12 +50,19 @@ int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 {
 	t_ast	*new;
 
-	new = ast_node_init();
-	if (!new)
-		return (1);
+	if (*start && !(*current)->cmd)
+		new = *current;
+	else
+	//  if (*start && (*current)->cmd)
+	{
+		new = ast_node_init();
+		if (!new)
+			return (ft_putstr_fd("Malloc error creating t_ast for ast_node_add\n", 2), 1);
+	}
+	// else if (*start)
 	new->cmd = ft_strdup((*tokens)->str);
 	if (!new->cmd)
-		return (1);
+		return (ft_putstr_fd("Malloc error creating t_ast->cmd for ast_node_add\n", 2), 1);
 	new->code = (*tokens)->code;
 	*tokens = (*tokens)->next;
 	if (!(*start))
@@ -96,14 +106,14 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 	current->n_args = count_args(*tokens);
 	current->args = malloc(sizeof(char *) * current->n_args);
 	if (!current->args)
-		return (1);
+		return (ft_putstr_fd("Malloc error creating t_ast->args\n", 2), 1);
 	i = 0;
 	while ((*tokens) && (*tokens)->code == TOKEN_ARG)
 	{
 		// printf("ast_node_append_arg: %s\n", (*tokens)->str);
 		current->args[i] = ft_strdup((*tokens)->str);
 		if (!current->args[i])
-			return (1);
+			return (ft_putstr_fd("Malloc error creating t_ast->arg[i]", 2), 1);
 		*tokens = (*tokens)->next;
 		i++;
 	}
@@ -115,22 +125,26 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 	- returns 1 if malloc error for strdup*/
 int	ast_node_append_misc(t_token **tokens, t_ast *current)
 {
+	if(!current)
+	{
+		current = ast_node_init();
+		if (!current)
+			return (ft_putstr_fd("Malloc error creating t_ast for ast_node_append\n", 2), 1);
+	}
 	if ((*tokens)->code == TOKEN_INPUT && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE) 
 	{
-		current->input = ft_strdup((*tokens)->next->str);
-		if (!current->input)
-			return (1);
+		if ((create_in_list((*tokens)->next, &current))==1)
+			return(1);
 	}
-	else if ((*tokens)->code == TOKEN_OUTPUT && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE) 
+	else if ((*tokens)->code == TOKEN_HEREDOC && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE)
 	{
-		current->output = ft_strdup((*tokens)->next->str);
-		if (!current->output)
-			return (1);
+		if(create_heredoc_list( (*tokens)->next, &current)==1)
+			return(0);
 	}
-	else if ((*tokens)->code == TOKEN_APPEND && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE)
+	else if( ((*tokens)->code == TOKEN_OUTPUT && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE)
+		||((*tokens)->code == TOKEN_APPEND && (*tokens)->next && (*tokens)->next->code == TOKEN_FILE))
 	{
-		current->append = ft_strdup((*tokens)->next->str);
-		if (!current->append)
+		if( create_output_append_list((*tokens)->code, (*tokens)->next, &current)==1)
 			return (1);
 	}
 	*tokens = (*tokens)->next->next;
@@ -163,6 +177,8 @@ t_ast	*ast_list_new(t_token **tokens)
 			if (ast_node_append_arg(tokens, current) == 1)
 				return (ast_list_free(start), NULL);
 		}
+		// else if((*tokens)->code == TOKEN_IONUM)
+		// 	(*tokens) = (*tokens)->next;
 		else
 		{
 			if (ast_node_append_misc(tokens, current) == 1) // what if command line starts with input, output or append 
@@ -173,12 +189,39 @@ t_ast	*ast_list_new(t_token **tokens)
 	return (start);
 }
 
+/*	file_list_print prints a file linked list
+	Depending on the type and file->flag, it will display "input/heredoc/output/append"
+	*/
+void	file_list_print(t_file *file, int type)
+{
+	t_file	*current;
+	int		i;
+
+	current = file;
+	i = 1;
+	while (current)
+	{
+		if (type == 1)
+			ft_printf("input file: ");
+		else if (type == 2)
+			ft_printf("heredoc delim: ");
+		else if (type == 3 && file->flag == TOKEN_OUTPUT)
+			ft_printf("output file: ");
+		else if (type == 3 && file->flag == TOKEN_APPEND)
+			ft_printf("append file: ");
+		ft_printf("%d, %s\n", i, file->file_name);
+		file = file->next;
+		i++;
+	}
+
+}
 /*	ast_list_print prints the ast nodes that are connected in a list
 	- prints other components in cmd node depending on whether it is filled */
 void	ast_list_print(t_ast *node)
 {
 	int	i;
 
+	printf("\nprinting ast_list\n");
 	while (node)
 	{
 		if (node->code == TOKEN_CMD)
@@ -191,17 +234,71 @@ void	ast_list_print(t_ast *node)
 				i++;
 			}
 			printf("\n");
-			if (node->input)
-				printf("input: %s\n", node->input);
-			if (node->output)
-				printf("output: %s\n", node->output);
-			if (node->append)
-				printf("append: %s\n", node->append);
+			if (node->input_list)
+			{
+				file_list_print(node->input_list, 1);
+				// t_file *c_input;
+				// c_input = node->input_list;
+
+				// int i=1;
+				// while (c_input)
+				// {
+				// 	printf("input file %d: %s\n", i, c_input ->file_name);
+				// 	c_input = c_input -> next;
+				// 	i++;
+				// }
+			}
+			if (node->heredoc_list)
+			{
+				file_list_print(node->heredoc_list, 2);
+				// t_file *c_h;
+				// c_h = node->heredoc_list;
+				// int i=1;
+				// while (c_h)
+				// {
+				// 	printf("heredoc delim %d: %s\n", i, c_h ->file_name);
+				// 	c_h = c_h -> next;
+				// 	i++;
+				// }
+			}
+			if (node->output_list)
+			{
+				file_list_print(node->output_list, 3);
+				// t_file *c_o;
+				// c_o = node->output_list;
+				// int i=1;
+				// while (c_o)
+				// {
+				// 	if (c_o->flag == TOKEN_OUTPUT)
+				// 		printf("output file %d: %s\n", i, c_o ->file_name);
+				// 	else
+				// 		printf("append file %d: %s\n", i, c_o ->file_name);
+				// 	c_o = c_o -> next;
+				// 	i++;
+				// }
+			}
 			printf("\n");
 		}
 		else 
 			printf("NODE: %s: %d\n\n", node->cmd, node->code);
 		node = node->next;
+	}
+}
+
+/*	file_list_free frees nodes in the files linked list
+	and the file names stored in each node */
+void	file_list_free(t_file *file)
+{
+	t_file	*current;
+	t_file	*next;
+	
+	current = file;
+	while (current)
+	{
+		next = current->next;
+		free(current->file_name);
+		free(current);
+		current = next;
 	}
 }
 
@@ -211,7 +308,7 @@ void	ast_list_free(t_ast *node)
 {
 	t_ast	*current;
 	t_ast	*next;
-
+	
 	current = node;
 	while (current)
 	{
@@ -224,12 +321,24 @@ void	ast_list_free(t_ast *node)
 				free(node->args[node->n_args]);
 			free(node->args);
 		}
-		if (node->input)
-			free(node->input);
-		if (node->output)
-			free(node->output);
-		if (node->append)
-			free(node->append);
+		if (node->input_list)
+		{
+			file_list_free(node->input_list);
+			// free(node->input_list);
+			// node ->input_list = node ->input_list -> next;
+		}
+		if (node->heredoc_list)
+		{
+			file_list_free(node->heredoc_list);
+			// free(node->heredoc_list);
+			// node ->heredoc_list = node ->heredoc_list -> next;
+		}
+		if (node->output_list)
+		{
+			file_list_free(node->output_list);
+			// free(node->output_list);
+			// node ->output_list = node ->output_list -> next;
+		}
 		current = next;
 	}
 }

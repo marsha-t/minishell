@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/03 13:04:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/04 14:20:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,29 @@ typedef struct	s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct	s_file
+{
+	char			*file_name;
+	int				flag;
+	struct s_file	*next;
+} t_file;
+
 typedef struct s_ast
 {
 	char	*cmd;
 	int		code;
 	int		n_args;
 	char	**args;
-	int		n_input;
-	int		*io_input;	// io_input[0] will contain io number for first input redirection
-	char	**file_input; // file_input[0] will contain file for first input redirection
-	int		n_output_append; // number of output and append redirections 
-	int		*io_output_append; // io_output_append[0] will contain io number for first output/append redirection
-	int		*is_append;// 0 if output; 1 if append
-	char	**file_output_append; // file_output_append[0] will contain file for first output/append redirection
+	// int		n_input;
+	// int		*io_input;	// io_input[0] will contain io number for first input redirection
+	// char	**file_input; // file_input[0] will contain file for first input redirection
+	// int		n_output_append; // number of output and append redirections 
+	// int		*io_output_append; // io_output_append[0] will contain io number for first output/append redirection
+	// int		*is_append;// 0 if output; 1 if append
+	// char	**file_output_append; // file_output_append[0] will contain file for first output/append redirection
+	t_file *input_list;
+	t_file *output_list;
+	t_file *heredoc_list;
 	struct s_ast	*root;
 	struct s_ast	*next;
 	struct s_ast	*left;
@@ -141,6 +151,9 @@ int		ast_node_append_misc(t_token **tokens, t_ast *current);
 t_ast	*ast_list_new(t_token **tokens);
 void	ast_list_print(t_ast *node);
 void	ast_list_free(t_ast *node);
+int create_in_list(t_token *token, t_ast **node);
+int create_heredoc_list(t_token *token, t_ast **node);
+int create_output_append_list(int code, t_token *token, t_ast **node);
 
 // parse_ast_tree.c
 t_ast	*ast_tree_new(t_ast **node);

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
 /*   Updated: 2024/06/03 17:51:00 by mateo            ###   ########.fr       */
@@ -15,7 +15,7 @@
 
 int main(int ac, char **av, char **envp)
 {
-	// t_ast	*root;
+  // t_ast	*root;
 	// t_token *token;
 	t_shell	*shell;
 	
@@ -44,13 +44,13 @@ int main(int ac, char **av, char **envp)
 			if (!shell->tokens) // handle tokenisation failures
 				return (1);
 			print_tokens(shell->tokens);
-			// token = shell->tokens;
-			// environment variables operations
-			// env_ops(shell->list, token);
-			// shell->root = parse_tokens(&shell->tokens);
-			// ast_tree_print(shell->root);
-			// execute_ast(shell->root);
-		}
+			token = shell->tokens;
+			env_ops(shell->list, token);
+			shell->root = parse_tokens(&shell->tokens);
+      printf("\nprinting ast_tree\n");
+			ast_tree_print(shell->root);
+			execute_ast(shell->root);
+    }
 	}
 	free_shell(shell);
 	rl_clear_history();
