@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_redir_lists.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:56:37 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/01 19:22:48 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/04 09:26:52 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ int create_in_list(t_token *token, t_ast **node)
 
     new = malloc(sizeof(t_file));
     if(!new)
-        return(1);
-    new -> flag = 4;
-    new->file_name= ft_strdup(token->str); 
+        return(ft_putstr_fd("Malloc error creating t_file for in_list\n", 2), 1);
+    new -> flag = TOKEN_INPUT;
+    new->file_name= ft_strdup(token->str);
+    if (!new->file_name)
+        return (ft_putstr_fd("Malloc error creating t_file->file_name for in_list\n", 2), 1);
     new ->next = NULL;
      current = (*node)-> input_list;
     if( current == 0)
@@ -42,12 +44,14 @@ int create_heredoc_list(t_token *token, t_ast **node)
 
     new = malloc(sizeof(t_file));
     if(!new)
-        return(1);
-    new -> flag = 7;
+        return(ft_putstr_fd("Malloc error creating t_file for heredoc_list\n", 2), 1);
+    new -> flag = TOKEN_HEREDOC;
     new->file_name= ft_strdup(token->str); 
+    if (!new->file_name)
+        return (ft_putstr_fd("Malloc error creating t_file->file_name for heredoc_list\n", 2), 1);
     new ->next = NULL;
      current = (*node)-> heredoc_list;
-    if( current == 0)
+    if (current == 0)
     { 
         (*node)->heredoc_list = new;
         return(0);
@@ -65,9 +69,11 @@ int create_output_append_list(int code, t_token *token, t_ast **node)
 
     new = malloc(sizeof(t_file));
     if(!new)
-        return(1);
-    new -> flag = code ;
+        return(ft_putstr_fd("Malloc error creating t_file for output_list\n", 2), 1);
+    new -> flag = code ; // why not: token->code
     new->file_name= ft_strdup(token->str); 
+    if (!new->file_name)
+        return (ft_putstr_fd("Malloc error creating t_file->file_name for output_list\n", 2), 1);
     new ->next = NULL;
      current = (*node)-> output_list;
     if( current == 0)

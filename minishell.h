@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/01 19:32:27 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/04 14:20:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define TOKEN_AND 10
 # define TOKEN_OBRACKET 11
 # define TOKEN_CBRACKET 12
-# define TOKEN_IONUM 13
+// # define TOKEN_IONUM 13
 
 typedef struct	s_token
 {
