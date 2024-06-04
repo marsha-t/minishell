@@ -50,14 +50,16 @@ int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 {
 	t_ast	*new;
 
-	if (current->cmd)
+	if (*start && !(*current)->cmd)
+		new = *current;
+	else
+	//  if (*start && (*current)->cmd)
 	{
 		new = ast_node_init();
 		if (!new)
 			return (ft_putstr_fd("Malloc error creating t_ast for ast_node_add\n", 2), 1);
 	}
-	else
-		new = *current;
+	// else if (*start)
 	new->cmd = ft_strdup((*tokens)->str);
 	if (!new->cmd)
 		return (ft_putstr_fd("Malloc error creating t_ast->cmd for ast_node_add\n", 2), 1);
@@ -204,9 +206,9 @@ void	file_list_print(t_file *file, int type)
 		else if (type == 2)
 			ft_printf("heredoc delim: ");
 		else if (type == 3 && file->flag == TOKEN_OUTPUT)
-			ft_printf("output file: ")
+			ft_printf("output file: ");
 		else if (type == 3 && file->flag == TOKEN_APPEND)
-			ft_printf("append file: ")
+			ft_printf("append file: ");
 		ft_printf("%d, %s\n", i, file->file_name);
 		file = file->next;
 		i++;
@@ -219,6 +221,7 @@ void	ast_list_print(t_ast *node)
 {
 	int	i;
 
+	printf("\nprinting ast_list\n");
 	while (node)
 	{
 		if (node->code == TOKEN_CMD)
@@ -287,7 +290,7 @@ void	ast_list_print(t_ast *node)
 void	file_list_free(t_file *file)
 {
 	t_file	*current;
-	t_file	*new;
+	t_file	*next;
 	
 	current = file;
 	while (current)

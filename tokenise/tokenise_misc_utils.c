@@ -33,7 +33,7 @@ char	*strdup_range(char *start, char *end)
 	size_t	n;
 	int		i;
 
-	n = end - start;
+	n = end - start + 1;
 	ptr = malloc(sizeof(char) * (n + 1));
 	if (!ptr)
 		return (0);

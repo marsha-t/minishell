@@ -35,7 +35,7 @@
 # define TOKEN_AND 10
 # define TOKEN_OBRACKET 11
 # define TOKEN_CBRACKET 12
-// # define TOKEN_IONUM 13
+# define TOKEN_IONUM 13
 
 typedef struct	s_token
 {

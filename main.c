@@ -18,7 +18,7 @@ int main(int ac, char **av, char **envp)
 	t_ast	*root;
 	(void)ac;
 	(void)av;
-	t_token *token;
+	// t_token *token;
 	t_var **list;
 
 	list = malloc(sizeof(t_var*));
@@ -31,14 +31,15 @@ int main(int ac, char **av, char **envp)
 		// 	return (1);
 		tokens = tokenise(line);
 		// int size = num_of_tokens(token);
-		token = tokens;
+		// token = tokens;
 		// environment variables operations
-		env_ops(list, token);
+		// env_ops(list, token);
    
 		print_tokens(tokens);
 		if (!tokens) // handle tokenisation failures
 			return (1);
 		root = parse_tokens(&tokens);
+		printf("\nprinting ast_tree\n");
 		ast_tree_print(root);
 		// execute_ast(root);
 	}
