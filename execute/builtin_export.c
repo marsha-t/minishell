@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/05 07:15:27 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/05 14:04:04 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 		- if key doesn't exist, create new node in list 
 	*/
 	//work in progress: check_exist not updated since it is used for expansions too 
+	// work in progress: if env variable already exists but no equal nor value are given for export, original value is retained
+	// work in progress, if normal variable already exists but no equal nor value are given for export, original value is retained and variable becomes env var
+	// work in progress, if env or normal var already exists - no value given but equal - updates value to empty string 
+				// if normal var, update to env var
 int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	int	i;
@@ -43,9 +47,18 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 				key = strdup_range(node->args[i], equal - 1);
 				if (!key)
 					return (ft_putstr_fd("Malloc error creating key in builtin_export\n", 2), 1);
-				value = strdup_range(equal + 1, node->args[i] + ft_strlen(node->args[i]) - 1);
-				if (!value)
-					return (ft_putstr_fd("Malloc error creating value in builtin_export\n", 2), 1);
+				if (equal + 1 == '\0')
+				{
+					value = ft_strdup("");
+					if (!new->value)
+						return (ft_putstr_fd("Malloc error creating value in builtin_export\n", 2), 1);
+				}
+				else
+				{
+					value = strdup_range(equal + 1, node->args[i] + ft_strlen(node->args[i]) - 1);
+					if (!value)
+						return (ft_putstr_fd("Malloc error creating value in builtin_export\n", 2), 1);
+				}
 			}
 			else
 			{

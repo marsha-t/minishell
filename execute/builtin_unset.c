@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 06:17:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/05 07:17:45 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/05 13:58:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 	- else if variable found, remove node from list
 	*/
 	// work in progress: need to update search_for_node (which uses search_for_key which expansions use)
+	// note that unset works for environment and normal vars
 int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	t_var	*current;

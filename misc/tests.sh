@@ -135,6 +135,13 @@ echo $var #abc=def
 var==abc
 echo $var #=abc
 
+var=abc
+echo $var #abc
+var=
+echo $var #<blank>
+
+var1=abc var2=def 123 #error msg for 123
+echo $var1 $var2 #blank - var1 and var2 not assigned
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
 #############################################################################
@@ -210,9 +217,23 @@ export var=123
 export 123 = var # error message for 123 and = 
 export # var is listed: var=123
 
+var=123
+export var
+export #var added: var=123
+env #var=123
+
+export var=123
+export var= #updates var to empty string 
+env #var is listed
+
 #############################################################################
 # UNSET ##################################################################### 
 #############################################################################
+var=123
+echo $var #123
+unset var
+echo $var #blank
+
 export var=123
 unset 123 var #error message for 123 but var is unset
 echo $? #return value of 1
