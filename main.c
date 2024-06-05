@@ -36,7 +36,7 @@ int main(int ac, char **av, char **envp)
 		else
 		{
 			add_history(shell->line);
-			printf("check_all: %d\n",check_all(shell->line));
+			ft_printf("check_all: %d\n",check_all(shell->line));
 			// if (check_all(line) != 1) // handle check failures
 			// 	return (1);
 			shell->tokens = tokenise(shell->line);
@@ -47,7 +47,7 @@ int main(int ac, char **av, char **envp)
 			// token = shell->tokens;
 			// env_ops(shell->list, token);
 			shell->root = parse_tokens(&shell->tokens);
-      		printf("\nprinting ast_tree\n");
+      		ft_printf("\nprinting ast_tree\n");
 			ast_tree_print(shell->root);
 			// execute_ast(shell->root);
     }

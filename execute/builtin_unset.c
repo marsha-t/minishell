@@ -17,7 +17,7 @@ void unset(char *s1,char *s2, t_var **envp)
 	t_var *current;
 	current = *envp;
 	t_var *del_node;
-	printf("%d \n",ft_strcmp(s1, "unset"));
+	ft_printf("%d \n",ft_strcmp(s1, "unset"));
 	del_node = malloc(sizeof(t_var));
 	if(ft_strcmp(s1, "unset")== 0)
 	{

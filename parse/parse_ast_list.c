@@ -231,29 +231,29 @@ void	ast_list_print(t_ast *node)
 {
 	int	i;
 
-	printf("\nprinting ast_list\n");
+	ft_printf("\nprinting ast_list\n");
 	while (node)
 	{
 		if (node->code == TOKEN_CMD)
 		{
-			printf("NODE: cmd: %s\nn_args: %d, args: ", node->cmd, node->n_args);
+			ft_printf("NODE: cmd: %s\nn_args: %d, args: ", node->cmd, node->n_args);
 			i = 0;
 			while (i < node->n_args)
 			{
-				printf("%s, ", node->args[i]);
+				ft_printf("%s, ", node->args[i]);
 				i++;
 			}
-			printf("\n");
+			ft_printf("\n");
 			if (node->input_list)
 				file_list_print(node->input_list, 1);
 			if (node->heredoc_list)
 				file_list_print(node->heredoc_list, 2);
 			if (node->output_list)
 				file_list_print(node->output_list, 3);
-			printf("\n");
+			ft_printf("\n");
 		}
 		else
-			printf("NODE: %s: %d\n\n", node->cmd, node->code);
+			ft_printf("NODE: %s: %d\n\n", node->cmd, node->code);
 		node = node->next;
 	}
 }

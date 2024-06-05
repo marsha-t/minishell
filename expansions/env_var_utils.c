@@ -18,7 +18,7 @@ char  *expand_var(t_var **env,char *key)
 	current = *env;
 	while (current -> next)
 	{
-		printf("%s this is the key\n", key);
+		ft_printf("%s this is the key\n", key);
 		if(search_for_key(key,current->content) != NULL)
 			return(search_for_key(key,current->content));
 		current = current -> next;
