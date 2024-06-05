@@ -6,13 +6,13 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/03 06:15:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/05 07:13:13 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int create_node(t_var **v, char *str)
+int create_node(t_var **v, char *str, int flag)
 {
 	t_var *new;
 	t_var *current;
@@ -20,13 +20,21 @@ int create_node(t_var **v, char *str)
 	
 	new = (t_var *) malloc(sizeof(t_var));
 	if(!new)
-		return(0);
+		return(ft_putstr_fd("Malloc error creating t_var", 2), 0);
 	equal = ft_strchr(str, '=');
 	new->key = strdup_range(str, equal - 1);
+	if (!new->key)
+		return (ft_putstr_fd("Malloc error creating t_var->key\n", 2), 0);
 	if (str + ft_strlen(str) - 1 == equal)
 		new->value = 0;
 	else
+	{
 		new->value = strdup_range(equal + 1, str + ft_strlen(str) - 1);
+		if (!new->value)
+			return (ft_putstr_fd("Malloc error creating t_var->value\n", 2), 0);
+	}
+	new->flag = flag;
+	new->env = 1;
 	new->next = NULL;
 	if (!*v)
 		*v = new;
@@ -49,7 +57,7 @@ t_var *create_list(char **envp)
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (create_node(&v, envp[i]) == 0)
+		if (create_node(&v, envp[i], 1) == 0)
 			return (NULL);
 		i++;
 	}

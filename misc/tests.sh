@@ -190,3 +190,30 @@ env #hello=world but test is not added
 export hello=world test=
 export #test='' listed
 env #test='' added
+
+var=123
+export var=987
+echo $var #987
+unset $var 
+echo $var # nothing i.e., doesn't revert to var=123
+
+var=123
+export var=987
+echo $var #987
+var=888 
+echo $var #888
+export # var = 888
+env # var = 888
+unset var # var is unset
+
+export var=123
+export 123 = var # error message for 123 and = 
+export # var is listed: var=123
+
+#############################################################################
+# UNSET ##################################################################### 
+#############################################################################
+export var=123
+unset 123 var #error message for 123 but var is unset
+echo $? #return value of 1
+export #var was unset

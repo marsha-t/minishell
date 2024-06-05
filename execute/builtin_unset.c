@@ -6,37 +6,89 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 06:17:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/03 06:17:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/05 07:17:45 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void unset(char *s1,char *s2, t_var **envp)
+/*	builtin_unset runs the unset command
+	- if no args, unset returns with success immediately
+	- if invalid variable name, skip to next variable but eventually return with error 
+	- if variable not found, skip to next variable 
+	- else if variable found, remove node from list
+	*/
+	// work in progress: need to update search_for_node (which uses search_for_key which expansions use)
+int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
-	t_var *current;
-	current = *envp;
-	t_var *del_node;
-	printf("%d \n",ft_strcmp(s1, "unset"));
-	del_node = malloc(sizeof(t_var));
-	if(ft_strcmp(s1, "unset")== 0)
+	t_var	*current;
+	t_var	*del_node;
+	int		i;
+	int		exit_status;
+	
+	exit_status = 0;
+	if (node->n_args == 0)
+		return (0);
+	while (i < node->n_args)
 	{
-		if(search_for_node(s2, envp) )
-			del_node = search_for_node(s2, envp);
-		else
-			return ;
-	}
-	if (del_node == *envp)
-		return((*envp)= (*envp)->next ,free(del_node)) ;
-
-	while(current->next)
-	{
-		if(current-> next== del_node)
+		if (valid_varname(node->n_args[i]) == 0)
 		{
-			current ->next = del_node ->next;
-			free(del_node);
-			return ;
+			ft_putstr_fd("unset: invalid environment variable name\n", 2);
+			exit_status = 1;
 		}
-		current = current-> next;
+		else if (search_for_node(node->n_args[i], shell->var_list))
+		{
+			del_node = search_for_node(node->n_args[i], shell->var_list);
+			if (del_node == shell->var_list)
+			{
+				shell->var_list = shell->var_list->next;
+				free(del_node->key);
+				free(del_node->value);
+				free(del_node);
+			}
+			current = shell->var_list;
+			while (current->next)
+			{
+				if (current->next== del_node)
+				{
+					current->next = del_node->next;
+					free(del_node->key);
+					free(del_node->value);
+					free(del_node);
+				}
+				current = current-> next;
+			}
+		}
+		i++;
 	}
+	return (0);
 }
+
+// void unset(char *s1,char *s2, t_var **envp)
+// {
+// 	t_var *current;
+// 	current = *envp;
+// 	t_var *del_node;
+// 	printf("%d \n",ft_strcmp(s1, "unset"));
+// 	del_node = malloc(sizeof(t_var));
+// 	if(ft_strcmp(s1, "unset")== 0)
+// 	{
+// 		if(search_for_node(s2, envp) )
+// 			del_node = search_for_node(s2, envp);
+// 		else
+// 			return ;
+// 	}
+// 	if (del_node == *envp)
+// 		return((*envp)= (*envp)->next ,free(del_node)) ;
+
+// 	while(current->next)
+// 	{
+// 		if(current-> next== del_node)
+// 		{
+// 			current ->next = del_node ->next;
+// 			free(del_node);
+// 			return ;
+// 		}
+// 		current = current-> next;
+// 	}
+// }

@@ -6,11 +6,14 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/29 15:46:36 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/05 07:07:48 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+// work in progress: update for new variable list structure
+// work in progress: assignment for an env var leaves it as an env var
 
 /*	valid_varname checks whether a name is valid 
 	- only contains letters, digits or _
