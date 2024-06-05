@@ -12,6 +12,7 @@
 
 #include "../minishell.h"
 
+/*	create_node returns 1 for malloc error */
 int create_node(t_var **v, char *str)
 {
 	t_var *new;
@@ -20,7 +21,7 @@ int create_node(t_var **v, char *str)
 	
 	new = (t_var *) malloc(sizeof(t_var));
 	if(!new)
-		return(0);
+		return (ft_putstr_fd("Malloc error creating t_var in create_node\n", 2), 1);
 	equal = ft_strchr(str, '=');
 	new->key = strdup_range(str, equal - 1);
 	if (str + ft_strlen(str) - 1 == equal)
@@ -37,7 +38,7 @@ int create_node(t_var **v, char *str)
 			current = current->next;
 		current->next = new;
 	}
-	return (1);
+	return (0);
 }
 
 t_var *create_list(char **envp)

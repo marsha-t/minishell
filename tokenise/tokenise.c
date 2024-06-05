@@ -89,7 +89,8 @@ int	tokenise_misc(char **input, t_token **tokens)
 		simple commands refer to the commands that are between &&, || or |
 	- simple commands cannot start with &&, || or |
 	- redirection tokens must be followed by another TOKEN_TEMP
-	- input cannot end with &&, ||, | or ( */
+	- input cannot end with &&, ||, | or ( 
+	- returns 1 if any of the above happens */
 int	check_syntax_tokens(t_token *tokens)
 {
 	t_token	*start;
@@ -118,8 +119,9 @@ int	check_syntax_tokens(t_token *tokens)
 		simple commands refer to the commands that are between &&, || or |
 	- if redirection found: next token is a file
 	- if no command tokens identified yet in simple command, first TOKEN_TEMP token is a command token
-	- otherwise, all other tokens are arguments */
-int	sort_temp_tokens(t_token *tokens)
+	- otherwise, all other tokens are arguments 
+	*/
+void	sort_temp_tokens(t_token *tokens)
 {
 	int		cmd;
 
@@ -143,7 +145,6 @@ int	sort_temp_tokens(t_token *tokens)
 			cmd = 0;
 		tokens = tokens->next;
 	}
-	return (0);
 }
 
 /*	tokenise creates linked list of tokens from input str

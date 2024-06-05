@@ -64,7 +64,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 	}
 	else if (valid_varname(varname) == 1)
 	{
-		if (create_node(&shell->var_list, varname) == 0) // note: create_node returns 0 for failure
+		if (create_node(&shell->var_list, varname) == 1) // updated since create_node returns 1 on failure
 		{
 			//error message: malloc error
 			return (1);

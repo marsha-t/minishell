@@ -148,7 +148,8 @@ int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current)
 }
 
 /*	ast_node_append_cmd appends cmd to an existing ast node
-	- used when redirection begins a command */
+	- used when redirection begins a command 
+	- returns 1 if malloc error for cmd*/
 int	ast_node_append_cmd(t_token **tokens, t_ast *current)
 {
 	current->cmd = ft_strdup((*tokens)->str);

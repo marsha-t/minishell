@@ -123,7 +123,7 @@ int	or_mid(int i, char *line);
 int		tokenise_op(char **input, t_token **tokens);
 int		tokenise_misc(char **input, t_token **tokens);
 int		check_syntax_tokens(t_token *tokens);
-int		sort_temp_tokens(t_token *tokens);
+void	sort_temp_tokens(t_token *tokens);
 t_token	*tokenise(char *input);
 
 // tokenise_token_utils.c
@@ -153,6 +153,7 @@ t_ast	*ast_list_new(t_token **tokens);
 void	ast_list_print(t_ast *node);
 void	ast_list_free(t_ast *node);
 
+// create_redir_lists.c
 int create_in_list(t_token *token, t_ast **node);
 int create_heredoc_list(t_token *token, t_ast **node);
 int create_output_append_list(int code, t_token *token, t_ast **node);

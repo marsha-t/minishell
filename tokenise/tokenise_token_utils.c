@@ -44,8 +44,7 @@ int	add_token(t_token **tokens, char *str, int code)
 	if (!new)
 	{
 		free(str);
-		ft_putstr_fd("Malloc error: token creation\n", 2);
-		return (1);
+		return (ft_putstr_fd("Malloc error: token creation\n", 2), 1);
 	}
 	if (!*tokens)
 		*tokens = new;
