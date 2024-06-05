@@ -171,7 +171,7 @@ t_ast	*ast_list_new(t_token **tokens)
 	current = 0;
 	while (*tokens)
 	{
-		if ((*tokens)->code == TOKEN_CMD && !current->cmd)
+		if ((*tokens)->code == TOKEN_CMD && current && !current->cmd)
 		{
 			if (ast_node_append_cmd(tokens, current) == 1)
 				return (ast_list_free(start), NULL);
