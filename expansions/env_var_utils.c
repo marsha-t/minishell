@@ -12,19 +12,62 @@
 
 #include "../minishell.h"
 
-// char  *expand_var(t_var **env,char *key)
-// {
-// 	t_var *current;
-// 	current = *env;
-// 	while (current -> next)
-// 	{
-// 		ft_printf("%s this is the key\n", key);
-// 		if(search_for_key(key,current->content) != NULL)
-// 			return(search_for_key(key,current->content));
-// 		current = current -> next;
-// 	}
-// 	return("\0");
-// }
+char  *expand_var(char **var, t_var **env)
+{
+	t_var *current;
+	current = *env;
+	while (current)
+	{
+		if(ft_strcmp(current->key,*var)==0)
+			return(current -> value);
+		current = current -> next;
+	}
+	return("\0");
+}
+char *expand_str(char *str, t_var *list)
+{
+	int i;
+	char *start;
+	char *end;
+	char *temp;
+	char *var;
+	char *all_str;
+
+	 i=0;
+	 start=NULL;
+	end=NULL;
+	temp=NULL;
+	var=NULL;
+	all_str=NULL;
+	 while(str[i] != '\0')
+	 {
+		if(i == 0 &&str[i] != '$')
+			start = &str[i];
+		else if(str[i]== '$')
+		{
+			end= &str[i-1];
+			i++;
+			temp = strdup_range(start,end);
+			start = &str[i];
+			while(ft_strchr("\"\t ()<>&|",str[i])==NULL)
+				i++;
+			end = &str[i -1];
+			var = strdup_range(start,end);
+			expand_var(&var,&list);
+			all_str= ft_strjoin(temp,var);
+			free(temp);
+			free(var);
+			temp = all_str;
+			all_str=ft_strjoin(temp,str+1);
+			free(temp);
+			free(str);
+			str = all_str;
+			i=-1;
+		}
+		i++;
+	 }
+	 return(str);
+}
 // int key_len(char *str)
 // {
 // 	int i;
@@ -156,6 +199,7 @@
 // 	return(str);
 // }
 // contain var will check if there is $ (for expansion) in the token and will return 0 (success) and 1 otherwise 
+// }
 int contain_var(char *str)
 {
 	int i;
@@ -168,16 +212,17 @@ int contain_var(char *str)
 	{
 		while(str[i] != '\0')
 		{
-				if(str[i] == '$' && str[i + 1] == '\"' && str[i + 1] != '\0')
-					str[i++] = '\0';
-				if (str[i] == '$' && str[i + 1] == '\"' && str[i + 1] == '\0')
+				if(str[i] == '$' && str[i + 1] == '\"' && str[i + 2] != '\0')
+					str[i++] = ' ';
+				if (str[i] == '$' && str[i + 1] == '\"' && str[i + 2] == '\0')
 					i++;
 				if (str[i] == '$' && (ft_strchr(" \t&|<>()",str[i + 1] )== NULL))
 					flag = 1;
+				// printf("%c",str[i]);
 				i++;
 		}
 	}
-	printf("\n this is exp%s\n", str);
+	printf("\n this is exp %s\n", str);
 	if(flag == 1)
 		return(0);
 	return(1);

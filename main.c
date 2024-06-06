@@ -44,6 +44,14 @@ int main(int ac, char **av, char **envp)
 			if (!shell->tokens) // handle tokenisation failures
 				return (1);
 			print_tokens(shell->tokens);
+			t_token *current;
+			current = shell->tokens;
+			while (current)
+			{
+				if(current-> code == 2 && contain_var(current->str)== 0)
+					current->str = expand_str(current->str,shell->var_list);
+				current = current->next;
+			}
 			// token = shell->tokens;
 			// env_ops(shell->list, token);
 			shell->root = parse_tokens(&shell->tokens);

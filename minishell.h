@@ -166,7 +166,8 @@ void	ast_tree_print(t_ast *node);
 int		execute_ast(t_ast *node);
 
 // env_var_utils.c
-char  *expand_var(t_var **env,char *key);
+char  *expand_var(char **var, t_var **env);
+char *expand_str(char *str, t_var *list);
 int key_len(char *str);
 char *return_key(char *str);
 char  *search_for_key(char *key,char *str);
