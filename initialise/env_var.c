@@ -50,7 +50,7 @@ t_var *create_list(char **envp)
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (create_node(&v, envp[i]) == 0)
+		if (create_node(&v, envp[i]) == 1)
 			return (NULL);
 		i++;
 	}

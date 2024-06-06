@@ -173,7 +173,7 @@ char  *search_for_key(char *key,char *str);
 int var_length(char *str);
 int ft_strlen_b_$(char *str);
 char *value(char *str , t_var **envp);
-int is_var(char *str);
+int contain_var(char *str);
 
 // environment_vars_op.c
 void env_ops(t_var **list, t_token *token);
