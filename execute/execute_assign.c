@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/06 05:36:19 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 10:27:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,14 +176,47 @@ int	check_assign_varname(t_ast *node)
 }
 
 /*	run_assign_cmd runs the remaining args in assignment as a simple command
+	- remove assignments from node and replace original cmd and args with non-assignment args
+	- execute updated cmd node using execute_cmd
 */
-// work in progress
+// work in progress since it uses execute_cmd_node() which is incomplete
+// it uses execute_cmd_node because redirections need to be setup; 
+// execute_cmd_node should find nothing to expand 
 int	run_assign_cmd(t_ast *node, t_shell *shell, int i)
 {
-	while (i < node->n_args)
+	int	ori_n_args;
+	char **ori_args;
+	int	j;
+	int	ori_i;
+	
+	ori_n_args = node->n_args;
+	ori_args = node->args;
+	free(node->cmd);
+	node->cmd = ori_args[i];
+	node->n_args = ori_n_args - i;
+	node->args = malloc(sizeof(char *) * node->n_args);
+	if (!node->args)
+		return (1); // add error msg
+	i++;
+	j = 0;
+	while (i < ori_n_args)
 	{
+		node->args[j] = ft_strdup(ori_args[i]);
+		if (!node->args[i])
+		{
+			// free node->args so far
+			return (1); // add error message
+		}
 		i++;
+		j++;
 	}
+	if (ori_n_args > 0)
+	{
+		while (ori_n_args--)
+			free(ori_args[ori_n_args]);
+		free(ori_args);
+	}
+	// return (execute_cmd_node(node, ));
 }
 
 /*	run_assign runs the assignments in cmd and args (if any) 

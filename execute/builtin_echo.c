@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 07:43:19 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/05 06:41:41 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 10:47:57 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	is_newline_arg(char *arg)
 }
 
 /*	builtin_echo runs the echo command
-	- error can occur from write errors*/
+	- error can occur from write errors
+	- invalid options are taken as arguments and printed */
 int	builtin_echo(t_ast *node, int in_fd, int out_fd)
 {
 	int	newline;

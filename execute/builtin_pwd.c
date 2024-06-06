@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:03:01 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/02 12:47:10 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 10:51:22 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,14 @@ int	builtin_pwd(t_ast *node, int in_fd, int out_fd)
 	int	size;
 	
 	if (node->n_args > 0 && node->args[0][0] == '-')
-	{
-		// error message: invalid option
-		return (1);
-	}
+		return (ft_putstr_fd("pwd: does not support options", 2), 1);
 	dir = 0;
 	size = 1024;
 	while (1)
 	{
 		dir = malloc(sizeof(char) * size);
 		if (!dir)
-		{
-			// error msg: malloc error
-			return (1);
-		}
+			return (ft_putstr_fd("Malloc error creating dir\n", 2), 1);
 		if (getcwd(wd, size) != NULL)
 		{
 			if (write(out_fd, wd, ft_strlen(wd)) == -1)

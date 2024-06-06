@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/06 04:53:16 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 10:48:52 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 			- if no equal, change to env (if originally normal); original value is retained
 			- if equal, replace in list
 		- if key doesn't exist, create new node in list 
-
+	- options are treated as invalid variable names
 	*/
 	//work in progress: check_exist not updated since it is used for expansions too 
 // work in progress: streamline function by using temp t_var to hold key + value and another function to create them (function will be used in run_assign_str)
