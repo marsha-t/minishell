@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 06:17:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/05 13:58:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 04:35:22 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 	- if invalid variable name, skip to next variable but eventually return with error 
 	- if variable not found, skip to next variable 
 	- else if variable found, remove node from list
+	- unset works for environment and normal vars
 	*/
 	// work in progress: need to update search_for_node (which uses search_for_key which expansions use)
-	// note that unset works for environment and normal vars
 int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	t_var	*current;
@@ -32,7 +32,7 @@ int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 		return (0);
 	while (i < node->n_args)
 	{
-		if (valid_varname(node->n_args[i]) == 0)
+		if (valid_varname(node->n_args[i]) == 1)
 		{
 			ft_putstr_fd("unset: invalid environment variable name\n", 2);
 			exit_status = 1;

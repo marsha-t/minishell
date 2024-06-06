@@ -113,11 +113,8 @@ echo abc $abc echo def #output: abc && echo def
 abc="|"
 echo abc $abc echo #output: abc | echo
 
-var=Hello
-echo $var
-
-var=in
-cat <"$var"put.txt
+var=out
+echo abc  >"$var"put.txt #abc redirected to output.txt
 
 var"="abc #error: var=abc command not found
 var'='abc #error: var=abc command not found
@@ -142,6 +139,12 @@ echo $var #<blank>
 
 var1=abc var2=def 123 #error msg for 123
 echo $var1 $var2 #blank - var1 and var2 not assigned
+
+var=123 echo abc #output: abc
+var=123 echo $var #blank output
+var=123 && echo $var #123
+var=123 cat input.txt #input.txt contents displayed
+var=123 cat input.txt > a.txt #input.txt contents redirected to a.txt
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
 #############################################################################
@@ -197,6 +200,10 @@ env #hello=world but test is not added
 export hello=world test=
 export #test='' listed
 env #test='' added
+
+export x=y=z
+export #x="y=z"
+env #x=y=z
 
 var=123
 export var=987

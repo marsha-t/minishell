@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/05 13:40:57 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 04:55:56 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int create_node(t_var **v, char *str, int flag)
 	
 	new = (t_var *) malloc(sizeof(t_var));
 	if(!new)
-		return(ft_putstr_fd("Malloc error creating t_var", 2), 0);
+		return(ft_putstr_fd("Malloc error creating t_var\n", 2), 0);
 	equal = ft_strchr(str, '=');
 	new->key = strdup_range(str, equal - 1);
 	if (!new->key)

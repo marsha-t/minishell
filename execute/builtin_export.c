@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/05 14:04:04 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 04:53:16 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@
 			- if there is no equal sign, variable is listed in export but not in env
 		- checks whether key is a valid variable name
 		- if key is invalid, returns error
-		- if key already exists, then replace in list
+		- if key already exists (as env or normal), 
+			- if no equal, change to env (if originally normal); original value is retained
+			- if equal, replace in list
 		- if key doesn't exist, create new node in list 
+
 	*/
 	//work in progress: check_exist not updated since it is used for expansions too 
-	// work in progress: if env variable already exists but no equal nor value are given for export, original value is retained
-	// work in progress, if normal variable already exists but no equal nor value are given for export, original value is retained and variable becomes env var
-	// work in progress, if env or normal var already exists - no value given but equal - updates value to empty string 
-				// if normal var, update to env var
+// work in progress: streamline function by using temp t_var to hold key + value and another function to create them (function will be used in run_assign_str)
+
 int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	int	i;
@@ -41,33 +42,9 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	{
 		while (i < node->n_args)
 		{
-			equal = ft_strchr(node->args[i], '=');
-			if (equal)
-			{
-				key = strdup_range(node->args[i], equal - 1);
-				if (!key)
-					return (ft_putstr_fd("Malloc error creating key in builtin_export\n", 2), 1);
-				if (equal + 1 == '\0')
-				{
-					value = ft_strdup("");
-					if (!new->value)
-						return (ft_putstr_fd("Malloc error creating value in builtin_export\n", 2), 1);
-				}
-				else
-				{
-					value = strdup_range(equal + 1, node->args[i] + ft_strlen(node->args[i]) - 1);
-					if (!value)
-						return (ft_putstr_fd("Malloc error creating value in builtin_export\n", 2), 1);
-				}
-			}
-			else
-			{
-				key = ft_strdup(node->args[i]);
-				if (!key)
-					return (ft_putstr_fd("Malloc error creating key in builtin_export\n", 2), 1);
-				value = 0;
-			}
-			if (valid_varname(key) == 0)
+			if (create_key_value(node->args[i], &equal, &key, &value) == 1)
+				return (1);
+			if (valid_varname(key) == 1)
 			{
 				free(key);
 				free(value);
@@ -76,13 +53,14 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 			exist = check_exist(key, shell->var_list);
 			if (exist)
 			{
-				free(exist->value);
-				exist->value = value;
-				if (equal)
-					exist->flag = 1;
-				else
-					exist->flag = 0;
 				exist->env = 1;
+				if (equal)
+				{
+					free(exist->value);
+					exist->value = value;
+					exist->flag = 1;
+					exist->env = 1;
+				}
 				free(key);
 			}
 			else
@@ -90,15 +68,22 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 				free(key);
 				free(value);
 				if (equal)
-					create_node(shell->var_list, argv[i], 1);
+				{
+					if (create_node(shell->var_list, argv[i], 1) == 1)
+						return (1); // update this
+
+				}
 				else
-					create_node(shell->var_list, argv[i], 0);
+				{
+					if (create_node(shell->var_list, argv[i], 0) == 1)
+						return (1); // update this 
+
+				}
 			}
 			i++;
 		}
 	}
 }
-
 
 // void export(char *s1,char *s2, t_var **envp)
 // {
