@@ -12,6 +12,28 @@
 
 #include "../minishell.h"
 
+char	*ft_strjoin2(char const *s1, char const *s2)
+{
+	char	*ptr;
+	size_t	tot_len;
+	int		i;
+
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
+	tot_len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	ptr = (char *)malloc(sizeof(char) * tot_len);
+	if (!ptr)
+		return (0);
+	i = 0;
+	while (*s1)
+		ptr[i++] = *(s1)++;
+	while (*s2)
+		ptr[i++] = *(s2)++;
+	ptr[i] = '\0';
+	return (ptr);
+}
 char  *expand_var(char **var, t_var **env)
 {
 	t_var *current;
@@ -19,49 +41,52 @@ char  *expand_var(char **var, t_var **env)
 	while (current)
 	{
 		if(ft_strcmp(current->key,*var)==0)
-			return(current -> value);
+			return(ft_strdup(current -> value));
 		current = current -> next;
 	}
-	return("\0");
+	char *n;
+	n= malloc(sizeof(char));
+	n = "\0";
+	return(ft_strdup(n));
+}
+char *join_expand(int i,char *temp, char *str,char *var)
+{
+	char *all_str;
+
+	all_str= ft_strjoin(temp,var);
+	free(temp);
+	free(var);
+	temp = all_str;
+	all_str=ft_strjoin2(temp,str+i);
+	free(temp);
+	free(str);
+	return(all_str);
 }
 char *expand_str(char *str, t_var *list)
 {
 	int i;
 	char *start;
-	char *end;
 	char *temp;
 	char *var;
-	char *all_str;
 
 	 i=0;
 	 start=NULL;
-	end=NULL;
 	temp=NULL;
 	var=NULL;
-	all_str=NULL;
 	 while(str[i] != '\0')
 	 {
 		if(i == 0 &&str[i] != '$')
 			start = &str[i];
-		else if(str[i]== '$')
+		else if(str[i]== '$'&& str[i+1]!= '\"')
 		{
-			end= &str[i-1];
-			i++;
-			temp = strdup_range(start,end);
-			start = &str[i];
-			while(ft_strchr("\"\t ()<>&|",str[i])==NULL)
+			if(&str[i] != start)
+				temp = strdup_range(start,&str[i]-1);
+			start = &str[++i];
+			while(ft_strchr("\"\t ()<>$&|",str[i])==NULL)
 				i++;
-			end = &str[i -1];
-			var = strdup_range(start,end);
-			expand_var(&var,&list);
-			all_str= ft_strjoin(temp,var);
-			free(temp);
-			free(var);
-			temp = all_str;
-			all_str=ft_strjoin(temp,str+1);
-			free(temp);
-			free(str);
-			str = all_str;
+			var = strdup_range(start,&str[i-1]);
+			var =expand_var(&var,&list);
+			str = join_expand(i,temp,str,var);
 			i=-1;
 		}
 		i++;
