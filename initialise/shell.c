@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/03 06:15:14 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/07 16:58:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_shell	*init_shell(char **envp)
 	if (!shell)
 		return (ft_putstr_fd("Malloc error for shell structure\n", 2), NULL);
 	shell->var_list = create_list(envp);
+	shell->directory_contents= create_conts_list();
 	if (!shell->var_list)
 	{
 		free(shell);

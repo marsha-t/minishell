@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/03 17:51:00 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/07 16:57:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,17 @@ int main(int ac, char **av, char **envp)
 			print_tokens(shell->tokens);
 			t_token *current;
 			current = shell->tokens;
+			DIR *dd;
+			dd=opendir(".");
+			printf("%s\n",readdir(dd)->d_name);
+			printf("%s",readdir(dd)->d_name);
+			closedir(dd);
 			while (current)
 			{
-				if(current-> code == 2 && contain_var(current->str)== 0)
+				if(current-> code == 2 && contain_var(&current->str)== 0)
 					current->str = expand_str(current->str,shell->var_list);
+				// if(current-> code == 2 && contain_var(&current->str)== 2)
+				// 	current -> str = expand_wildcard(current->str, shell->var_list);
 				current = current->next;
 			}
 			// token = shell->tokens;

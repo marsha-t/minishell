@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/04 14:20:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/07 16:54:58 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdlib.h>
+#include <errno.h>
+#include <dirent.h>
 # include "libft/libft.h"
 # include "printf/ft_printf.h"
 
@@ -50,6 +52,12 @@ typedef struct	s_file
 	int				flag;
 	struct s_file	*next;
 } t_file;
+// struct to save the contents of the current directory
+typedef struct s_dconts
+{
+	char *cont_name;
+	struct s_dconts *next;
+} t_dconts;
 
 typedef struct s_ast
 {
@@ -87,6 +95,7 @@ typedef struct s_var
 typedef struct s_shell
 {
 	t_var	*var_list;
+	t_dconts *directory_contents;
 	char	*line;
 	t_token	*tokens;
 	t_ast	*root;
@@ -174,7 +183,8 @@ char  *search_for_key(char *key,char *str);
 int var_length(char *str);
 int ft_strlen_b_$(char *str);
 char *value(char *str , t_var **envp);
-int contain_var(char *str);
+int contain_var(char **str1);
+t_dconts *create_conts_list(void);
 
 // environment_vars_op.c
 void env_ops(t_var **list, t_token *token);

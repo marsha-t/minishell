@@ -225,10 +225,12 @@ char *expand_str(char *str, t_var *list)
 // }
 // contain var will check if there is $ (for expansion) in the token and will return 0 (success) and 1 otherwise 
 // }
-int contain_var(char *str)
+int contain_var(char **str1)
 {
 	int i;
 	int flag;
+	char *str;
+	str = *str1;
 	flag = 0;
 	i = 0;
 	if(!str)
@@ -243,6 +245,12 @@ int contain_var(char *str)
 					i++;
 				if (str[i] == '$' && (ft_strchr(" \t&|<>()",str[i + 1] )== NULL))
 					flag = 1;
+				if (str[i] == '*')
+				{
+					while (str[i] == '*')
+						i++;
+					return(2);
+				}
 				// printf("%c",str[i]);
 				i++;
 		}
