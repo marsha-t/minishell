@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 09:32:47 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/08 18:36:14 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/09 15:24:30 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,3 @@ int list_size(t_dconts *list)
 	}
 	return(i);
 }
-char **join_contc 

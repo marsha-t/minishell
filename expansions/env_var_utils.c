@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_var_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/02 17:41:08 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/09 16:35:49 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ char *expand_str(char *str, t_var *list)
 	 start=NULL;
 	temp=NULL;
 	var=NULL;
+	printf("%sHERE IS\n",str);
 	 while(str[i] != '\0')
 	 {
 		if(i == 0 &&str[i] != '$')
@@ -82,6 +83,7 @@ char *expand_str(char *str, t_var *list)
 			if(&str[i] != start)
 				temp = strdup_range(start,&str[i]-1);
 			start = &str[++i];
+
 			while(ft_strchr("\"\t ()<>$&|",str[i])==NULL)
 				i++;
 			var = strdup_range(start,&str[i-1]);
@@ -223,7 +225,7 @@ char *expand_str(char *str, t_var *list)
 // 	}
 // 	return(str);
 // }
-// contain var will check if there is $ (for expansion) in the token and will return 0 (success) and 1 otherwise 
+// contain var will check if there is $ (for expansion) in the token and will return 0 (success) and 1 otherwise
 // }
 int contain_var(char **str1)
 {
