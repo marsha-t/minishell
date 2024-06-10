@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:06:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/10 17:51:33 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/10 21:22:29 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,18 @@ t_ast	*parse_tokens(t_token **tokens, t_shell *shell)
 	ast_list = ast_list_new(tokens);
 	// t_dconts *list;
 	// temp = NULL;
-	int j;
-	j = 0;
+	// int j;
+	// j = 0;
 	curr = ast_list;
 	while (curr)
 	{
-		if(curr->n_args > 0)
-		{
-			while (i != curr->n_args)
+		if(curr->args)
+		{	while (curr->args)
 			{
-				j = 0;
-				i=0;
-				if(contain_var(&curr->args[i])== 0)
-				{
-					curr->args[i] = expand_str(curr->args[i],shell->var_list);
-					// i++;
-				}
-				i++;
+				printf("%s",curr->args->content);
+				if(contain_var(curr->args->content)== 0)
+					curr->args->content = expand_str(curr->args->content,shell->var_list);
+				curr->args = curr->args->next;
 			}
 		}
 		curr = curr->next;

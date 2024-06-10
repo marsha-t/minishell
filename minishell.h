@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/10 17:42:50 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/10 21:14:12 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_dconts
 	char *cont_name;
 	struct s_dconts *next;
 } t_dconts;
+
 // typedef struct s_list
 // {
 // 	char *arg_str;
@@ -69,7 +70,7 @@ typedef struct s_ast
 	char	*cmd;
 	int		code;
 	int		n_args;
-   char	**args;
+   t_list *args;
 	// int		n_input;
 	// int		*io_input;	// io_input[0] will contain io number for first input redirection
 	// char	**file_input; // file_input[0] will contain file for first input redirection
@@ -188,7 +189,7 @@ char  *search_for_key(char *key,char *str);
 int var_length(char *str);
 int ft_strlen_b_$(char *str);
 char *value(char *str , t_var **envp);
-int contain_var(char **str1);
+int contain_var(char *str);
 t_dconts *create_conts_list(void);
 char *ft_strrev(char *str);
 int	ft_strcmp1(const char *s1, const char *s2);

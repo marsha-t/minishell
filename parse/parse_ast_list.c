@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ast_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/04 14:59:45 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/10 21:07:36 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ t_ast	*ast_node_init(void)
 	return (new);
 }
 
-/*	add_ast_node: 
+/*	add_ast_node:
 	- calls on init_ast_node to malloc space
 	- duplicates str in tokens node (to make freeing tokens linked list easier later)
 	- moves tokens pointer along by 1
-	- attaches new node to end of list 
+	- attaches new node to end of list
 		- current node is included in function to avoid traversal of ast linked list
-	- returns 1 if malloc error 
+	- returns 1 if malloc error
 */
 int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 {
@@ -69,7 +69,7 @@ int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 }
 
 /*	count_args count the number of arguments in the token list
-	- single pointer used for tokens 
+	- single pointer used for tokens
 	so that shifting of pointer in function doesn't affect other functions*/
 int	count_args(t_token *tokens)
 {
@@ -92,17 +92,30 @@ int	count_args(t_token *tokens)
 int	ast_node_append_arg(t_token **tokens, t_ast *current)
 {
 	int	i;
-
-	current->n_args = count_args(*tokens);
-	current->args = malloc(sizeof(char *) * current->n_args);
+	t_list *new;
+	t_list *c;
+	c = current->args;
+	if(!current->args)
+		current->args = malloc(sizeof(t_list));
 	if (!current->args)
 		return (ft_putstr_fd("Malloc error creating t_ast->args\n", 2), 1);
 	i = 0;
 	while ((*tokens) && (*tokens)->code == TOKEN_ARG)
 	{
-		current->args[i] = ft_strdup((*tokens)->str);
-		if (!current->args[i])
-			return (ft_putstr_fd("Malloc error creating t_ast->arg[i]", 2), 1);
+		new = malloc(sizeof(t_list));
+		new ->content= ft_strdup((*tokens)->str);
+		if (!new->content)
+			return (ft_putstr_fd("Malloc error creating t_ast->arg", 2), 1);
+		new -> next = NULL;
+		if(!c)
+			c= new;
+		else
+		{
+			c = current->args;
+			while (c -> next)
+				c = c -> next;
+			c-> next = new;
+		}
 		*tokens = (*tokens)->next;
 		i++;
 	}
@@ -110,7 +123,7 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 }
 
 /*	ast_node_append_misc adds file to the ast_node
-	- tokens pointer is shifted by two: 1) redirection node 2) file node 
+	- tokens pointer is shifted by two: 1) redirection node 2) file node
 	- returns 1 if malloc error for strdup*/
 int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current)
 {
@@ -148,7 +161,7 @@ int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current)
 }
 
 /*	ast_node_append_cmd appends cmd to an existing ast node
-	- used when redirection begins a command 
+	- used when redirection begins a command
 	- returns 1 if malloc error for cmd*/
 int	ast_node_append_cmd(t_token **tokens, t_ast *current)
 {
@@ -161,7 +174,7 @@ int	ast_node_append_cmd(t_token **tokens, t_ast *current)
 }
 
 /*	ast_list_new generates nodes in the ast
-	- ast nodes are placed in a linked list 
+	- ast nodes are placed in a linked list
 	- frees tokens linked list 	*/
 t_ast	*ast_list_new(t_token **tokens)
 {
@@ -238,11 +251,18 @@ void	ast_list_print(t_ast *node)
 		{
 			ft_printf("NODE: cmd: %s\nn_args: %d, args: ", node->cmd, node->n_args);
 			i = 0;
-			while (i < node->n_args)
+			if (node->args)
 			{
-				ft_printf("%s, ", node->args[i]);
-				i++;
+				t_list *c;
+				c = node->args;
+				while (c)
+				{
+					ft_printf("%s, ", c->content);
+					c = c->next;
+				}
+
 			}
+
 			ft_printf("\n");
 			if (node->input_list)
 				file_list_print(node->input_list, 1);
@@ -275,7 +295,7 @@ void	file_list_free(t_file *file)
 	}
 }
 
-/*	ast_list_free frees nodes in ast linked list, cmd, 
+/*	ast_list_free frees nodes in ast linked list, cmd,
 	args and its component strings, input, output, append */
 void	ast_list_free(t_ast *node)
 {
@@ -288,11 +308,16 @@ void	ast_list_free(t_ast *node)
 		next = current->next;
 		if (node->cmd)
 			free(node->cmd);
-		if (node->n_args > 0)
+		if (node-> args)
 		{
-			while (node->n_args--)
-				free(node->args[node->n_args]);
-			free(node->args);
+			t_list *curr;
+			curr = node ->args;
+			while (curr)
+			{
+				node ->args = node->args->next;
+				free(curr);
+				curr = node->args;
+			}
 		}
 		if (node->input_list)
 			file_list_free(node->input_list);

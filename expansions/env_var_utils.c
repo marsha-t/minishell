@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/10 18:47:29 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/10 21:15:37 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,12 +253,10 @@ char *expand_str(char *str, t_var *list)
 // }
 // contain var will check if there is $ (for expansion) in the token and will return 0 (success) and 1 otherwise
 // }
-int contain_var(char **str1)
+int contain_var(char *str)
 {
 	int i;
 	int flag;
-	char *str;
-	str = *str1;
 	flag = 0;
 	i = 0;
 	if(!str)
@@ -283,7 +281,6 @@ int contain_var(char **str1)
 				i++;
 		}
 	}
-	printf("\n this is exp %s\n", str);
 	if(flag == 1)
 		return(0);
 	return(1);
