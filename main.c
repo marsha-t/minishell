@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/07 16:57:46 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/09 16:37:51 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int main(int ac, char **av, char **envp)
   // t_ast	*root;
 	// t_token *token;
 	t_shell	*shell;
-	
+
 	(void)ac;
 	(void)av;
 	shell = init_shell(envp);
@@ -32,7 +32,7 @@ int main(int ac, char **av, char **envp)
 		shell->line = ft_strtrim(shell->line, " \t");
 
 		if (shell->line[0] == '\0')
-			free(shell->line); 
+			free(shell->line);
 		else
 		{
 			add_history(shell->line);
@@ -44,29 +44,14 @@ int main(int ac, char **av, char **envp)
 			if (!shell->tokens) // handle tokenisation failures
 				return (1);
 			print_tokens(shell->tokens);
-			t_token *current;
-			current = shell->tokens;
-			DIR *dd;
-			dd=opendir(".");
-			printf("%s\n",readdir(dd)->d_name);
-			printf("%s",readdir(dd)->d_name);
-			closedir(dd);
-			while (current)
-			{
-				if(current-> code == 2 && contain_var(&current->str)== 0)
-					current->str = expand_str(current->str,shell->var_list);
-				// if(current-> code == 2 && contain_var(&current->str)== 2)
-				// 	current -> str = expand_wildcard(current->str, shell->var_list);
-				current = current->next;
-			}
 			// token = shell->tokens;
 			// env_ops(shell->list, token);
-			shell->root = parse_tokens(&shell->tokens);
+			shell->root = parse_tokens(&shell->tokens,shell);
       		ft_printf("\nprinting ast_tree\n");
 			ast_tree_print(shell->root);
 			// execute_ast(shell->root);
     }
 	}
 	free_shell(shell);
-	rl_clear_history();
+	// rl_clear_history();
 }

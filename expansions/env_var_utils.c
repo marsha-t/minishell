@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/09 16:35:49 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/10 18:47:29 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char *join_expand(int i,char *temp, char *str,char *var)
 {
 	char *all_str;
 
-	all_str= ft_strjoin(temp,var);
+	all_str= ft_strjoin2(temp,var);
 	free(temp);
 	free(var);
 	temp = all_str;
@@ -62,6 +62,31 @@ char *join_expand(int i,char *temp, char *str,char *var)
 	free(str);
 	return(all_str);
 }
+// char *strdup_range(char *start, char *end)
+// {
+// 	char *ptr;
+// 	size_t	n;
+// 	int i;
+
+// 	n = end - start + 1;
+// 	ptr = malloc(sizeof(char) * (n + 1));
+// 	printf("n + 1: %ld\n", n + 1);
+// 	if (!ptr)
+// 		return (0);
+// 	i = 0;
+// 	while (start != end)
+// 	{
+// 		ptr[i] = *start;
+// 		start++;
+// 		printf("%c\n", ptr[i]);
+// 		i++;
+// 	}
+// 	ptr[i] = *end;
+// 	printf("%c\n", ptr[i]);
+// 	ptr[i+1] = '\0';
+// 	printf("i+1: %d\n", i+1);
+// 	return (ptr);
+// }
 char *expand_str(char *str, t_var *list)
 {
 	int i;
@@ -80,10 +105,11 @@ char *expand_str(char *str, t_var *list)
 			start = &str[i];
 		else if(str[i]== '$'&& str[i+1]!= '\"')
 		{
-			if(&str[i] != start)
+			if(&str[i] != start && start)
+			{
 				temp = strdup_range(start,&str[i]-1);
+			}
 			start = &str[++i];
-
 			while(ft_strchr("\"\t ()<>$&|",str[i])==NULL)
 				i++;
 			var = strdup_range(start,&str[i-1]);

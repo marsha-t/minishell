@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/07 16:54:58 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/10 17:42:50 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,22 @@ typedef struct s_dconts
 	char *cont_name;
 	struct s_dconts *next;
 } t_dconts;
+// typedef struct s_list
+// {
+// 	char *arg_str;
+// 	struct s_list*next;
+// } t_list;
 
 typedef struct s_ast
 {
 	char	*cmd;
 	int		code;
 	int		n_args;
-	char	**args;
+   char	**args;
 	// int		n_input;
 	// int		*io_input;	// io_input[0] will contain io number for first input redirection
 	// char	**file_input; // file_input[0] will contain file for first input redirection
-	// int		n_output_append; // number of output and append redirections 
+	// int		n_output_append; // number of output and append redirections
 	// int		*io_output_append; // io_output_append[0] will contain io number for first output/append redirection
 	// int		*is_append;// 0 if output; 1 if append
 	// char	**file_output_append; // file_output_append[0] will contain file for first output/append redirection
@@ -149,7 +154,7 @@ int		is_cmdorder_op(int code);
 int		check_quote(int quote, char input);
 
 // parse.c
-t_ast	*parse_tokens(t_token **tokens);
+t_ast	*parse_tokens(t_token **tokens, t_shell *shell);
 
 // parse_ast_list.c
 t_ast	*ast_node_init(void);
@@ -185,11 +190,15 @@ int ft_strlen_b_$(char *str);
 char *value(char *str , t_var **envp);
 int contain_var(char **str1);
 t_dconts *create_conts_list(void);
+char *ft_strrev(char *str);
+int	ft_strcmp1(const char *s1, const char *s2);
+t_dconts *expand_wildcard(char *str, t_dconts *conts_list);
+int list_size(t_dconts *list);
 
 // environment_vars_op.c
 void env_ops(t_var **list, t_token *token);
 
-// var_modif.c 
+// var_modif.c
 void print_export(char *str, t_var **envp);
 void print_envp(char *str, t_var **envp);
 void export(char *s1,char *s2, t_var **envp);
