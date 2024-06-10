@@ -41,8 +41,9 @@ int main(int ac, char **av, char **envp)
 		else
 		{
 			add_history(shell->line);
-			if (check_all(shell->line) != 1)
+			if (check_all(shell->line) != 0)
 			{
+				exit_status = 2;
 				free(shell->line);
 				continue;
 			}

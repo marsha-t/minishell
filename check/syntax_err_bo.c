@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-/*	check_and returns 0 if
+/*	check_and returns 1 if
 	- line starts with && (with or without whitespace)
 	- prompts for more input if || ends line (with or without whitespace)*/
 int	check_and(char *line)
@@ -25,25 +25,25 @@ int	check_and(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '&' && line[1] == '&')
-			return (write(2, "minishell: syntax error near unexpected token `&&'\n", 46), 0);
+			return (write(2, "minishell: syntax error near unexpected token `&&'\n", 46), 1);
 		j = i;
 		while (line[i] == 32 || line[i] == 9)
 		{
 			i++;
 			if (line[i] == '&' && line[i + 1] == '&' && j == 0)
-				return (write(2, "minishell: syntax error near unexpected token `&&'\n", 46), 0);
+				return (write(2, "minishell: syntax error near unexpected token `&&'\n", 46), 1);
 		}
 		if (line[i] == '&' && line[i + 1] == '&')
 		{
-			if (and_mid(i, line) == 0)
-				return (0);
+			if (and_mid(i, line) == 1)
+				return (1);
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
-/*	check_or returns 0 if
+/*	check_or returns 1 if
 	- || starts line (with or without whitespace)
 	- prompts for more input if || ends line (with or without whitespace)*/
 int	check_or(char *line)
@@ -56,25 +56,25 @@ int	check_or(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '|' && line[1] == '|')
-			return (write(2, "minishell: syntax error near unexpected token `||'\n", 46), 0);
+			return (write(2, "minishell: syntax error near unexpected token `||'\n", 46), 1);
 		j = i;
 		while (line[i] == 32 || line[i] == 9)
 		{
 			i++;
 			if (line[i] == '|' && line[i + 1] == '|' && j == 0)
-				return (write(2, "minishell: syntax error near unexpected token `||'\n", 46), 0);
+				return (write(2, "minishell: syntax error near unexpected token `||'\n", 46), 1);
 		}
 		if (line[i] == '|' && line[i + 1] == '|')
 		{
-			if (or_mid(i, line) == 0)
-				return (0);
+			if (or_mid(i, line) == 1)
+				return (1);
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
-/*	check_op_para returns 0 if open parenthesis is not closed
+/*	check_op_para returns 1 if open parenthesis is not closed
 	in this case, there is a prompt for more input */
 int	check_op_para(char *line)
 {
@@ -97,12 +97,12 @@ int	check_op_para(char *line)
 					op_count--;
 			}
 			if (line[i] == '\0')
-				return (write(1, ">\n", 2), 0);
+				return (write(1, ">\n", 2), 1);
 		}
 		else
 			i++;
 	}
-	return (1);
+	return (0);
 }
 
 /*	check_close_para returns 1 if a closing para exists without an opening one*/
@@ -126,7 +126,7 @@ int	check_close_para(char *line)
 	if (close_p > open_p)
 	{
 		write(2, "minishell: syntax error near unexpected token `)'\n", 51);
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }
