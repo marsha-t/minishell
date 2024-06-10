@@ -24,10 +24,16 @@ int create_node(t_var **v, char *str)
 		return (ft_putstr_fd("Malloc error creating t_var in create_node\n", 2), 1);
 	equal = ft_strchr(str, '=');
 	new->key = strdup_range(str, equal - 1);
+	if (!new->key)
+		return (ft_putstr_fd("Malloc error creating t_var->key in create_node\n", 2), 1);
 	if (str + ft_strlen(str) - 1 == equal)
 		new->value = 0;
 	else
+	{
 		new->value = strdup_range(equal + 1, str + ft_strlen(str) - 1);
+		if (!new->value)
+			return (ft_putstr_fd("Malloc error creating t_var->value in create_node\n", 2), 1);
+	}
 	new->next = NULL;
 	if (!*v)
 		*v = new;
@@ -68,8 +74,10 @@ void	free_var_list(t_var *var)
 	while (current)
 	{
 		next = current->next;
-		free(current->key);
-		free(current->value);
+		if (current->key)
+			free(current->key);
+		if (current->value)
+			free(current->value);
 		free(current);
 		current = next;
 	}

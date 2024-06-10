@@ -150,29 +150,27 @@ void	sort_temp_tokens(t_token *tokens)
 /*	tokenise creates linked list of tokens from input str
 	- separate tokens in input str based on whitespace, pipe or redirect
 	- categorises non-operator tokens into commands, arguments, files
-	- frees entire list and returns NULL if error creating any of the tokens */
-t_token	*tokenise(char *input)
+	- frees entire list and returns 1 if error creating any of the tokens 
+	- checks syntax of tokens and returns 2 if syntax error*/
+int	tokenise(char *input, t_token **tokens)
 {
-	t_token	*tokens;
-
-	tokens = 0;
 	while (*input)
 	{
 		while (ft_strchr(" \t", *input))
 			input++;
 		if (ft_strchr("|<>&()", *input))
 		{
-			if (tokenise_op(&input, &tokens) == 1)
-				return (free_tokens(tokens), NULL);
+			if (tokenise_op(&input, tokens) == 1)
+				return (free_tokens(*tokens), 1);
 		}
 		else
 		{
-			if (tokenise_misc(&input, &tokens) == 1)
-				return (free_tokens(tokens), NULL);
+			if (tokenise_misc(&input, tokens) == 1)
+				return (free_tokens(*tokens), 1);
 		}
 	}
-	if (check_syntax_tokens(tokens) == 1)
-		return (free_tokens(tokens), NULL);
-	sort_temp_tokens(tokens);
-	return (tokens);
+	if (check_syntax_tokens(*tokens) == 1)
+		return (free_tokens(*tokens), 2);
+	sort_temp_tokens(*tokens);
+	return (0);
 }

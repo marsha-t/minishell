@@ -57,13 +57,6 @@ typedef struct s_ast
 	int		code;
 	int		n_args;
 	char	**args;
-	// int		n_input;
-	// int		*io_input;	// io_input[0] will contain io number for first input redirection
-	// char	**file_input; // file_input[0] will contain file for first input redirection
-	// int		n_output_append; // number of output and append redirections 
-	// int		*io_output_append; // io_output_append[0] will contain io number for first output/append redirection
-	// int		*is_append;// 0 if output; 1 if append
-	// char	**file_output_append; // file_output_append[0] will contain file for first output/append redirection
 	t_file *input_list;
 	t_file *output_list;
 	t_file *heredoc_list;
@@ -124,7 +117,8 @@ int		tokenise_op(char **input, t_token **tokens);
 int		tokenise_misc(char **input, t_token **tokens);
 int		check_syntax_tokens(t_token *tokens);
 void	sort_temp_tokens(t_token *tokens);
-t_token	*tokenise(char *input);
+// t_token	*tokenise(char *input);
+int	tokenise(char *input, t_token **tokens);
 
 // tokenise_token_utils.c
 t_token	*new_token(char *str, int code);

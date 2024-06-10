@@ -20,7 +20,7 @@ int	pipe_mid(int i, char *line)
 	while (line[i] == 32 || line[i] == 9)
 		i++;
 	if (line[i] == '\0')
-		return (write(1, ">\n", 2), 0);
+		return (write(1, ">\n", 2), 0); // work in progress: how to read another line
 	return (1);
 }
 

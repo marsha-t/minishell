@@ -102,7 +102,10 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 	{
 		current->args[i] = ft_strdup((*tokens)->str);
 		if (!current->args[i])
+		{
+			current->n_args = i;
 			return (ft_putstr_fd("Malloc error creating t_ast->arg[i]", 2), 1);
+		}
 		*tokens = (*tokens)->next;
 		i++;
 	}

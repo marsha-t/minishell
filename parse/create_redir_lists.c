@@ -31,12 +31,12 @@ int create_in_list(t_token *token, t_ast **node)
     if (current == 0)
     { 
         (*node)->input_list = new;
-        return(0);
+        return (0);
     }
     while(current -> next)
         current = current ->next;
     current ->next = new;
-    return(0);   
+    return (0);   
 }
 
 /*  create_heredoc_list 
@@ -54,7 +54,7 @@ int create_heredoc_list(t_token *token, t_ast **node)
     if (!new->file_name)
         return (ft_putstr_fd("Malloc error creating t_file->file_name for heredoc_list\n", 2), 1);
     new->next = NULL;
-     current = (*node)->heredoc_list;
+    current = (*node)->heredoc_list;
     if (current == 0)
     { 
         (*node)->heredoc_list = new;
@@ -90,5 +90,5 @@ int create_output_append_list(int code, t_token *token, t_ast **node)
     while(current->next)
         current = current->next;
     current->next = new;
-    return(0);   
+    return (0);   
 }

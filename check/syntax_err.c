@@ -13,6 +13,7 @@
 #include "../minishell.h"
 
 /*	check_direct returns 0 if
+	-> followed by < and vice versa
 	- line ends with >, >>, < or << */
 int	check_direct(char *line)
 {
@@ -22,14 +23,14 @@ int	check_direct(char *line)
 	while (line[i] != '\0')
 	{
 		if ((line[i] == '>' && line[i + 1] == '<') || (line[i] == '<' && line[i + 1] == '>'))
-			return (0);
+			return (ft_putstr_fd("minishell: syntax error near unexpected token\n", 2), 0);
 		else if (((line[i] == '>' && line[i + 1] == '>') || (line[i] == '<' && line[i + 1] == '<')))
 		{
 			i = i + 2;
 			while (line [i] == ' ' || line[i] == '\t')
 				i++;
 			if (line[i] == '\0')
-				return (0);
+				return (ft_putstr_fd("minishell: syntax error near unexpected token", 2), 0);
 		}
 		else if ((line[i] == '>' || line[i] == '<' ))
 		{
@@ -37,7 +38,7 @@ int	check_direct(char *line)
 			while (line [i] == ' ' || line[i] == '\t')
 				i++;
 			if (line[i] == '\0')
-				return (0);
+				return (ft_putstr_fd("minishell: syntax error near unexpected token\n", 2), 0);
 		}
 		i++;
 	}
@@ -60,7 +61,7 @@ int	check_quotes(char *line)
 			while (line[i] != '\0' && line[i] != quote_t)
 				i++;
 			if (line[i] == '\0')
-				return (0);
+				return (ft_putstr_fd("minishell: mismatched quotes used\n", 2), 0);
 			else
 				i++;
 		}
