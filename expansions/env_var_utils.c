@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/10 21:15:37 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/11 22:03:02 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ char *expand_str(char *str, t_var *list)
 	 start=NULL;
 	temp=NULL;
 	var=NULL;
-	printf("%sHERE IS\n",str);
 	 while(str[i] != '\0')
 	 {
 		if(i == 0 &&str[i] != '$')
@@ -261,25 +260,21 @@ int contain_var(char *str)
 	i = 0;
 	if(!str)
 		return(1);
-	if(ft_strlen(str) >= 2)
+	while(str[i] != '\0')
 	{
-		while(str[i] != '\0')
+			// if(str[i] == '$' && str[i + 1] == '\"' && str[i + 2] != '\0')
+			// 	str[i++] = ' ';
+		if (str[i] == '$' && str[i + 1] == '\"' && str[i + 2] == '\0')
+			i++;
+		if (str[i] == '$' && (ft_strchr(" \t&|<>()",str[i + 1] )== NULL))
+			flag = 1;
+		if (str[i] == '*')
 		{
-				if(str[i] == '$' && str[i + 1] == '\"' && str[i + 2] != '\0')
-					str[i++] = ' ';
-				if (str[i] == '$' && str[i + 1] == '\"' && str[i + 2] == '\0')
-					i++;
-				if (str[i] == '$' && (ft_strchr(" \t&|<>()",str[i + 1] )== NULL))
-					flag = 1;
-				if (str[i] == '*')
-				{
-					while (str[i] == '*')
-						i++;
-					return(2);
-				}
-				// printf("%c",str[i]);
+			while (str[i] == '*' && str[i] != '\0')
 				i++;
+			return(2);
 		}
+		i++;
 	}
 	if(flag == 1)
 		return(0);

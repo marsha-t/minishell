@@ -30,7 +30,6 @@ FT_PRINTF_DIR = printf
 
 CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
-hello 
 all: $(NAME)
 
 %o: %c

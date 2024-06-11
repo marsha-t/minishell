@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/10 21:07:36 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/11 20:29:10 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,15 @@ int	count_args(t_token *tokens)
 int	ast_node_append_arg(t_token **tokens, t_ast *current)
 {
 	int	i;
+	// t_list *head;
 	t_list *new;
+	(void)tokens;
 	t_list *c;
-	c = current->args;
 	if(!current->args)
-		current->args = malloc(sizeof(t_list));
+		current->args = ft_calloc(1, sizeof(t_list*));
 	if (!current->args)
 		return (ft_putstr_fd("Malloc error creating t_ast->args\n", 2), 1);
+	c = (*(current->args));
 	i = 0;
 	while ((*tokens) && (*tokens)->code == TOKEN_ARG)
 	{
@@ -107,11 +109,11 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 		if (!new->content)
 			return (ft_putstr_fd("Malloc error creating t_ast->arg", 2), 1);
 		new -> next = NULL;
-		if(!c)
-			c= new;
+		if(!(*(current->args)))
+			(*(current->args)) = new;
 		else
 		{
-			c = current->args;
+			c = (*(current->args));
 			while (c -> next)
 				c = c -> next;
 			c-> next = new;
@@ -249,12 +251,12 @@ void	ast_list_print(t_ast *node)
 	{
 		if (node->code == TOKEN_CMD)
 		{
-			ft_printf("NODE: cmd: %s\nn_args: %d, args: ", node->cmd, node->n_args);
+			ft_printf("NODE: cmd: , args: ", node->cmd, node->n_args);
 			i = 0;
 			if (node->args)
 			{
 				t_list *c;
-				c = node->args;
+				c = *(node->args);
 				while (c)
 				{
 					ft_printf("%s, ", c->content);
@@ -311,12 +313,12 @@ void	ast_list_free(t_ast *node)
 		if (node-> args)
 		{
 			t_list *curr;
-			curr = node ->args;
+			curr = *(node ->args);
 			while (curr)
 			{
-				node ->args = node->args->next;
+				*(node ->args)= (*(node ->args))->next;
 				free(curr);
-				curr = node->args;
+				curr = *(node ->args);
 			}
 		}
 		if (node->input_list)

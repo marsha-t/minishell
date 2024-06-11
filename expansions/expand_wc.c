@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/08 18:30:47 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/11 21:45:36 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ char *word_suff(char *str, char *word_e)
 {
 	char *suff;
 	int i;
+	if(!str|| !word_e)
+		return(NULL);
 	suff= malloc(sizeof(char) *(ft_strlen(word_e)+1));
 	int l1;
 	int l2;
@@ -132,7 +134,7 @@ t_dconts *expand_wildcard(char *str, t_dconts *conts_list)
 			start = &str[i];
 			while (ft_strchr("\t \"\0",str[i])==NULL)
 				i++;
-			if (start != &str[i-1])
+			if (start != &str[i])
 				word_e = strdup_range(start, &str[i-1]);
 			return(goal_list(conts_list,word_b,word_e));
 		}

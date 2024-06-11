@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/10 21:14:12 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/11 20:25:31 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_ast
 	char	*cmd;
 	int		code;
 	int		n_args;
-   t_list *args;
+   t_list **args;
 	// int		n_input;
 	// int		*io_input;	// io_input[0] will contain io number for first input redirection
 	// char	**file_input; // file_input[0] will contain file for first input redirection
@@ -155,7 +155,7 @@ int		is_cmdorder_op(int code);
 int		check_quote(int quote, char input);
 
 // parse.c
-t_ast	*parse_tokens(t_token **tokens, t_shell *shell);
+t_ast	*parse_tokens(t_token **tokens);
 
 // parse_ast_list.c
 t_ast	*ast_node_init(void);

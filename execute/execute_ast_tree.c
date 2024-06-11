@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/29 08:39:41 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/11 18:19:02 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int	execute_cmd(t_ast *node, int in_fd, int out_fd)
 {
 	int	exit_status;
-	
+
 	if (ft_strcmp(cmd, "echo") == 0)
 		exit_status = builtin_echo(node, in_fd, out_fd);
 	else if (ft_strcmp(cmd, "cd") == 0)
@@ -65,7 +65,7 @@ int	execute_ast(t_ast *node)
 {
 	if (!node)
 		return (0);
-	if (!node->left && !node->right) 
+	if (!node->left && !node->right)
 		return (execute_cmd_node(node));
 	else if (node->code == TOKEN_PIPE)
 	{
