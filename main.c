@@ -45,22 +45,11 @@ int main(int ac, char **av, char **envp)
 				return (1);
 			print_tokens(shell->tokens);
 			t_token *token;
-			t_dconts *cu;
 			token = shell->tokens;
 			while (token)
 			{
 				if(contain_var(token->str) == 0)
 					token->str =	expand_str(token->str,shell->var_list);
-				else if(contain_var(token->str) == 2)
-				{
-					cu =expand_wildcard(token->str, shell->directory_contents);
-					while (cu)
-					{
-						printf("%s\n",cu->cont_name);
-						cu = cu -> next;
-					}
-				}
-
 				token  = token->next;
 			}
 			shell->root = parse_tokens(&shell->tokens);

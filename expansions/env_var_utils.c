@@ -102,6 +102,8 @@ char *expand_str(char *str, t_var *list)
 	 {
 		if(i == 0 &&str[i] != '$')
 			start = &str[i];
+		if (str[i] == '$' && str[i+1] == '\0')
+			i++;
 		else if(str[i]== '$'&& str[i+1]!= '\"')
 		{
 			if(&str[i] != start && start)
@@ -256,19 +258,27 @@ int contain_var(char *str)
 {
 	int i;
 	int flag;
+	int flag1;
 	flag = 0;
+	flag1 = 0;
 	i = 0;
 	if(!str)
 		return(1);
 	while(str[i] != '\0')
 	{
-			// if(str[i] == '$' && str[i + 1] == '\"' && str[i + 2] != '\0')
-			// 	str[i++] = ' ';
+
+		if (str[i] == '\"')
+		{
+			if(flag1 == 1)
+				flag1=0;
+			else
+				flag1 =1;
+		}
 		if (str[i] == '$' && str[i + 1] == '\"' && str[i + 2] == '\0')
 			i++;
 		if (str[i] == '$' && (ft_strchr(" \t&|<>()",str[i + 1] )== NULL))
 			flag = 1;
-		if (str[i] == '*')
+		if (str[i] == '*'&& flag1 == 0)
 		{
 			while (str[i] == '*' && str[i] != '\0')
 				i++;

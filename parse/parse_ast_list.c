@@ -244,7 +244,6 @@ void	file_list_print(t_file *file, int type)
 	- prints other components in cmd node depending on whether it is filled */
 void	ast_list_print(t_ast *node)
 {
-	int	i;
 
 	ft_printf("\nprinting ast_list\n");
 	while (node)
@@ -252,7 +251,6 @@ void	ast_list_print(t_ast *node)
 		if (node->code == TOKEN_CMD)
 		{
 			ft_printf("NODE: cmd: , args: ", node->cmd, node->n_args);
-			i = 0;
 			if (node->args)
 			{
 				t_list *c;

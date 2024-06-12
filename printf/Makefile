@@ -12,7 +12,7 @@
 
 NAME = libftprintf.a
 CFILES = ft_putnbr.c ft_putchar.c ft_putstr.c ft_printf.c ft_puthexa.c ft_puthexal.c ft_putunsigned.c
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror -g3
 OFILES = $(CFILES:.c=.o)
 
 all: $(NAME)
