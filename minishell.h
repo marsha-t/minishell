@@ -70,7 +70,7 @@ typedef struct s_ast
 	char	*cmd;
 	int		code;
 	int		n_args;
-   t_list **args;
+   t_list *args;
 	// int		n_input;
 	// int		*io_input;	// io_input[0] will contain io number for first input redirection
 	// char	**file_input; // file_input[0] will contain file for first input redirection

@@ -135,11 +135,29 @@ echo $var #abc=def
 var==abc
 echo $var #=abc
 
+var=123
+echo $"$var" # 123
+echo $"$var$" #123$
+echo $"$var$" $"$var$" #123$ 123$
+
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
 #############################################################################
 ls *txt
+ls i*c # lists files starting with i and ending with c 
+ls '*.t' # there are no files ending with t; cannot access *.t 
+ls "*.c" # cannot access *.c 
+ls '*.c' # cannot access *.c
 norminette ***.c
+
+var=*
+echo $var #prints all the files in working directory
+echo $var abc # prints all the files in working directory followed by abc
+echo "$var abc" #prints: * abc
+
+touch test'".c' #create file called: test".c
+ls *".c # counts as incomplete line until another " typed in
+ls *'".c' #prints 'test.".c'
 
 #############################################################################
 # REDIRECTION ORDER #########################################################

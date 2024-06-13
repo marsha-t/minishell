@@ -68,21 +68,21 @@ int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 	return (0);
 }
 
-/*	count_args count the number of arguments in the token list
-	- single pointer used for tokens
-	so that shifting of pointer in function doesn't affect other functions*/
-int	count_args(t_token *tokens)
-{
-	int	count;
+// /*	count_args count the number of arguments in the token list
+// 	- single pointer used for tokens
+// 	so that shifting of pointer in function doesn't affect other functions*/
+// int	count_args(t_token *tokens)
+// {
+// 	int	count;
 
-	count = 0;
-	while (tokens && tokens->code == TOKEN_ARG)
-	{
-		count++;
-		tokens = tokens->next;
-	}
-	return (count);
-}
+// 	count = 0;
+// 	while (tokens && tokens->code == TOKEN_ARG)
+// 	{
+// 		count++;
+// 		tokens = tokens->next;
+// 	}
+// 	return (count);
+// }
 
 /*	ast_node_append_arg appends the arguments into command ast node
 	- allocates space for n_args strings
@@ -92,31 +92,25 @@ int	count_args(t_token *tokens)
 int	ast_node_append_arg(t_token **tokens, t_ast *current)
 {
 	int	i;
-	// t_list *head;
 	t_list *new;
-	(void)tokens;
 	t_list *c;
-	if(!current->args)
-		current->args = ft_calloc(1, sizeof(t_list*));
-	if (!current->args)
-		return (ft_putstr_fd("Malloc error creating t_ast->args\n", 2), 1);
-	c = (*(current->args));
+
 	i = 0;
 	while ((*tokens) && (*tokens)->code == TOKEN_ARG)
 	{
 		new = malloc(sizeof(t_list));
-		new ->content= ft_strdup((*tokens)->str);
+		new->content= ft_strdup((*tokens)->str);
 		if (!new->content)
 			return (ft_putstr_fd("Malloc error creating t_ast->arg", 2), 1);
-		new -> next = NULL;
-		if(!(*(current->args)))
-			(*(current->args)) = new;
+		new->next = NULL;
+		if(!current->args)
+			current->args = new;
 		else
 		{
-			c = (*(current->args));
-			while (c -> next)
-				c = c -> next;
-			c-> next = new;
+			c = current->args;
+			while (c->next)
+				c = c->next;
+			c->next = new;
 		}
 		*tokens = (*tokens)->next;
 		i++;
@@ -244,6 +238,7 @@ void	file_list_print(t_file *file, int type)
 	- prints other components in cmd node depending on whether it is filled */
 void	ast_list_print(t_ast *node)
 {
+	t_list *c;
 
 	ft_printf("\nprinting ast_list\n");
 	while (node)
@@ -253,16 +248,13 @@ void	ast_list_print(t_ast *node)
 			ft_printf("NODE: cmd: , args: ", node->cmd, node->n_args);
 			if (node->args)
 			{
-				t_list *c;
-				c = *(node->args);
+				c = node->args;
 				while (c)
 				{
 					ft_printf("%s, ", c->content);
 					c = c->next;
 				}
-
 			}
-
 			ft_printf("\n");
 			if (node->input_list)
 				file_list_print(node->input_list, 1);
@@ -301,6 +293,7 @@ void	ast_list_free(t_ast *node)
 {
 	t_ast	*current;
 	t_ast	*next;
+	t_list	*curr_arg;
 
 	current = node;
 	while (current)
@@ -308,15 +301,15 @@ void	ast_list_free(t_ast *node)
 		next = current->next;
 		if (node->cmd)
 			free(node->cmd);
-		if (node-> args)
+		if (node->args)
 		{
-			t_list *curr;
-			curr = *(node ->args);
-			while (curr)
+			curr_arg = node->args;
+			while (curr_arg)
 			{
-				*(node ->args)= (*(node ->args))->next;
-				free(curr);
-				curr = *(node ->args);
+				node->args = node->args->next;
+				free(curr_arg->content);
+				free(curr_arg);
+				curr_arg = node->args;
 			}
 		}
 		if (node->input_list)
