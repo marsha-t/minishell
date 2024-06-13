@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:29 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 13:04:38 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ int	count_args(t_token *tokens)
 	- allocates space for n_args strings
 	- duplicates arg strings into array of str in ast node
 	- shifts tokens pointer along
-	- returns 1 if malloc error for char **args or strdup*/
+	- returns 1 if malloc error for char **args or strdup
+		- if strdup error, update n_args so that ast_list_free frees the correct number of strings*/
 int	ast_node_append_arg(t_token **tokens, t_ast *current)
 {
 	int	i;
@@ -100,10 +101,12 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 	i = 0;
 	while ((*tokens) && (*tokens)->code == TOKEN_ARG)
 	{
-		// printf("ast_node_append_arg: %s\n", (*tokens)->str);
 		current->args[i] = ft_strdup((*tokens)->str);
 		if (!current->args[i])
+		{
+			current->n_args = i;
 			return (1);
+		}
 		*tokens = (*tokens)->next;
 		i++;
 	}

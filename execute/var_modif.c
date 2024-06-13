@@ -6,13 +6,13 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/05 05:49:36 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/07 05:28:42 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int print_export(t_var **envp)
+void print_export(t_var **envp)
 {
 	t_var *current;
 
@@ -23,7 +23,6 @@ int print_export(t_var **envp)
 			ft_printf("declare -x %s\n", current->content);
 		current = current -> next;
 	}
-	return (0);
 }
 
 // void print_export(char *str, t_var **envp)
@@ -41,8 +40,7 @@ int print_export(t_var **envp)
 // 	}
 // }
 
-// work in progress: to check return values of ft_printf
-int print_envp(t_var **envp)
+void print_envp(t_var **envp)
 {
 	t_var *current;
 
@@ -53,7 +51,6 @@ int print_envp(t_var **envp)
 			ft_printf("%s\n", current->content);
 		current = current -> next;
 	}
-	return (0);
 }
 
 // void print_envp(char *str, t_var **envp)

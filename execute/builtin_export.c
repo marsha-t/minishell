@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/06 10:48:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/13 13:42:32 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@
 			- if equal, replace in list
 		- if key doesn't exist, create new node in list 
 	- options are treated as invalid variable names
-	*/
-	//work in progress: check_exist not updated since it is used for expansions too 
-// work in progress: streamline function by using temp t_var to hold key + value and another function to create them (function will be used in run_assign_str)
-
+*/
+// work in progress: check_exist not updated since it is used for expansions too 
+// work in progress: to terminate shell for malloc issues
 int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
-	int	i;
+	t_file	*curr_arg;
 	char	*key;
 	char	*value;
 	char	*equal;
@@ -40,14 +39,14 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 		return (print_export(shell->var_list));
 	else
 	{
-		while (i < node->n_args)
+		curr_arg = node->args;
+		while (curr_arg)
 		{
-			if (create_key_value(node->args[i], &equal, &key, &value) == 1)
-				return (1);
+			if (create_key_value(curr_arg, &equal, &key, &value) == 1)
+				return (1); // terminate shell
 			if (valid_varname(key) == 1)
 			{
-				free(key);
-				free(value);
+				free_num(2, key, value);
 				return (ft_putstr_fd("export: invalid environment variable name\n", 2), 1);
 			}
 			exist = check_exist(key, shell->var_list);
@@ -65,22 +64,19 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 			}
 			else
 			{
-				free(key);
-				free(value);
+				free_num(2, key, value);
 				if (equal)
 				{
-					if (create_node(shell->var_list, argv[i], 1) == 1)
-						return (1); // update this
-
+					if (create_node(shell->var_list, curr_arg, 1) == 1)
+						return (1); // need to terminate shell
 				}
 				else
 				{
-					if (create_node(shell->var_list, argv[i], 0) == 1)
-						return (1); // update this 
-
+					if (create_node(shell->var_list, curr_arg, 0) == 1)
+						return (1); // need to terminate shell
 				}
 			}
-			i++;
+			curr_arg = curr_arg->next;
 		}
 	}
 }

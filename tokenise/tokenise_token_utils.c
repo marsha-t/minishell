@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/02 12:08:45 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/13 04:54:42 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ void	free_tokens(t_token *tokens)
 	while (current)
 	{
 		next = current->next;
-		free(current->str);
-		free(current);
+		free_num(2, current->str, current);
+		// free(current->str);
+		// free(current);
 		current = next;
 	}
 }
