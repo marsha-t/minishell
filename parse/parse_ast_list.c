@@ -68,22 +68,6 @@ int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 	return (0);
 }
 
-// /*	count_args count the number of arguments in the token list
-// 	- single pointer used for tokens
-// 	so that shifting of pointer in function doesn't affect other functions*/
-// int	count_args(t_token *tokens)
-// {
-// 	int	count;
-
-// 	count = 0;
-// 	while (tokens && tokens->code == TOKEN_ARG)
-// 	{
-// 		count++;
-// 		tokens = tokens->next;
-// 	}
-// 	return (count);
-// }
-
 /*	ast_node_append_arg appends the arguments into command ast node
 	- allocates space for n_args strings
 	- duplicates arg strings into array of str in ast node
@@ -112,6 +96,7 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 				c = c->next;
 			c->next = new;
 		}
+		current->n_args++;
 		*tokens = (*tokens)->next;
 		i++;
 	}
@@ -245,7 +230,7 @@ void	ast_list_print(t_ast *node)
 	{
 		if (node->code == TOKEN_CMD)
 		{
-			ft_printf("NODE: cmd: , args: ", node->cmd, node->n_args);
+			ft_printf("NODE: cmd: %s\nn_args: %d, args: ", node->cmd, node->n_args);
 			if (node->args)
 			{
 				c = node->args;
