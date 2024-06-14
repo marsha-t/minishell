@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 10:56:38 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 15:49:27 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct	s_file
 	int				flag;
 	struct s_file	*next;
 } t_file;
+
 // struct to save the contents of the current directory
 typedef struct s_dconts
 {
@@ -62,25 +63,12 @@ typedef struct s_dconts
 	struct s_dconts *next;
 } t_dconts;
 
-// typedef struct s_list
-// {
-// 	char *arg_str;
-// 	struct s_list*next;
-// } t_list;
-
 typedef struct s_ast
 {
 	char	*cmd;
 	int		code;
 	int		n_args;
-   t_list *args;
-	// int		n_input;
-	// int		*io_input;	// io_input[0] will contain io number for first input redirection
-	// char	**file_input; // file_input[0] will contain file for first input redirection
-	// int		n_output_append; // number of output and append redirections
-	// int		*io_output_append; // io_output_append[0] will contain io number for first output/append redirection
-	// int		*is_append;// 0 if output; 1 if append
-	// char	**file_output_append; // file_output_append[0] will contain file for first output/append redirection
+   	t_list *args;
 	t_file *input_list;
 	t_file *output_list;
 	t_file *heredoc_list;
@@ -113,14 +101,13 @@ typedef struct s_shell
 /*****************************************************************************/
 /*	initialise																 */
 /*****************************************************************************/
-
 // shell.c
 void	free_safe(void *pointer);
 t_shell	*init_shell(char **envp);
 void	free_shell(t_shell *shell);
 
 // env_var.c
-int create_node(t_var **v, char *str);
+int create_node(t_var **v, char *str, int flag);
 t_var *create_list(char **envp);
 void	free_var_list(t_var *var);
 
@@ -223,6 +210,7 @@ unsigned long long	ft_atoi_ull(char *str);
 int check_ll_limit(char *str, int sign);
 int	check_exit_arg(char *str);
 int	get_exit_status(char *str);
+void	exit_shell(t_shell *shell);
 int	builtin_exit(t_ast *node, t_shell *shell);
 
 // builtin_export.c

@@ -20,6 +20,9 @@ echo "'"
 echo "\"" # Output is " but here, \ is unsupported
 ech"o" "a"b"cd'ef" 1> a".txt" #abcd'ef in a.txt
 
+"" #error: command not found (127)
+"" echo abc #error: command not found (127)
+'' echo abc #error: command not found (127)
 #############################################################################
 # PIPES #####################################################################
 #############################################################################
@@ -158,6 +161,12 @@ echo $"$var" # 123
 echo $"$var$" #123$
 echo $"$var$" $"$var$" #123$ 123$
 
+var=
+$var #treated like empty line; not in history; no error
+$var echo abc #output: abc
+
+echo hello$*world #output: helloworld
+echo hello$%world #output: hello$%world
 
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
@@ -178,6 +187,7 @@ touch test'".c' #create file called: test".c
 ls *".c # counts as incomplete line until another " typed in
 ls *'".c' #prints 'test.".c'
 
+echo e$*e #ee
 #############################################################################
 # REDIRECTION ORDER #########################################################
 #############################################################################

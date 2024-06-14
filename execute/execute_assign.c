@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/13 14:46:00 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 14:14:41 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ int	check_assign_varname(t_ast *node)
 	if (valid_varname(key) == 1)
 		return (ft_putstr_fd("Invalid variable name provided", 2), 1);
 	free(key);
+	curr_arg = node->args;
 	if (node->n_args > 0)
 	{
 		while (curr_arg)

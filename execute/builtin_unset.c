@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 06:17:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/13 13:44:30 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 15:48:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,30 @@
 	- options are treated as invalid variable names
 	*/
 // work in progress: need to update search_for_node (which uses search_for_key which expansions use)
+// work in progress: are in_fd and out_fd needed?
 int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	t_var	*current;
 	t_var	*del_node;
 	int		exit_status;
-	t_file	*curr_arg;
+	t_list	*curr_arg;
 	
+	(void)in_fd;
+	(void)out_fd;
 	exit_status = 0;
 	if (node->n_args == 0)
 		return (0);
 	curr_arg = node->args;
 	while (curr_arg)
-
 	{
 		if (valid_varname(curr_arg->content) == 1)
 		{
 			ft_putstr_fd("unset: invalid environment variable name\n", 2);
 			exit_status = 1;
 		}
-		else if (search_for_node(curr_arg->content, shell->var_list))
+		else if (search_for_node(curr_arg->content, &shell->var_list))
 		{
-			del_node = search_for_node(curr_arg->content, shell->var_list);
+			del_node = search_for_node(curr_arg->content, &shell->var_list);
 			if (del_node == shell->var_list)
 			{
 				shell->var_list = shell->var_list->next;

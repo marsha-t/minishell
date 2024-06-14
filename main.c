@@ -3,20 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/03 17:51:00 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 15:52:43 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_shell(t_shell *shell)
-{
-	free_shell(shell);
-	rl_clear_history();
-}
 
 int main(int ac, char **av, char **envp)
 {
@@ -60,6 +55,7 @@ int main(int ac, char **av, char **envp)
 			if (!shell->root)
 				return (exit_shell(shell), 1); 
 			ast_tree_print(shell->root);
+			printf("before execute\n");
 			execute_ast(shell->root, shell);
     	}
 	}
