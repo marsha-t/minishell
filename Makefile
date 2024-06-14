@@ -10,15 +10,17 @@ PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c create_redir_lists.c
 EXPANSIONS_DIR = expansions
 EXPANSIONS_CFILES = env_var_utils.c quote_remove.c
 EXECUTE_DIR = execute
-EXECUTE_CFILES = execute_ast_tree.c
-
+EXECUTE_CFILES = execute_ast_tree.c  execute_external.c execute_external_utils.c \
+	builtin_echo.c builtin_exit.c  builtin_pwd.c 
+	# execute_assign.c builtin_cd.c builtin_env.c builtin_export.c builtin_export_unset_utils.c builtin_unset.c
 CFILES =  main.c \
 		$(addprefix $(INITIALISE_DIR)/, $(INITIALISE_CFILES)) \
 		$(addprefix $(CHECK_DIR)/, $(CHECK_CFILES)) \
 		$(addprefix $(TOKENISE_DIR)/, $(TOKENISE_CFILES)) \
 		$(addprefix $(PARSE_DIR)/, $(PARSE_CFILES)) \
+		expansions/quote_remove.c \
+		$(addprefix $(EXECUTE_DIR)/, $(EXECUTE_CFILES)) \
 		# $(addprefix $(EXPANSION_DIR)/, $(EXPANSION_CFILES)) 
-		# $(addprefix $(EXECUTE_DIR)/, $(EXECUTE_CFILES)) 
 
 OFILES = ${CFILES:.c=.o}
 
@@ -39,7 +41,7 @@ $(NAME): $(OFILES) $(LIBFT) $(FT_PRINTF)
 	cc $(CFLAGS) $(OFILES) $(LIBFT_DIR)/$(LIBFT) $(FT_PRINTF_DIR)/$(FT_PRINTF) -o $(NAME) -lreadline
 
 $(LIBFT):
-	make -C $(LIBFT_DIR)
+	make bonus -C $(LIBFT_DIR)
 
 $(FT_PRINTF):
 	make -C $(FT_PRINTF_DIR)

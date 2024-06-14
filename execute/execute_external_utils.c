@@ -41,7 +41,7 @@ int	check_filepath(char *cmd)
 		if (stat(cmd, &file_stat) == -1)
 			return (ft_putstr_fd("Error calling stat\n", 2), 1); // note: this should terminate shell
 		else if (S_ISDIR(file_stat.st_mode))
-			return (ft_putstr("Is a directory\n", 2), 126);
+			return (ft_putstr_fd("Is a directory\n", 2), 126);
 		else
 			return (0);
 	}
@@ -57,8 +57,8 @@ int	check_filepath(char *cmd)
 
 /*	value finds the value in var_list given a key*/
 // work in progress - this is likely a duplicate of a function in expansions; 
-// this is excluded from minishell.h
-char *value(t_var *var, char *key)
+// this is included in  minishell.h
+char *get_value(t_var *var, char *key)
 {
 	while (var)
 	{
@@ -123,11 +123,11 @@ char *add_current_wd(char *path, int i)
 		if (!new_path)
 			return (ft_putstr_fd("Malloc creating new_path\n", 2), NULL); // terminate shell
 	}
-	else if (i == ft_strlen(path) - 1)
+	else if (i == (int)ft_strlen(path) - 1)
 	{
 		new_path = ft_strjoin_free(ft_strjoin_free(path, ":"), dir);
 		if (!new_path)
-			return(ft_putstr_fd("Malloc creating new_path\n", 2), NULL) // terminate shell
+			return(ft_putstr_fd("Malloc creating new_path\n", 2), NULL); // terminate shell
 	}
 	else
 	{
@@ -169,10 +169,10 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	struct stat file_stat;
 	int	denied;
 	
-	value = ft_strdup(value(shell->var_list, "PATH"));
+	value = ft_strdup(get_value(shell->var_list, "PATH"));
 	if (!value)
 	{
-		*exit_status = 1
+		*exit_status = 1;
 		return (ft_putstr_fd("No such file or directory\n", 2), NULL);
 	}
 	if (has_current_wd(value) > -1)

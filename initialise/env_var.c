@@ -6,15 +6,14 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/06 04:55:56 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 15:39:41 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
 /*	create_node returns 1 for malloc error */
-int create_node(t_var **v, char *str)
+int create_node(t_var **v, char *str, int flag)
 {
 	t_var *new;
 	t_var *current;
@@ -35,6 +34,8 @@ int create_node(t_var **v, char *str)
 		if (!new->value)
 			return (ft_putstr_fd("Malloc error creating t_var->value in create_node\n", 2), 1);
 	}
+	new->flag = flag;
+	new->env = 1;
 	new->next = NULL;
 	if (!*v)
 		*v = new;
@@ -57,7 +58,7 @@ t_var *create_list(char **envp)
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (create_node(&v, envp[i]) == 1)
+		if (create_node(&v, envp[i], 1) == 1)
 			return (NULL);
 		i++;
 	}

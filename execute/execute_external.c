@@ -39,7 +39,7 @@ char	**envp_array(t_var *env)
 	
 	envp = malloc(sizeof(char *) * (count_env(env) + 1));
 	if (!envp)
-		return (ft_putstr_fd("Malloc error creating envp for envp_array\n", 2), 0);
+		return (ft_putstr_fd("Malloc error creating envp for envp_array\n", 2), NULL);
 	i = 0;
 	current = env;
 	while (current)
@@ -52,7 +52,7 @@ char	**envp_array(t_var *env)
 				while (i--)
 					free(envp[i]);
 				free(envp);
-				return (ft_putstr_fd("Malloc error creating envp[i] for envp_array\n", 2), 0);
+				return (ft_putstr_fd("Malloc error creating envp[i] for envp_array\n", 2), NULL);
 			}
 			i++;
 		}
@@ -66,9 +66,10 @@ char	**envp_array(t_var *env)
 char **argv_array(t_ast *node)
 {
 	char	**argv;
-	t_file	*current;
+	t_list	*current;
 	int		i;
 	
+	current = node->args;
 	argv = malloc(sizeof(char *) * (ft_lstsize(current) + 2));
 	if (!argv)
 		return (ft_putstr_fd("Malloc error creating argv for argv_array\n", 2), NULL);
@@ -110,9 +111,9 @@ char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
 	if (cmd[0] == '\0')
 	{
 		*exit_status = 127;
-		return (ft_putstr_fd("command not found\n", 2), 0);
+		return (ft_putstr_fd("command not found\n", 2), NULL);
 	}
-	if (ft_strchr(cmd, '/') == 1)
+	if (ft_strchr(cmd, '/') != 0)
 	{
 		*exit_status = check_filepath(cmd);
 		if (*exit_status == 0)
@@ -127,6 +128,7 @@ char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
 
 /*	run_external runs an external command 
 	- by first preparing the arguments for execve */
+// work in progress: how to pass in_fd and out_fd to execve
 int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	int		exit_status;
@@ -134,13 +136,15 @@ int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	char	**argv;
 	char	**envp;
 
+	(void)in_fd;
+	(void)out_fd;
 	filename = get_filepath(node->cmd, &exit_status, shell);
 	if (!filename)
 		return (exit_status);
 	argv = argv_array(node);
-	if (!arg)
+	if (!argv)
 		return (1);
-	envp = envp_array(shell->envp);
+	envp = envp_array(shell->var_list);
 	if (!envp)
 		return (1);
 	exit_status = execve(filename, argv, envp);

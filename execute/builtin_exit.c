@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/13 13:35:49 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 14:16:14 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,16 @@ int	get_exit_status(char *str)
 	return ((int) num);
 }
 
+/*	exit_shell does final clean-up before shell is exited
+	- free shell
+	- clear history */
+// work in progress: error running rl_clear_history on Mac (error: implicit declaration)
+void	exit_shell(t_shell *shell)
+{
+	free_shell(shell);
+	// rl_clear_history();
+}
+
 /*	builtin_exit runs the exit command
 	- checks validity of arguments
 	- determines value (exit status) to return
@@ -95,7 +105,8 @@ int	get_exit_status(char *str)
 	- errors: 
 		- numeric argument required: exit status = 2
 		- too many arguments: exit status = 1 */
-int	builtin_exit(t_ast *node)
+// work in progress: need to find a way to terminate shell after exit_shell()
+int	builtin_exit(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
 
@@ -107,7 +118,6 @@ int	builtin_exit(t_ast *node)
 		exit_status = 0;
 	else
 		exit_status = get_exit_status(node->args->content);
-	free_shell(shell);
-	rl_clear_history();
+	exit_shell(shell);
 	return (exit_status);
 }

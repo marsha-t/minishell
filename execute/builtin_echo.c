@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 07:43:19 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/13 13:37:02 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 15:55:43 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	is_newline_arg(char *arg)
 	{
 		if (arg[i] != 'n')
 			return (0);
+		i++;
 	}
 	return (1);
 }
@@ -33,11 +34,13 @@ int	is_newline_arg(char *arg)
 	- error can occur from write errors
 	- multiple newline arguments are all considered as newline arguments
 	- invalid options are taken as arguments and printed */
+// work in progress: should in_fd do anything?
 int	builtin_echo(t_ast *node, int in_fd, int out_fd)
 {
 	int		newline;
-	t_file	*curr_arg;
+	t_list	*curr_arg;
 	
+	(void)in_fd;
 	newline = 1;
 	if (node->n_args == 0 || (node->n_args > 0 && is_newline_arg(node->args->content) == 1))
 		newline = 0;
@@ -46,10 +49,10 @@ int	builtin_echo(t_ast *node, int in_fd, int out_fd)
 		curr_arg = curr_arg->next;
 	while (curr_arg)
 	{
-		write(out_fd, curr_arg, ft_strlen(curr_arg));
+		write(out_fd, curr_arg->content, ft_strlen(curr_arg->content));
 		if (curr_arg->next)
 			write(out_fd, " ", 1);
-		i++;
+		curr_arg = curr_arg->next;
 	}
 	if (newline == 1)
 		write(out_fd, "\n", 1);

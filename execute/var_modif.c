@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-void print_export(t_var **envp)
+void print_export(t_var *envp)
 {
 	t_var *current;
 
-	current = *envp;
+	current = envp;
 	while (current)
 	{
 		if (current->env == 1)
@@ -40,11 +40,11 @@ void print_export(t_var **envp)
 // 	}
 // }
 
-void print_envp(t_var **envp)
+void print_envp(t_var *envp)
 {
 	t_var *current;
 
-	current = *envp;
+	current = envp;
 	while (current)
 	{
 		if (current->env == 1 && current->flag == 0)
