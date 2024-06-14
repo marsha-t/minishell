@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 15:58:21 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 16:30:49 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,91 @@ int	check_empty_cmd(t_ast *node)
 		return (0);
 }
 
+/*	file_list_check_var calls contain_var and expand_str 
+	for each file provided in file linked list 
+	*/
+// int	file_list_check_var(t_file *file)
+// {
+// 	t_file	*curr_file;
+	
+// 	curr_file = file;
+// 	while (curr_file)
+// 	{
+// 		if (contain_var(curr_file->file_name) == 0)
+// 		{
+// 			curr_file->file_name = expand_str(curr_file->file_name);
+// 			if (!curr_file->file_name)
+// 				return (1);
+// 		}
+// 		curr_file = curr_file->next;
+// 	}
+// 	return (0);
+// }
+
+/*	check_var_expansion checks whether variable expansions are needed 
+	- checks strings in cmd, args and files
+	- if needed, expands them
+	- returns 1 if errors with expansion
+	*/
+// int	check_var_expansion(t_ast *node)
+// {
+// 	t_list	*curr_arg;
+// 	t_file	*curr_file;
+	
+// 	if (contain_var(node->cmd) == 0)
+// 	{
+// 		node->cmd = expand_str(node->cmd);
+// 		if (!node->cmd)
+// 			return (1);
+// 	}
+// 	if (node->n_args > 0)
+// 	{
+// 		curr_arg = node->args;
+// 		while (curr_arg)
+// 		{
+// 			if (contain_var(curr_arg->content) == 0)
+// 			{
+// 				curr_arg->content = expand_str(curr_arg->content);
+// 				if (!curr_arg->content)
+// 					return (1);
+// 			}
+// 			curr_arg = curr_arg->next;
+// 		}
+// 	}
+// 	if (node->input_list)
+// 	{
+// 		if (file_list_check_var(node->input_list) == 1)
+// 			return (1);
+// 	}
+// 	if (node->heredoc_list)
+// 	{
+// 		if (file_list_check_var(node->heredoc_list) == 1)
+// 			return (1);
+// 	}
+// 	if (node->output_list)
+// 	{
+// 		if (file_list_check_var(node->output_list) == 1)
+// 			return (1);
+// 	}
+// 	return (0);		
+// }
+
+/*	check_wc_expansion checks whether wildcard expansions are needed 
+	- checks strings in cmd, args and files
+	- if needed, expands them
+	- returns 1 if errors with expansion
+	*/
+// work in progress: finish function - same as check_var_expansion but with contain_wc and corresponding expand function
+
+// int	check_wc_expansion(t_ast *node)
+// {
+// }
+
 /*	execute_cmd_node
 	- checks for empty cmd before - expands normal and environment variables
 	- removes quotes
 	- sets up file descriptors given redirections
 	- executes command with updated input/output fd */
-// work in progress: need to integrate variable expansion
-// work in progress: need to integrate wildcard expansion
 // work in progress: need to return from check_empty_cmd if empty str was typed
 // work in progress: need to integrate quote removal
 // work in progress: need to add redirections
@@ -106,8 +184,10 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	int in_fd;
 	int out_fd;
 
-	// variable expansion
-	// wildcard expansion
+	// if (check_var_expansion(node) == 1)
+	// 	return (1); 
+	// if (check_wc_expansion(node) == 1)
+	// 	return (1);
 	if (cmd_only_quote(node->cmd) == 0)
 		return (ft_putstr_fd("command not found\n", 2), 127);
 	if (check_empty_cmd(node) == 1)
