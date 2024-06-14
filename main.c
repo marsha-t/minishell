@@ -60,7 +60,7 @@ int main(int ac, char **av, char **envp)
 			if (!shell->root)
 				return (exit_shell(shell), 1); 
 			ast_tree_print(shell->root);
-			// execute_ast(shell->root);
+			execute_ast(shell->root, shell);
     	}
 	}
 	exit_shell(shell);

@@ -17,5 +17,8 @@
 // work in progress: continue work on this!
 int	builtin_cd(t_ast *node, int in_fd, int out_fd)
 {
-
+	(void)node;
+	(void)in_fd;
+	(void)out_fd;
+	return (0);
 }

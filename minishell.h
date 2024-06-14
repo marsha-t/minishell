@@ -23,6 +23,7 @@
 # include <errno.h>
 # include <stdarg.h>
 # include <dirent.h>
+#include <sys/stat.h>
 # include "libft/libft.h"
 # include "printf/ft_printf.h"
 
@@ -193,20 +194,25 @@ int create_output_append_list(int code, t_token *token, t_ast **node);
 t_ast	*ast_tree_new(t_ast **node);
 void	ast_tree_print(t_ast *node);
 
+// quote_remove.c 
+char	*ft_strjoin_free(char *s1, char *s2);
+char	*remove_quote_str(char *str);
+int	remove_quote_node(t_ast *node);
+
 /*****************************************************************************/
 /*	execute																	 */
 /*****************************************************************************/
 // execute_ast_tree.c
-int	execute_cmd(t_ast *node, int in_fd, int out_fd);
+int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell);
 int	cmd_only_quote(char *cmd);
-int	execute_cmd_node(t_ast *node);
-int		execute_ast(t_ast *node);
+int	execute_cmd_node(t_ast *node, t_shell *shell);
+int		execute_ast(t_ast *node, t_shell *shell);
 
 // builtin_cd.c
 int	builtin_cd(t_ast *node, int in_fd, int out_fd);
 
 // builtin_echo.c
-int	is_newline_arg(char *arg)
+int	is_newline_arg(char *arg);
 int	builtin_echo(t_ast *node, int in_fd, int out_fd);
 
 // builtin_env.c
@@ -217,7 +223,7 @@ unsigned long long	ft_atoi_ull(char *str);
 int check_ll_limit(char *str, int sign);
 int	check_exit_arg(char *str);
 int	get_exit_status(char *str);
-int	builtin_exit(t_ast *node);
+int	builtin_exit(t_ast *node, t_shell *shell);
 
 // builtin_export.c
 int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell);
@@ -231,7 +237,7 @@ char	*ft_getcwd(void);
 int	builtin_pwd(t_ast *node, int in_fd, int out_fd);
 
 // builtin_unset.c
-int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell);
 
 // execute_assign.c
 int	valid_varname(char *name);
@@ -239,7 +245,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value);
 int	create_node_normal(t_var **v, char *key, char *value);
 int	run_assign_str(char *cmd, t_shell *shell);
 int	check_assign_varname(t_ast *node);
-int	run_assign_cmd(t_ast *node, t_shell *shell, int i);
+int	run_assign_cmd(t_ast *node, t_shell *shell);
 int	run_assign(t_ast *node, t_shell *shell);
 
 // execute_external.c
@@ -251,6 +257,7 @@ int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell);
 
 // execute_external_utils.c
 void	free_num(int num, ...); // move to basic utils?
+char *get_value(t_var *var, char *key);
 int	check_filepath(char *cmd);
 void	free_char_dp(char **dp);
 int	has_current_wd(char *path);
@@ -268,7 +275,7 @@ char *return_key(char *str);
 char  *search_for_key(char *key,char *str);
 int var_length(char *str);
 int ft_strlen_b_$(char *str);
-char *value(char *str , t_var **envp);
+// char *value(char *str , t_var **envp);
 int contain_var(char *str);
 t_dconts *create_conts_list(void);
 char *ft_strrev(char *str);
@@ -280,8 +287,8 @@ int list_size(t_dconts *list);
 void env_ops(t_var **list, t_token *token);
 
 // var_modif.c
-void print_export(char *str, t_var **envp);
-void print_envp(char *str, t_var **envp);
+void print_export(t_var *envp);
+void print_envp(t_var *envp);
 void export(char *s1,char *s2, t_var **envp);
 void unset(char *s1,char *s2, t_var **envp);
 

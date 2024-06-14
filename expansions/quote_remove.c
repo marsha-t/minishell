@@ -23,7 +23,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	int		j;
 	
 	if (!s1 || !s2)
-		return (free_num(2, s1, s2), 0);
+		return (free_num(2, s1, s2), NULL);
 	// if (!s1) 
 	// 	return (s2);
 	// if (!s2)
@@ -92,7 +92,7 @@ char	*remove_quote_str(char *str)
 	// work in progress depending on structure of ast node for args, input and output_append
 int	remove_quote_node(t_ast *node)
 {
-	int i;
+	// int i;
 	
 	node->cmd = remove_quote_str(node->cmd);
 	if (!node->cmd)
@@ -100,25 +100,26 @@ int	remove_quote_node(t_ast *node)
 		// error msg: malloc error
 		return (1);
 	}
-	if (n_args > 0)
-	{
-		i = 0;
-		while (i < n_args)
-		{
-			node->args[i] = remove_quote_str(node->cmd);
-			if (!node->args[i])
-			{
-				// error msg: malloc error
-				return (1);
-			}
-		}
-	}
-	if (n_input > 0)
-	{
+	// if (node->n_args > 0)
+	// {
+	// 	i = 0;
+	// 	while (i < n_args)
+	// 	{
+	// 		node->args[i] = remove_quote_str(node->cmd);
+	// 		if (!node->args[i])
+	// 		{
+	// 			// error msg: malloc error
+	// 			return (1);
+	// 		}
+	// 	}
+	// }
+	// if (n_input > 0)
+	// {
 		
-	}
-	if (n_output_append > 0)
-	{
+	// }
+	// if (n_output_append > 0)
+	// {
 		
-	}
+	// }
+	return (0);
 }

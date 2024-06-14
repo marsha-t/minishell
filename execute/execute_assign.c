@@ -42,7 +42,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 		*key = strdup_range(str, *equal - 1);
 		if (!*key)
 			return (ft_putstr_fd("Malloc error creating key", 2), 1);
-		if (*equal + 1 == '\0')
+		if (*(*equal + 1) == '\0')
 		{
 			*value = ft_strdup("");
 			if (!*value)
@@ -115,7 +115,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 	if (valid_varname(key) == 1)
 	{
 		free_num(2, key, value);
-		return ((ft_putstr_fd("Invalid variable name\n", 2), 1);
+		return (ft_putstr_fd("Invalid variable name\n", 2), 1);
 	}
 	exist = check_exist(key, shell->var_list);
 	if (exist)
@@ -133,6 +133,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 		}
 		free(key);
 	}
+	return (0);
 }
 
 /*	check_assign_varname checks that key in assignments is valid
@@ -141,11 +142,10 @@ int	check_assign_varname(t_ast *node)
 {
 	char	*equal;
 	char	*key;
-	int		i;
-	t_file	*curr_arg;
+	t_list	*curr_arg;
 	
 	equal = ft_strchr(node->cmd, '=');
-	key = strdrup_range(node->cmd, equal - 1);
+	key = strdup_range(node->cmd, equal - 1);
 	if (!key)
 		return (ft_putstr_fd("Malloc error creating key for check_assign_varname\n", 2), 1);
 	if (valid_varname(key) == 1)
@@ -183,10 +183,10 @@ int	check_assign_varname(t_ast *node)
 int	run_assign_cmd(t_ast *node, t_shell *shell)
 {
 	free(node->cmd);
-	node->cmd = node->args;
+	node->cmd = node->args->content;
 	node->args = node->args->next;
 	node->n_args = ft_lstsize(node->args);
-	// return (execute_cmd_node(node, ));
+	return (execute_cmd_node(node, shell));
 }
 
 /*	run_assign runs the assignments in cmd and args (if any) 
@@ -196,8 +196,7 @@ int	run_assign_cmd(t_ast *node, t_shell *shell)
 // work in progress: finish run_assign_cmd
 int	run_assign(t_ast *node, t_shell *shell)
 {
-	t_file	*curr_arg;
-	char	*equal;
+	t_list	*curr_arg;
 
 	if (check_assign_varname(node) == 1)
 		return (1);
@@ -210,7 +209,7 @@ int	run_assign(t_ast *node, t_shell *shell)
 		{
 			if (ft_strchr(curr_arg->content, '='))
 			{
-				if (run_assign_str(curr_arg->content) == 1)
+				if (run_assign_str(curr_arg->content, shell) == 1)
 					return (1);
 				node->args = curr_arg->next;
 				free(curr_arg->content);

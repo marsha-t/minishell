@@ -15,26 +15,26 @@
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
 // work in progress - whether to give in_fd and out_fd to run_assign
-int	execute_cmd(t_ast *node, int in_fd, int out_fd)
+int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	int	exit_status;
 	
-	if (ft_strcmp(cmd, "echo") == 0)
+	if (ft_strcmp(node->cmd, "echo") == 0)
 		exit_status = builtin_echo(node, in_fd, out_fd);
-	else if (ft_strcmp(cmd, "cd") == 0)
+	else if (ft_strcmp(node->cmd, "cd") == 0)
 		exit_status = builtin_cd(node, in_fd, out_fd);
-	else if (ft_strcmp(cmd, "pwd") == 0)
+	else if (ft_strcmp(node->cmd, "pwd") == 0)
 		exit_status = builtin_pwd(node, in_fd, out_fd);
-	else if (ft_strcmp(cmd, "export") == 0)
+	else if (ft_strcmp(node->cmd, "export") == 0)
 		exit_status = builtin_export(node, in_fd, out_fd, shell);
-	else if (ft_strcmp(cmd, "unset") == 0)
+	else if (ft_strcmp(node->cmd, "unset") == 0)
 		exit_status = builtin_unset(node, in_fd, out_fd, shell);
-	else if (ft_strcmp(cmd, "env") == 0)
+	else if (ft_strcmp(node->cmd, "env") == 0)
 		exit_status = builtin_env(node, in_fd, out_fd, shell);
-	else if (ft_strcmp(cmd, "exit") == 0)
-		exit_status = builtin_exit(node);
+	else if (ft_strcmp(node->cmd, "exit") == 0)
+		exit_status = builtin_exit(node, shell);
 	else if (ft_strchr(node->cmd, '=') != NULL)
-		exit_status = run_assign(node);
+		exit_status = run_assign(node, shell);
 	else
 		exit_status = run_external(node, in_fd, out_fd, shell);
 	return(exit_status);
@@ -68,18 +68,22 @@ int	cmd_only_quote(char *cmd)
 	- sets up file descriptors given redirections
 	- executes command with updated input/output fd */
 // work in progress
-int	execute_cmd_node(t_ast *node)
+int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
-	
+	int in_fd;
+	int out_fd;
+
 	// variable expansion
 	// wildcard expansion
-	if (cmd_only_quotes(node->cmd) == 0)
+	if (cmd_only_quote(node->cmd) == 0)
 		return (ft_putstr_fd("command not found\n", 2), 127);
-	if (remove_quote_node(node) == 1)
-		return (1);
+	// if (remove_quote_node(node) == 1)
+	// 	return (1);
 	// handle redirections
-	exit_status = execute_cmd(node, );
+	in_fd = 0;
+	out_fd = 1;
+	exit_status = execute_cmd(node, in_fd, out_fd, shell);
 	return (exit_status);
 }
 
@@ -87,29 +91,29 @@ int	execute_cmd_node(t_ast *node)
 	- includes logic for TOKEN_AND and TOKEN_OR (which recursively calls execute_ast)
 	*/
 // work in progress for pipe
-int	execute_ast(t_ast *node)
+int	execute_ast(t_ast *node, t_shell *shell)
 {
 	if (!node)
 		return (0);
 	if (!node->left && !node->right) 
-		return (execute_cmd_node(node));
+		return (execute_cmd_node(node, shell));
 	else if (node->code == TOKEN_PIPE)
 	{
 		// ???
 	}
 	else if (node->code == TOKEN_AND)
 	{
-		if (execute_ast(node->left) == 0)
-			return (execute_ast(node->right));
+		if (execute_ast(node->left, shell) == 0)
+			return (execute_ast(node->right, shell));
 		else
 			return (1);
 	}
 	else if (node->code == TOKEN_OR)
 	{
-		if (execute_ast(node->left) == 0)
+		if (execute_ast(node->left, shell) == 0)
 			return (0);
 		else
-			return (execute_ast(node->right));
+			return (execute_ast(node->right, shell));
 	}
 	return (0);
 }

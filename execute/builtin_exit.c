@@ -95,7 +95,7 @@ int	get_exit_status(char *str)
 	- errors: 
 		- numeric argument required: exit status = 2
 		- too many arguments: exit status = 1 */
-int	builtin_exit(t_ast *node)
+int	builtin_exit(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
 
