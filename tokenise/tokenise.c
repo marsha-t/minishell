@@ -89,10 +89,11 @@ int	tokenise_misc(char **input, t_token **tokens)
 		simple commands refer to the commands that are between &&, || or |
 	- simple commands cannot start with &&, || or |
 	- redirection tokens must be followed by another TOKEN_TEMP
-	- input cannot end with &&, ||, | or ( */
+	- input cannot end with &&, ||, | or ( 
+	- returns 1 if any of the above happens */
 int	check_syntax_tokens(t_token *tokens)
 {
-	t_token *start;
+	t_token	*start;
 
 	start = tokens;
 	while (tokens)
@@ -108,7 +109,7 @@ int	check_syntax_tokens(t_token *tokens)
 			if (!start)
 				return (ft_putstr_fd("Syntax error: Incomplete command\n", 2), 1);
 		}
-		tokens = tokens->next;	
+		tokens = tokens->next;
 	}
 	return (0);
 }
@@ -118,11 +119,12 @@ int	check_syntax_tokens(t_token *tokens)
 		simple commands refer to the commands that are between &&, || or |
 	- if redirection found: next token is a file
 	- if no command tokens identified yet in simple command, first TOKEN_TEMP token is a command token
-	- otherwise, all other tokens are arguments */
-int	sort_temp_tokens(t_token *tokens)
+	- otherwise, all other tokens are arguments 
+	*/
+void	sort_temp_tokens(t_token *tokens)
 {
 	int		cmd;
-	
+
 	cmd = 0;
 	while (tokens)
 	{
@@ -143,36 +145,32 @@ int	sort_temp_tokens(t_token *tokens)
 			cmd = 0;
 		tokens = tokens->next;
 	}
-	return (0);
 }
 
 /*	tokenise creates linked list of tokens from input str
 	- separate tokens in input str based on whitespace, pipe or redirect
 	- categorises non-operator tokens into commands, arguments, files
-	- frees entire list and returns NULL if error creating any of the tokens */
-t_token	*tokenise(char *input)
+	- frees entire list and returns 1 if error creating any of the tokens 
+	- checks syntax of tokens and returns 2 if syntax error*/
+int	tokenise(char *input, t_token **tokens)
 {
-	t_token	*tokens;
-
-	tokens = 0;
-	// input = ft_strtrim(input, " \t");
 	while (*input)
 	{
 		while (ft_strchr(" \t", *input))
 			input++;
 		if (ft_strchr("|<>&()", *input))
 		{
-			if (tokenise_op(&input, &tokens) == 1)
-				return (free_tokens(tokens), NULL);
+			if (tokenise_op(&input, tokens) == 1)
+				return (free_tokens(*tokens), 1);
 		}
 		else
 		{
-			if (tokenise_misc(&input, &tokens) == 1)
-				return (free_tokens(tokens), NULL);
+			if (tokenise_misc(&input, tokens) == 1)
+				return (free_tokens(*tokens), 1);
 		}
 	}
-	if (check_syntax_tokens(tokens) == 1)
-		return (free_tokens(tokens), NULL);
-	sort_temp_tokens(tokens);
-	return (tokens);
+	if (check_syntax_tokens(*tokens) == 1)
+		return (free_tokens(*tokens), 2);
+	sort_temp_tokens(*tokens);
+	return (0);
 }

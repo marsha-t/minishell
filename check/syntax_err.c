@@ -12,7 +12,8 @@
 
 #include "../minishell.h"
 
-/*	check_direct returns 0 if
+/*	check_direct returns 1 if
+	-> followed by < and vice versa
 	- line ends with >, >>, < or << */
 int	check_direct(char *line)
 {
@@ -21,30 +22,30 @@ int	check_direct(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if ((line[i] == '>'&& line[i+1] == '<') || (line[i] == '<' && line[i+1] == '>'))
-			return(0);
+		if ((line[i] == '>' && line[i + 1] == '<') || (line[i] == '<' && line[i + 1] == '>'))
+			return (ft_putstr_fd("minishell: syntax error near unexpected token\n", 2), 1);
 		else if (((line[i] == '>' && line[i + 1] == '>') || (line[i] == '<' && line[i + 1] == '<')))
 		{
 			i = i + 2;
 			while (line [i] == ' ' || line[i] == '\t')
 				i++;
-			if(line[i] == '\0')
-				return (0);
+			if (line[i] == '\0')
+				return (ft_putstr_fd("minishell: syntax error near unexpected token", 2), 1);
 		}
 		else if ((line[i] == '>' || line[i] == '<' ))
 		{
 			i++;
 			while (line [i] == ' ' || line[i] == '\t')
 				i++;
-			if(line[i] == '\0')
-				return (0);
+			if (line[i] == '\0')
+				return (ft_putstr_fd("minishell: syntax error near unexpected token\n", 2), 1);
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
-/*	check_quotes returns 0 if mismatched quotes */
+/*	check_quotes returns 1 if mismatched quotes */
 int	check_quotes(char *line)
 {
 	int		i;
@@ -60,14 +61,14 @@ int	check_quotes(char *line)
 			while (line[i] != '\0' && line[i] != quote_t)
 				i++;
 			if (line[i] == '\0')
-				return (0);
+				return (ft_putstr_fd("minishell: mismatched quotes used\n", 2), 1);
 			else
 				i++;
 		}
 		else
 			i++;
 	}
-	return (1);
+	return (0);
 }
 
 /*	check_pipes returns 0 if
@@ -83,31 +84,32 @@ int	check_pipes(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '|' && line [1] != '|')
-			return (write(2, "minishell: syntax error near unexpected token `|'\n", 46), 0);
+			return (write(2, "minishell: syntax error near unexpected token `|'\n", 46), 1);
 		j = i;
 		while ((line[i] == 32 || line[i] == 9))
 		{
 			i++;
 			if (line[i] == '|' && line [i + 1] != '|' && j == 0)
-				return (write(2, "minishell: syntax error near unexpected token `|'\n", 46), 0);
+				return (write(2, "minishell: syntax error near unexpected token `|'\n", 46), 1);
 		}
 		if (line[i] == '|' && line [i + 1] != '|' && line[i - 1] != '|')
 		{
-			if (pipe_mid(i, line) == 0)
-				return (0);
+			if (pipe_mid(i, line) == 1)
+				return (1);
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
-/*	check_all returns 1 if all checks are passed */
+/*	check_all returns 0 if all checks are passed */
 int	check_all(char *line)
 {
-	if (check_quotes(line) == 1 && check_pipes(line) == 1 && check_direct(line) == 1
-		&& check_and(line) == 1 && check_or(line) == 1 && check_op_para(line) == 1
-		&& check_close_para(line) == 1)
-		return (1);
-	else
+	if (check_quotes(line) == 0 && check_pipes(line) == 0
+		&& check_direct(line) == 0 && check_and(line) == 0
+		&& check_or(line) == 0 && check_op_para(line) == 0
+		&& check_close_para(line) == 0)
 		return (0);
+	else
+		return (1);
 }

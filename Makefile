@@ -6,7 +6,9 @@ CHECK_CFILES = syntax_err.c syntax_err_bo.c syntax_bo_utils.c
 TOKENISE_DIR = tokenise
 TOKENISE_CFILES = tokenise.c tokenise_token_utils.c tokenise_misc_utils.c
 PARSE_DIR = parse
-PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c 
+PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c create_redir_lists.c
+EXPANSIONS_DIR = expansions
+EXPANSIONS_CFILES = env_var_utils.c quote_remove.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c
 
@@ -14,9 +16,9 @@ CFILES =  main.c \
 		$(addprefix $(INITIALISE_DIR)/, $(INITIALISE_CFILES)) \
 		$(addprefix $(CHECK_DIR)/, $(CHECK_CFILES)) \
 		$(addprefix $(TOKENISE_DIR)/, $(TOKENISE_CFILES)) \
-	#  env_var_utils.c var_modif.c environment_vars_op.c unset_and_export_utils.c		
-		# $(addprefix $(PARSE_DIR)/, $(PARSE_CFILES)) \
-		# $(addprefix $(EXECUTE_DIR)/, $(EXECUTE_CFILES)) \
+		$(addprefix $(PARSE_DIR)/, $(PARSE_CFILES)) \
+		# $(addprefix $(EXPANSION_DIR)/, $(EXPANSION_CFILES)) 
+		# $(addprefix $(EXECUTE_DIR)/, $(EXECUTE_CFILES)) 
 
 OFILES = ${CFILES:.c=.o}
 

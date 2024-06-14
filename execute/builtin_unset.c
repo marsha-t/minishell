@@ -33,6 +33,7 @@ int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 		return (0);
 	curr_arg = node->args;
 	while (curr_arg)
+
 	{
 		if (valid_varname(curr_arg->content) == 1)
 		{

@@ -61,15 +61,14 @@ t_ast	*ast_tree_new(t_ast **node)
 	- and then to right and doing the same*/
 void	ast_tree_print(t_ast *node)
 {
-	printf("node: %d, %s\n", node->code, node->cmd);
+	ft_printf("node: %d, %s\n", node->code, node->cmd);
 	if (node->left)
-		printf("left: %d, %s\n", node->left->code, node->left->cmd);
+		ft_printf("left: %d, %s\n", node->left->code, node->left->cmd);
 	if (node->right)
-		printf("right: %d, %s\n", node->right->code, node->right->cmd);
-	printf("\n\n");
+		ft_printf("right: %d, %s\n", node->right->code, node->right->cmd);
+	ft_printf("\n\n");
 	if (node->left)
 		ast_tree_print(node->left);
 	if (node->right)
 		ast_tree_print(node->right);
 }
-

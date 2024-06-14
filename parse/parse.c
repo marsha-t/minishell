@@ -28,6 +28,5 @@ t_ast	*parse_tokens(t_token **tokens)
 		return (NULL);
 	ast_list_print(ast_list);
 	root = ast_tree_new(&ast_list);
-	ast_tree_print(root);
 	return (root);
 }

@@ -30,19 +30,23 @@ t_shell	*init_shell(char **envp)
 		return (ft_putstr_fd("Malloc error for shell structure\n", 2), NULL);
 	shell->var_list = create_list(envp);
 	if (!shell->var_list)
-	{
-		free(shell);
-		ft_putstr_fd("???", 2);
-		return (NULL);
-	}
+		return (free_shell(shell), NULL);
 	shell->line = 0;
+	shell->tokens = 0;
+	shell->root = 0;
 	return (shell);	
 }
 
-/*	free_shell frees the various structures within shell */
+/*	free_shell frees the various structures within shell 
+	and then frees shell itself */
 void	free_shell(t_shell *shell)
 {
-	free_var_list(shell->var_list);
-	free_tokens(shell->tokens);
+	if (shell->line)
+		free(shell->line);
+	if (shell->var_list)
+		free_var_list(shell->var_list);
+	if (shell->tokens)
+		free_tokens(shell->tokens);
+	free(shell);
 	// ast_tree_free(shell->root);
 }

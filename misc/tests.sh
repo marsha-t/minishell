@@ -153,11 +153,30 @@ var=123 && echo $var #123
 var=123 cat input.txt #input.txt contents displayed
 var=123 cat input.txt > a.txt #input.txt contents redirected to a.txt
 
+var=123
+echo $"$var" # 123
+echo $"$var$" #123$
+echo $"$var$" $"$var$" #123$ 123$
+
+
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
 #############################################################################
 ls *txt
+ls i*c # lists files starting with i and ending with c 
+ls '*.t' # there are no files ending with t; cannot access *.t 
+ls "*.c" # cannot access *.c 
+ls '*.c' # cannot access *.c
 norminette ***.c
+
+var=*
+echo $var #prints all the files in working directory
+echo $var abc # prints all the files in working directory followed by abc
+echo "$var abc" #prints: * abc
+
+touch test'".c' #create file called: test".c
+ls *".c # counts as incomplete line until another " typed in
+ls *'".c' #prints 'test.".c'
 
 #############################################################################
 # REDIRECTION ORDER #########################################################
@@ -187,6 +206,7 @@ echo abc -n       # output: abc -n
 echo abc -n def   #output: abc -n def
 echo -n -invalid abc  #output: -invalid abc without new line
 echo -invalid -n abc  #output: -invalid -n abc with new line
+# ( <in echo >out "r")in this case is not working
 echo # new line printed 
 echo -n #no new line printed
 echo -n -n abc # output: abc without new line 

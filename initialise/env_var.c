@@ -12,7 +12,9 @@
 
 #include "../minishell.h"
 
-int create_node(t_var **v, char *str, int flag)
+
+/*	create_node returns 1 for malloc error */
+int create_node(t_var **v, char *str)
 {
 	t_var *new;
 	t_var *current;
@@ -20,25 +22,19 @@ int create_node(t_var **v, char *str, int flag)
 	
 	new = (t_var *) malloc(sizeof(t_var));
 	if(!new)
-		return(ft_putstr_fd("Malloc error creating t_var\n", 2), 0);
+		return (ft_putstr_fd("Malloc error creating t_var in create_node\n", 2), 1);
 	equal = ft_strchr(str, '=');
 	new->key = strdup_range(str, equal - 1);
 	if (!new->key)
-		return (ft_putstr_fd("Malloc error creating t_var->key\n", 2), 0);
-	if (equal + 1 == '\0')
-	{
-		new->value = ft_stdup("");
-		if (!new->value)
-			return (ft_putstr_fd("Malloc error creating t_var->value\n", 2), 0);
-	}
+		return (ft_putstr_fd("Malloc error creating t_var->key in create_node\n", 2), 1);
+	if (str + ft_strlen(str) - 1 == equal)
+		new->value = 0;
 	else
 	{
 		new->value = strdup_range(equal + 1, str + ft_strlen(str) - 1);
 		if (!new->value)
-			return (ft_putstr_fd("Malloc error creating t_var->value\n", 2), 0);
+			return (ft_putstr_fd("Malloc error creating t_var->value in create_node\n", 2), 1);
 	}
-	new->flag = flag;
-	new->env = 1;
 	new->next = NULL;
 	if (!*v)
 		*v = new;
@@ -49,7 +45,7 @@ int create_node(t_var **v, char *str, int flag)
 			current = current->next;
 		current->next = new;
 	}
-	return (1);
+	return (0);
 }
 
 t_var *create_list(char **envp)
@@ -61,7 +57,7 @@ t_var *create_list(char **envp)
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (create_node(&v, envp[i], 1) == 0)
+		if (create_node(&v, envp[i]) == 1)
 			return (NULL);
 		i++;
 	}
@@ -79,8 +75,10 @@ void	free_var_list(t_var *var)
 	while (current)
 	{
 		next = current->next;
-		free(current->key);
-		free(current->value);
+		if (current->key)
+			free(current->key);
+		if (current->value)
+			free(current->value);
 		free(current);
 		current = next;
 	}

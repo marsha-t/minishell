@@ -20,9 +20,9 @@ t_token	*new_token(char *str, int code)
 	t_token	*new;
 
 	new = malloc(sizeof(t_token));
-	new->str = str;
-	if (!new->str)
+	if (!new)
 		return (NULL);
+	new->str = str;
 	new->code = code;
 	new->next = 0;
 	return (new);
@@ -39,13 +39,12 @@ int	add_token(t_token **tokens, char *str, int code)
 	t_token	*new;
 
 	if (!str)
-		return (ft_putstr_fd("Malloc error: string creation\n", 2), 1);
+		return (ft_putstr_fd("Malloc error creating token->str\n", 2), 1);
 	new = new_token(str, code);
 	if (!new)
 	{
 		free(str);
-		ft_putstr_fd("Malloc error: token creation\n", 2);
-		return (1);
+		return (ft_putstr_fd("Malloc error creating token\n", 2), 1);
 	}
 	if (!*tokens)
 		*tokens = new;
