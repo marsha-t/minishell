@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/02 12:47:04 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/13 05:35:28 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	int		i;
 	int		j;
 	
-	if (!s1) 
-		return (s2);
-	if (!s2)
-		return (0);
+	if (!s1 || !s2)
+		return (free_num(2, s1, s2), 0);
+	// if (!s1) 
+	// 	return (s2);
+	// if (!s2)
+	// 	return (0);
 	tot_len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	ptr = (char *)malloc(sizeof(char) * tot_len);
 	if (!ptr)
@@ -38,8 +40,9 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	while (s2[j])
 		ptr[i++] = s2[j++];
 	ptr[i] = '\0';
-	free(s1);
-	free(s2);
+	free_num(2, s1, s2);
+	// free(s1);
+	// free(s2);
 	return (ptr);
 }
 
@@ -47,6 +50,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	- retains quotes that are quoted e.g., single quote inside double or double inside single
 	- frees original str
 	- malloc error from strdup or strjoin will result in unquoted_str being NULL */
+// work in progress: check whether updated strjoin_free still works for this function
 char	*remove_quote_str(char *str)
 {
 	int	i;

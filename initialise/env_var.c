@@ -6,11 +6,12 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/03 06:15:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/06 04:55:56 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 
 /*	create_node returns 1 for malloc error */
 int create_node(t_var **v, char *str)

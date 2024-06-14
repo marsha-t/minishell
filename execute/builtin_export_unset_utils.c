@@ -6,11 +6,13 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:45:56 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/03 06:19:00 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/13 13:42:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// work in progress: these functions haven't been updated in case they are used in expansions 
 
 t_var *check_exist(char *word, t_var *list)
 {

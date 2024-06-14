@@ -52,6 +52,10 @@ echo abc 1>input.txt >extra.txt #nothing in input.txt; abc in extra.txt
 echo abc 1>b.txt1>a.txt #abc directed to a.txt but b.txt1 created
 echo abc > a.txt abc # file called a.txt and inside: abc abc
 
+var=
+echo abc > $var #error: $var: ambiguous redirect
+
+
 # IO NUMBER INPUT 
 cat 0< exists.txt # equivalent to cat < exists.txt
 cat 5<exists.txt # redirect contents of exists.txt to 5 and cat reads from fd 5
@@ -101,9 +105,12 @@ echo a ( || echo c && echo d) #error near (
 #############################################################################
 # VARIABLE ASSIGNMENT & EXPANSIONS ##########################################
 #############################################################################
-var=a
+abc=o
 ech$abc a #output: a
 ech"$abc" a #output: a
+
+abc=
+$abc #error: command not found (127)
 
 abc=&& #taken as incomplete line
 abc="&&"
@@ -113,11 +120,8 @@ echo abc $abc echo def #output: abc && echo def
 abc="|"
 echo abc $abc echo #output: abc | echo
 
-var=Hello
-echo $var
-
-var=in
-cat <"$var"put.txt
+var=out
+echo abc  >"$var"put.txt #abc redirected to output.txt
 
 var"="abc #error: var=abc command not found
 var'='abc #error: var=abc command not found
@@ -135,10 +139,25 @@ echo $var #abc=def
 var==abc
 echo $var #=abc
 
+var=abc
+echo $var #abc
+var=
+echo $var #<blank>
+
+var1=abc var2=def 123 #error msg for 123
+echo $var1 $var2 #blank - var1 and var2 not assigned
+
+var=123 echo abc #output: abc
+var=123 echo $var #blank output
+var=123 && echo $var #123
+var=123 cat input.txt #input.txt contents displayed
+var=123 cat input.txt > a.txt #input.txt contents redirected to a.txt
+
 var=123
 echo $"$var" # 123
 echo $"$var$" #123$
 echo $"$var$" $"$var$" #123$ 123$
+
 
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
@@ -190,7 +209,7 @@ echo -invalid -n abc  #output: -invalid -n abc with new line
 # ( <in echo >out "r")in this case is not working
 echo # new line printed 
 echo -n #no new line printed
-
+echo -n -n abc # output: abc without new line 
 #############################################################################
 # PWD #######################################################################
 #############################################################################
@@ -210,3 +229,90 @@ export hello=world test=
 export #test='' listed
 env #test='' added
 
+export x=y=z
+export #x="y=z"
+env #x=y=z
+
+var=123
+export var=987
+echo $var #987
+unset $var 
+echo $var # nothing i.e., doesn't revert to var=123
+
+var=123
+export var=987
+echo $var #987
+var=888 
+echo $var #888
+export # var = 888
+env # var = 888
+unset var # var is unset
+
+export var=123
+export 123 = var # error message for 123 and = 
+export # var is listed: var=123
+
+var=123
+export var
+export #var added: var=123
+env #var=123
+
+export var=123
+export var= #updates var to empty string 
+env #var is listed
+
+#############################################################################
+# UNSET ##################################################################### 
+#############################################################################
+var=123
+echo $var #123
+unset var
+echo $var #blank
+
+export var=123
+unset 123 var #error message for 123 but var is unset
+echo $? #return value of 1
+export #var was unset
+
+#############################################################################
+# EXIT ######################################################################
+#############################################################################
+exit #exit status = 0
+exit 00000 #exit status = 0
+exit +2 #exit status = 2
+exit "" #error message: "exit: : numeric argument required" --> exit status = 2
+exit "" "" "" #error message: "exit: : numeric argument required" --> exit status = 2
+exit "" "2" "" #error message: "exit: : numeric argument required"
+exit "2" "" "" #error message: "exit: too many arguments" --> exit status = 1
+exit --2 #error message: "exit: --2: numeric argument required"
+exit ++2 #error message: "exit: ++2: numeric argument required"
+exit +-2 #error message: "exit: +-2: numeric argument required"
+exit -+2 #error message: "exit: -+2: numeric argument required"
+exit a #error message: "exit: a: numeric argument required"
+exit 1 2 #error message: "exit: too many arguments"
+exit -10 #exit status = 246
+exit 10 - #error message: "exit: too many arguments"
+exit - 10 #error message: "exit: -: numeric argument required"
+exit 9223372036854775807 #exit status = 255
+exit 9223372036854775808 #error message: "exit: 9223372036854775808: numeric argument required"
+exit -9223372036854775808 #exit status = 0
+exit -9223372036854775809 #error message: "exit: -9223372036854775809: numeric argument required"
+
+#############################################################################
+# MISC ######################################################################
+#############################################################################
+. #error: filename argument required (2)
+.. #error: command not found (127)
+./ #error: ../: Is a directory (126)
+../ #error: ../: Is a directory (126)
+./a #error: no such file or directory (127)
+
+var=
+$var #blank (0)
+"$var" #error: command not found (127)
+
+"" #error: command not found (127)
+"""" #error: command not found (127)
+
+'' #error: command not found (127)
+'''' #error: command not found (127)

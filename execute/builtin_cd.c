@@ -1,30 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/03 23:35:32 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/05 13:37:22 by mateo            ###   ########.fr       */
+/*   Created: 2024/06/06 13:35:36 by mateo             #+#    #+#             */
+/*   Updated: 2024/06/13 05:58:37 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
-char	*ft_strdup(const char *src)
+/*	builtin_cd runs the cd command
+	- if no arg, sets to $HOME*/
+// work in progress: continue work on this!
+int	builtin_cd(t_ast *node, int in_fd, int out_fd)
 {
-	char		*ptr;
-	size_t		n;
-	int			i;
 
-	n = ft_strlen(src);
-	ptr = (char *)malloc(sizeof(char) * (n + 1));
-	if (!ptr)
-		return (0);
-	i = -1;
-	while (src[++i] != '\0')
-		ptr[i] = src[i];
-	ptr[i] = '\0';
-	return (ptr);
 }

@@ -19,8 +19,10 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdlib.h>
-#include <errno.h>
-#include <dirent.h>
+# include <limits.h>
+# include <errno.h>
+# include <stdarg.h>
+# include <dirent.h>
 # include "libft/libft.h"
 # include "printf/ft_printf.h"
 
@@ -107,6 +109,10 @@ typedef struct s_shell
 	t_ast	*root;
 }	t_shell;
 
+/*****************************************************************************/
+/*	initialise																 */
+/*****************************************************************************/
+
 // shell.c
 void	free_safe(void *pointer);
 t_shell	*init_shell(char **envp);
@@ -117,6 +123,9 @@ int create_node(t_var **v, char *str);
 t_var *create_list(char **envp);
 void	free_var_list(t_var *var);
 
+/*****************************************************************************/
+/*	check																	 */
+/*****************************************************************************/
 // syntax_err.c
 int	check_direct(char *line);
 int check_quotes(char *line);
@@ -134,6 +143,9 @@ int	pipe_mid(int i, char *line);
 int	and_mid(int i, char *line);
 int	or_mid(int i, char *line);
 
+/*****************************************************************************/
+/*	tokenise																 */
+/*****************************************************************************/
 // tokenise.c
 int		tokenise_op(char **input, t_token **tokens);
 int		tokenise_misc(char **input, t_token **tokens);
@@ -155,6 +167,9 @@ int		is_file_op(int code);
 int		is_cmdorder_op(int code);
 int		check_quote(int quote, char input);
 
+/*****************************************************************************/
+/*	parse																	 */
+/*****************************************************************************/
 // parse.c
 t_ast	*parse_tokens(t_token **tokens);
 
@@ -178,9 +193,73 @@ int create_output_append_list(int code, t_token *token, t_ast **node);
 t_ast	*ast_tree_new(t_ast **node);
 void	ast_tree_print(t_ast *node);
 
-//execute_ast_tree.c
+/*****************************************************************************/
+/*	execute																	 */
+/*****************************************************************************/
+// execute_ast_tree.c
+int	execute_cmd(t_ast *node, int in_fd, int out_fd);
+int	cmd_only_quote(char *cmd);
+int	execute_cmd_node(t_ast *node);
 int		execute_ast(t_ast *node);
 
+// builtin_cd.c
+int	builtin_cd(t_ast *node, int in_fd, int out_fd);
+
+// builtin_echo.c
+int	is_newline_arg(char *arg)
+int	builtin_echo(t_ast *node, int in_fd, int out_fd);
+
+// builtin_env.c
+int	builtin_env(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+
+// builtin_exit.c
+unsigned long long	ft_atoi_ull(char *str);
+int check_ll_limit(char *str, int sign);
+int	check_exit_arg(char *str);
+int	get_exit_status(char *str);
+int	builtin_exit(t_ast *node);
+
+// builtin_export.c
+int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+
+// builtin_export_unset_utils.c
+t_var *check_exist(char *word, t_var *list);
+t_var *search_for_node(char *s2, t_var **list);
+
+// builtin_pwd.c
+char	*ft_getcwd(void);
+int	builtin_pwd(t_ast *node, int in_fd, int out_fd);
+
+// builtin_unset.c
+int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+
+// execute_assign.c
+int	valid_varname(char *name);
+int	create_key_value(char *str, char **equal, char **key, char **value);
+int	create_node_normal(t_var **v, char *key, char *value);
+int	run_assign_str(char *cmd, t_shell *shell);
+int	check_assign_varname(t_ast *node);
+int	run_assign_cmd(t_ast *node, t_shell *shell, int i);
+int	run_assign(t_ast *node, t_shell *shell);
+
+// execute_external.c
+int	count_env(t_var *env);
+char	**envp_array(t_var *env);
+char	**argv_array(t_ast *node);
+char *get_filepath(char *cmd, int *exit_status, t_shell *shell);
+int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+
+// execute_external_utils.c
+void	free_num(int num, ...); // move to basic utils?
+int	check_filepath(char *cmd);
+void	free_char_dp(char **dp);
+int	has_current_wd(char *path);
+char *add_current_wd(char *path, int i);
+char	*find_cmd(char *cmd, int *exit_status, t_shell *shell);
+
+/*****************************************************************************/
+/*	misc																	 */
+/*****************************************************************************/
 // env_var_utils.c
 char  *expand_var(char **var, t_var **env);
 char *expand_str(char *str, t_var *list);
@@ -206,8 +285,5 @@ void print_envp(char *str, t_var **envp);
 void export(char *s1,char *s2, t_var **envp);
 void unset(char *s1,char *s2, t_var **envp);
 
-// unset_and_export_utils.c
-t_var *check_exist(char *word, t_var *list);
-t_var *search_for_node(char *s2, t_var **list);
 
 #endif
