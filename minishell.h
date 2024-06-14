@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/04 14:20:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 10:56:38 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdlib.h>
+#include <errno.h>
+#include <dirent.h>
 # include "libft/libft.h"
 # include "printf/ft_printf.h"
 
@@ -50,13 +52,32 @@ typedef struct	s_file
 	int				flag;
 	struct s_file	*next;
 } t_file;
+// struct to save the contents of the current directory
+typedef struct s_dconts
+{
+	char *cont_name;
+	struct s_dconts *next;
+} t_dconts;
+
+// typedef struct s_list
+// {
+// 	char *arg_str;
+// 	struct s_list*next;
+// } t_list;
 
 typedef struct s_ast
 {
 	char	*cmd;
 	int		code;
 	int		n_args;
-	char	**args;
+   t_list *args;
+	// int		n_input;
+	// int		*io_input;	// io_input[0] will contain io number for first input redirection
+	// char	**file_input; // file_input[0] will contain file for first input redirection
+	// int		n_output_append; // number of output and append redirections
+	// int		*io_output_append; // io_output_append[0] will contain io number for first output/append redirection
+	// int		*is_append;// 0 if output; 1 if append
+	// char	**file_output_append; // file_output_append[0] will contain file for first output/append redirection
 	t_file *input_list;
 	t_file *output_list;
 	t_file *heredoc_list;
@@ -80,6 +101,7 @@ typedef struct s_var
 typedef struct s_shell
 {
 	t_var	*var_list;
+	t_dconts *directory_contents;
 	char	*line;
 	t_token	*tokens;
 	t_ast	*root;
@@ -160,19 +182,25 @@ void	ast_tree_print(t_ast *node);
 int		execute_ast(t_ast *node);
 
 // env_var_utils.c
-char  *expand_var(t_var **env,char *key);
+char  *expand_var(char **var, t_var **env);
+char *expand_str(char *str, t_var *list);
 int key_len(char *str);
 char *return_key(char *str);
 char  *search_for_key(char *key,char *str);
 int var_length(char *str);
 int ft_strlen_b_$(char *str);
 char *value(char *str , t_var **envp);
-int is_var(char *str);
+int contain_var(char *str);
+t_dconts *create_conts_list(void);
+char *ft_strrev(char *str);
+int	ft_strcmp1(const char *s1, const char *s2);
+t_dconts *expand_wildcard(char *str, t_dconts *conts_list);
+int list_size(t_dconts *list);
 
 // environment_vars_op.c
 void env_ops(t_var **list, t_token *token);
 
-// var_modif.c 
+// var_modif.c
 void print_export(char *str, t_var **envp);
 void print_envp(char *str, t_var **envp);
 void export(char *s1,char *s2, t_var **envp);
