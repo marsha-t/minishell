@@ -12,16 +12,54 @@
 
 #include "../minishell.h"
 
+/*	is_valid_varstart checks whether the char after $ is valid
+	- valid if c is a letter or underscore: returns 0 */
+int	is_valid_varstart(char c)
+{
+	if (ft_isalpha(c) == 1)
+		return (0);
+	if (c == '_')
+		return (0);
+	else
+		return (1);
+}
+
+
+/*	is_valid_varchar returns 0 if char is valid character for a variable
+	- valid if c is a letter, number or underscore*/
+int	is_valid_varchar(char c)
+{
+	if (ft_isalpha(c) == 1)
+		return (0);
+	else if (ft_isdigit(c) == 1)
+		return (0);
+	else if (c == '_')
+		return (0);
+	return (1);
+}
+
+/*	is_quote returns 0 if c is a single or double quote */
+int	is_quote(char c)
+{
+	if (c == '\'' || c == '\"')
+		return (0);
+	return (1);
+}
+/************************************************************************/
+/*	expand_str()														*/
+/************************************************************************/
 char	*ft_strjoin2(char const *s1, char const *s2)
 {
 	char	*ptr;
 	size_t	tot_len;
 	int		i;
 
-	if (!s1)
+	if (!s1 && s2)
 		return (ft_strdup(s2));
-	if (!s2)
+	else if (!s2 && s1)
 		return (ft_strdup(s1));
+	else if (!s1 && !s2)
+		return (0);
 	tot_len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	ptr = (char *)malloc(sizeof(char) * tot_len);
 	if (!ptr)
@@ -34,22 +72,39 @@ char	*ft_strjoin2(char const *s1, char const *s2)
 	ptr[i] = '\0';
 	return (ptr);
 }
-char  *expand_var(char **var, t_var **env)
+
+char  *expand_var(char *var, t_var *env) // changed to single pointers
 {
 	t_var *current;
-	current = *env;
+	current = env;
 	while (current)
 	{
-		if(ft_strcmp(current->key,*var)==0)
+		if(ft_strcmp(current->key,var)==0)
 			return(ft_strdup(current -> value));
 		current = current -> next;
 	}
-	char *n;
-	n= malloc(sizeof(char));
-	n = "\0";
-	return(ft_strdup(n));
+	// char *n;
+	// n= malloc(sizeof(char));
+	// n = "\0";
+	// return(ft_strdup(n));
+	return (ft_strdup(""));
 }
-char *join_expand(int i,char *temp, char *str,char *var)
+
+/*	join_expand*/
+// char *join_expand(int i,char *temp, char *str,char *var)
+// {
+// 	char *all_str;
+
+// 	all_str= ft_strjoin2(temp,var);
+// 	free(temp);
+// 	free(var);
+// 	temp = all_str;
+// 	all_str=ft_strjoin2(temp,str+i);
+// 	free(temp);
+// 	free(str);
+// 	return(all_str);
+// }
+char *join_expand(char *temp, char *var, char *str, int i)
 {
 	char *all_str;
 
@@ -62,232 +117,172 @@ char *join_expand(int i,char *temp, char *str,char *var)
 	free(str);
 	return(all_str);
 }
-// char *strdup_range(char *start, char *end)
-// {
-// 	char *ptr;
-// 	size_t	n;
-// 	int i;
 
-// 	n = end - start + 1;
-// 	ptr = malloc(sizeof(char) * (n + 1));
-// 	printf("n + 1: %ld\n", n + 1);
-// 	if (!ptr)
-// 		return (0);
-// 	i = 0;
-// 	while (start != end)
-// 	{
-// 		ptr[i] = *start;
-// 		start++;
-// 		printf("%c\n", ptr[i]);
-// 		i++;
-// 	}
-// 	ptr[i] = *end;
-// 	printf("%c\n", ptr[i]);
-// 	ptr[i+1] = '\0';
-// 	printf("i+1: %d\n", i+1);
-// 	return (ptr);
-// }
-char *expand_str(char *str, t_var *list)
+
+char	*split_expand_join(char *str, int start, int i, t_var *list)
 {
-	int i;
-	char *start;
-	char *temp;
-	char *var;
+	char	*temp;
+	char	*var;
 
-	 i=0;
-	 start=NULL;
-	temp=NULL;
-	var=NULL;
-	 while(str[i] != '\0')
-	 {
-		if(i == 0 &&str[i] != '$')
-			start = &str[i];
-		if (str[i] == '$' && str[i+1] == '\0')
-			i++;
-		else if(str[i]== '$'&& str[i+1]!= '\"')
-		{
-			if(&str[i] != start && start)
-			{
-				temp = strdup_range(start,&str[i]-1);
-			}
-			start = &str[++i];
-			while(ft_strchr("\"\t ()<>$&|",str[i])==NULL)
-				i++;
-			var = strdup_range(start,&str[i-1]);
-			var =expand_var(&var,&list);
-			str = join_expand(i,temp,str,var);
-			i=-1;
-		}
-		i++;
-	 }
-	 return(str);
-}
-// int key_len(char *str)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while (str[i] != '=' && str[i] != '\0')
-// 	{
-// 		i++;
-// 	}
-// 	return(i);
-// }
-// char *return_key(char *str)
-// {
-// 	int length;
-// 	int i;
-// 	char *key;
-// 	length = key_len(str);
-// 	i = 0;
-// 	key = malloc(sizeof(char) * length);
-// 	while(str[i] != '\0' && str[i] != '=')
-// 	{
-// 		key[i] = str[i];
-// 		i++;
-// 	}
-// 	if(str[i] == '=')
-// 	{
-// 		key[i] = '\0';
-// 		return(key);
-// 	}
-// 	else
-// 		return(NULL);
-// }
-
-// char  *search_for_key(char *key,char *str)
-// {
-// 	int i;
-// 	char *li_key;
-
-// 	li_key = return_key(str);
-// 	i = 0;
-// 	if (ft_strcmp(key , li_key) == 0)
-// 	{
-// 		while (str[i] != '=')
-// 			i++;
-// 		i++;
-// 		return(free(li_key), str + i);
-// 	}
-// 	return(free(li_key), NULL);
-// }
-
-// int var_length(char *str)
-// {
-// 	int i;
-// 	i = 0;
-// 	while(str[i] != '\0')
-// 	{
-// 		if(str[i] == '$')
-// 		{
-// 			i++;
-// 			while(ft_strchr(" \t\"<>()&|", str[i]) == NULL)
-// 			{
-// 				i++;
-// 			}
-// 			return(i + 1);
-// 		}
-// 		i++;
-// 	}
-// 	return(0);
-// }
-// char ret_value(char * envp, char temp ,char str, int *i)
-// {
-
-// }
-// int ft_strlen_b_$(char *str)
-// {
-// 	int i;
-// 	i = 0;
-// 	while(str[i] != '\0' &&str[i] !=  '$')
-// 	{
-// 		i++;
-// 	}
-// 	if(str[i] == '$')
-// 		return(i);
-// 	return(-1);
-
-// }
-// char *value(char *str , t_var **envp)
-// {
-// 	char *var;
-// 	char *temp;
-// 	int i;
-// 	int j;
-
-// 	i = 0;
-// 	j = 0;
-// 	var = malloc(var_length(str) * sizeof(char));
-// 	while(str[i] != '\0')
-// 	{
-// 		if(ft_strlen_b_$(str + i)!= -1)
-// 		{
-// 			j =0;
-// 			temp = malloc(sizeof(char) * ft_strlen_b_$(str + i));
-// 			while(str[i] != '$' && str[i] != '\0')
-// 			{
-// 				temp[j] = str[i];
-// 				i++;
-// 				j++;
-// 			}
-// 		}
-// 		if(str[i] == '$')
-// 		{
-// 			i++;
-// 			j = 0;
-// 			while(ft_strchr(" \t\"<>()&|", str[i]) == NULL)
-// 			{
-// 				var[j] = str[i];
-// 				i++;
-// 				j++;
-// 			}
-// 			var[j] = '\0';
-// 			var = expand_var(envp,var);
-// 			var = ft_strjoin(temp, var);
-// 			 str = ft_strjoin(var, str + i);
-// 			 free(temp);
-// 			 free(var);
-// 		}
-// 		i++;
-// 	}
-// 	return(str);
-// }
-// contain var will check if there is $ (for expansion) in the token and will return 0 (success) and 1 otherwise
-// }
-int contain_var(char *str)
-{
-	int i;
-	int flag;
-	int flag1;
-	flag = 0;
-	flag1 = 0;
-	i = 0;
-	if(!str)
-		return(1);
-	while(str[i] != '\0')
+	if (start != i)
 	{
-
-		if (str[i] == '\"')
-		{
-			if(flag1 == 1)
-				flag1=0;
-			else
-				flag1 =1;
-		}
-		if (str[i] == '$' && str[i + 1] == '\"' && str[i + 2] == '\0')
+		temp = strdup_range(&str[start], &str[i - 1]);
+		if (!temp)
+			return (ft_putstr_fd("Malloc error creating temp\n", 2), NULL);
+	}
+	else
+		temp = NULL;
+	start = i + 1;
+	if (is_valid_varstart(start) == 0)
+	{
+		while (is_valid_varchar(str[i]) == 0)
 			i++;
-		if (str[i] == '$' && (ft_strchr(" \t&|<>()",str[i + 1] )== NULL))
-			flag = 1;
-		if (str[i] == '*'&& flag1 == 0)
+		var = strdup_range(&str[start], &str[i - 1]);
+		if (!var)
+			return (ft_putstr_fd("Malloc error creating var\n", 2), NULL);
+		var = expand_var(var, list);
+		if (!var)
+			return (ft_putstr_fd("Malloc error creating var\n", 2), NULL);
+	}
+	else
+		var = NULL;
+	if (!temp)
+		printf("temp: %s\n", temp);
+	if (!var)
+		printf("var: %s\n", var);
+	str = join_expand(temp, var, str, i);
+	if (!str)
+		return (ft_putstr_fd("Malloc error joining expanded var\n", 2), NULL);
+	free(var);
+	return (str);
+}
+
+char	*expand_str(char *str, t_var *list)
+{
+	int	i;
+	int	start;
+
+	i = 0;
+	start = 0; // not needed?
+	while (str[i])
+	{
+		if (str[i] == 39)
 		{
-			while (str[i] == '*' && str[i] != '\0')
+			i++;
+			while (str[i] != '\0' && str[i] != 39)
 				i++;
-			return(2);
+		}
+		else if (str[i] == '\"')
+		{
+			i++;
+			while (str[i] != '\0' && str[i] != '\"')
+			{
+				if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
+				{
+					str = split_expand_join(str, start, i, list);
+					if (!str)
+						return (NULL);
+					i = -1;
+				}
+				i++;
+			}
+		}
+		else if (str[i] == '$' && is_quote(str[i + 1]))
+		{
+			str = split_expand_join(str, start, i, list);
+			if (!str)
+				return (NULL);
+			i = -1;
+		}
+		else if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
+		{
+			str = split_expand_join(str, start, i, list);
+			if (!str)
+				return (NULL);
+			i = -1;
 		}
 		i++;
 	}
-	if(flag == 1)
-		return(0);
-	return(1);
+	return (str);
 }
 
+// char *expand_str(char *str, t_var *list)
+// {
+// 	int i;
+// 	char *start;
+// 	char *temp;
+// 	char *var;
+
+// 	 i=0;
+// 	 start=NULL;
+// 	temp=NULL;
+// 	var=NULL;
+// 	 while(str[i] != '\0')
+// 	 {
+// 		if(i == 0 &&str[i] != '$')
+// 			start = &str[i];
+// 		if (str[i] == '$' && str[i+1] == '\0')
+// 			i++;
+// 		else if(str[i]== '$'&& str[i+1]!= '\"')
+// 		{
+// 			if(&str[i] != start && start)
+// 			{
+// 				temp = strdup_range(start,&str[i]-1);
+// 			}
+// 			start = &str[++i];
+// 			while(ft_strchr("\"\t ()<>$&|",str[i])==NULL)
+// 				i++;
+// 			var = strdup_range(start,&str[i-1]);
+// 			var =expand_var(&var,&list);
+// 			str = join_expand(i,temp,str,var);
+// 			i=-1;
+// 		}
+// 		i++;
+// 	 }
+// 	 return(str);
+// }
+
+/************************************************************************/
+/*	contain_var()														*/
+/************************************************************************/
+
+/*	contain_var checks whether str contains a variable expansion 
+	i.e., a $ followed by valid variable name character 
+	- if $ is followed by a starting quote, it is counted as a variable expansion (that expands into empty str)
+	- if $ followed by number of special character, it doesn't count as variable expansion
+	- if $ is inside single quotes, it isn't a variable expansion
+	- if there is variable expansion, return (0)
+*/
+int contain_var(char *str)
+{
+	int i;
+
+	if (!str)
+		return (1);
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == 39)
+		{
+			i++;
+			while (str[i] != '\0' && str[i] != 39)
+				i++;
+		}
+		else if (str[i] == '\"')
+		{
+			i++;
+			while (str[i] != '\0' && str[i] != '\"')
+			{
+				if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
+					return (0);
+				i++;
+			}
+		}
+		else if (str[i] == '$' && is_quote(str[i + 1]) == 0)
+			return (0);
+		else if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
