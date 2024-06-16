@@ -6,11 +6,13 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:45:56 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/03 06:19:00 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/14 15:41:42 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
+
+// work in progress: these functions haven't been updated in case they are used in expansions 
 
 t_var *check_exist(char *word, t_var *list)
 {
@@ -20,7 +22,7 @@ t_var *check_exist(char *word, t_var *list)
 	word = return_key(word);
 	while(current && word)
 	{
-		if(search_for_key(word,current->content)!= NULL)
+		if(search_for_key(word,current->key)!= NULL)
 			return(free(word), current);
 		current = current -> next;
 	}
@@ -34,7 +36,7 @@ t_var *search_for_node(char *s2, t_var **list)
 	current = *list;
 	while(current)
 	{
-		if(search_for_key(s2, current -> content))
+		if(search_for_key(s2, current->key))
 			return(current);
 		current = current->next;
 	}

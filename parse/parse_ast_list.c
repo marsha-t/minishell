@@ -72,7 +72,8 @@ int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 	- allocates space for n_args strings
 	- duplicates arg strings into array of str in ast node
 	- shifts tokens pointer along
-	- returns 1 if malloc error for char **args or strdup*/
+	- returns 1 if malloc error for char **args or strdup
+		- if strdup error, update n_args so that ast_list_free frees the correct number of strings*/
 int	ast_node_append_arg(t_token **tokens, t_ast *current)
 {
 	int	i;
