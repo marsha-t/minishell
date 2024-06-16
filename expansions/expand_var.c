@@ -1,53 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_var_utils.c                                    :+:      :+:    :+:   */
+/*   expand_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/11 22:03:02 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/16 21:59:04 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*	is_valid_varstart checks whether the char after $ is valid
-	- valid if c is a letter or underscore: returns 0 */
-int	is_valid_varstart(char c)
-{
-	if (ft_isalpha(c) == 1)
-		return (0);
-	if (c == '_')
-		return (0);
-	else
-		return (1);
-}
-
-
-/*	is_valid_varchar returns 0 if char is valid character for a variable
-	- valid if c is a letter, number or underscore*/
-int	is_valid_varchar(char c)
-{
-	if (ft_isalpha(c) == 1)
-		return (0);
-	else if (ft_isdigit(c) == 1)
-		return (0);
-	else if (c == '_')
-		return (0);
-	return (1);
-}
-
-/*	is_quote returns 0 if c is a single or double quote */
-int	is_quote(char c)
-{
-	if (c == '\'' || c == '\"')
-		return (0);
-	return (1);
-}
-/************************************************************************/
-/*	expand_str()														*/
-/************************************************************************/
 char	*ft_strjoin2(char const *s1, char const *s2)
 {
 	char	*ptr;
@@ -73,9 +37,14 @@ char	*ft_strjoin2(char const *s1, char const *s2)
 	return (ptr);
 }
 
+/*	expand_var searches for var in variable list 
+	- returns duplicate of value if found
+	- returns duplicate of empty string if nothing found
+	- malloc protection in split_expand_join()*/
 char  *expand_var(char *var, t_var *env) // changed to single pointers
 {
 	t_var *current;
+
 	current = env;
 	while (current)
 	{
@@ -104,6 +73,7 @@ char  *expand_var(char *var, t_var *env) // changed to single pointers
 // 	free(str);
 // 	return(all_str);
 // }
+
 char *join_expand(char *temp, char *var, char *str, int i)
 {
 	char *all_str;
@@ -118,22 +88,23 @@ char *join_expand(char *temp, char *var, char *str, int i)
 	return(all_str);
 }
 
-
-char	*split_expand_join(char *str, int start, int i, t_var *list)
+char	*split_expand_join(char *str, int i, t_var *list)
 {
 	char	*temp;
 	char	*var;
+	int		start;
 
-	if (start != i)
+	if (i != 0)
 	{
-		temp = strdup_range(&str[start], &str[i - 1]);
+		temp = strdup_range(&str[0], &str[i - 1]);
 		if (!temp)
 			return (ft_putstr_fd("Malloc error creating temp\n", 2), NULL);
 	}
 	else
 		temp = NULL;
 	start = i + 1;
-	if (is_valid_varstart(start) == 0)
+	i++;
+	if (is_valid_varstart(str[start]) == 0)
 	{
 		while (is_valid_varchar(str[i]) == 0)
 			i++;
@@ -146,24 +117,17 @@ char	*split_expand_join(char *str, int start, int i, t_var *list)
 	}
 	else
 		var = NULL;
-	if (!temp)
-		printf("temp: %s\n", temp);
-	if (!var)
-		printf("var: %s\n", var);
 	str = join_expand(temp, var, str, i);
 	if (!str)
 		return (ft_putstr_fd("Malloc error joining expanded var\n", 2), NULL);
-	free(var);
 	return (str);
 }
 
 char	*expand_str(char *str, t_var *list)
 {
 	int	i;
-	int	start;
 
 	i = 0;
-	start = 0; // not needed?
 	while (str[i])
 	{
 		if (str[i] == 39)
@@ -171,6 +135,7 @@ char	*expand_str(char *str, t_var *list)
 			i++;
 			while (str[i] != '\0' && str[i] != 39)
 				i++;
+			i++;
 		}
 		else if (str[i] == '\"')
 		{
@@ -179,29 +144,32 @@ char	*expand_str(char *str, t_var *list)
 			{
 				if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
 				{
-					str = split_expand_join(str, start, i, list);
+					str = split_expand_join(str, i, list);
 					if (!str)
 						return (NULL);
 					i = -1;
 				}
-				i++;
+				else
+					i++;
 			}
+			i++;
 		}
-		else if (str[i] == '$' && is_quote(str[i + 1]))
+		else if (str[i] == '$' && is_quote(str[i + 1]) == 0)
 		{
-			str = split_expand_join(str, start, i, list);
+			str = split_expand_join(str, i, list);
 			if (!str)
 				return (NULL);
-			i = -1;
+			i = 0;
 		}
 		else if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
 		{
-			str = split_expand_join(str, start, i, list);
+			str = split_expand_join(str, i, list);
 			if (!str)
 				return (NULL);
-			i = -1;
+			i = 0;
 		}
-		i++;
+		else
+			i++;
 	}
 	return (str);
 }
@@ -242,47 +210,3 @@ char	*expand_str(char *str, t_var *list)
 // 	 return(str);
 // }
 
-/************************************************************************/
-/*	contain_var()														*/
-/************************************************************************/
-
-/*	contain_var checks whether str contains a variable expansion 
-	i.e., a $ followed by valid variable name character 
-	- if $ is followed by a starting quote, it is counted as a variable expansion (that expands into empty str)
-	- if $ followed by number of special character, it doesn't count as variable expansion
-	- if $ is inside single quotes, it isn't a variable expansion
-	- if there is variable expansion, return (0)
-*/
-int contain_var(char *str)
-{
-	int i;
-
-	if (!str)
-		return (1);
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == 39)
-		{
-			i++;
-			while (str[i] != '\0' && str[i] != 39)
-				i++;
-		}
-		else if (str[i] == '\"')
-		{
-			i++;
-			while (str[i] != '\0' && str[i] != '\"')
-			{
-				if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
-					return (0);
-				i++;
-			}
-		}
-		else if (str[i] == '$' && is_quote(str[i + 1]) == 0)
-			return (0);
-		else if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}

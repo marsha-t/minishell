@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/11 21:26:08 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/16 21:39:22 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ int main(int ac, char **av, char **envp)
 			if (!shell->tokens) // handle tokenisation failures
 				return (1);
 			print_tokens(shell->tokens);
-			t_token *token;
-			token = shell->tokens;
-			while (token)
-			{
-				if(contain_var(token->str) == 0)
-					token->str =	expand_str(token->str,shell->var_list);
-				token  = token->next;
-			}
+			// t_token *token;
+			// token = shell->tokens;
+			// while (token)
+			// {
+			// 	if(contain_var(token->str) == 0)
+			// 		token->str =	expand_str(token->str,shell->var_list);
+			// 	token  = token->next;
+			// }
 			shell->root = parse_tokens(&shell->tokens);
       		ft_printf("\nprinting ast_tree\n");
 			ast_tree_print(shell->root);

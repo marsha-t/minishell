@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/11 20:25:31 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/16 21:58:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,17 +180,19 @@ void	ast_tree_print(t_ast *node);
 //execute_ast_tree.c
 int		execute_ast(t_ast *node);
 
-// env_var_utils.c
-
+// expand_var.c
+char	*ft_strjoin2(char const *s1, char const *s2);
 char  *expand_var(char *var, t_var *env);
-char *expand_str(char *str, t_var *list);
-int key_len(char *str);
-char *return_key(char *str);
-char  *search_for_key(char *key,char *str);
-int var_length(char *str);
-int ft_strlen_b_$(char *str);
-char *value(char *str , t_var **envp);
+char *join_expand(char *temp, char *var, char *str, int i);
+char	*split_expand_join(char *str, int i, t_var *list);
+char	*expand_str(char *str, t_var *list);
+
+// expand_var_utils.c
+int	is_valid_varstart(char c);
+int	is_valid_varchar(char c);
+int	is_quote(char c);
 int contain_var(char *str);
+
 t_dconts *create_conts_list(void);
 char *ft_strrev(char *str);
 int	ft_strcmp1(const char *s1, const char *s2);
