@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 16:30:49 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/16 22:13:16 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	int	exit_status;
-	
+
 	if (ft_strcmp(node->cmd, "echo") == 0)
 		exit_status = builtin_echo(node, in_fd, out_fd);
 	// else if (ft_strcmp(node->cmd, "cd") == 0)

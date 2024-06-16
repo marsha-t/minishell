@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:06:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:34 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/11 20:33:17 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+
 /* NOTE: PARSING CODE DOESN'T CATER FOR HEREDOCS*/
 
-/*	parse_tokens 
+/*	parse_tokens
 	- parses tokens linked list into "ast" linked list
-	- parses ast linked list into ast 
+	- parses ast linked list into ast
 	- returns 1 if malloc error creating ast nodes or strdup*/
 t_ast	*parse_tokens(t_token **tokens)
 {

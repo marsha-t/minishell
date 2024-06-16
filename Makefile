@@ -2,13 +2,13 @@ NAME = minishell
 INITIALISE_DIR = initialise
 INITIALISE_CFILES = shell.c env_var.c
 CHECK_DIR = check
-CHECK_CFILES = syntax_err.c syntax_err_bo.c syntax_bo_utils.c  
+CHECK_CFILES = syntax_err.c syntax_err_bo.c syntax_bo_utils.c
 TOKENISE_DIR = tokenise
 TOKENISE_CFILES = tokenise.c tokenise_token_utils.c tokenise_misc_utils.c
 PARSE_DIR = parse
 PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c create_redir_lists.c
 EXPANSIONS_DIR = expansions
-EXPANSIONS_CFILES = env_var_utils.c quote_remove.c
+EXPANSIONS_CFILES = expand_var.c expand_var_utils.c expand_wc.c expand_wc_utils.c #quote_remove.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c  execute_external.c execute_external_utils.c \
 	builtin_echo.c builtin_exit.c  builtin_pwd.c 
@@ -30,7 +30,7 @@ LIBFT_DIR = libft
 FT_PRINTF =	libftprintf.a
 FT_PRINTF_DIR = printf
 
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 
 
 all: $(NAME)
 

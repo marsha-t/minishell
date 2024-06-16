@@ -27,8 +27,7 @@ void env_ops(t_var **list, t_token *token)
 			else if(!token -> next)
 				print_export(token -> str, list);
 		}
-		if(token -> code == 2 && is_var(token->str)== 1)
-			token->str = value(token->str,list);
+		
 		token = token -> next;
 	}
 	free(token);

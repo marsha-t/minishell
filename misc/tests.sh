@@ -168,6 +168,39 @@ $var echo abc #output: abc
 echo hello$*world #output: helloworld
 echo hello$%world #output: hello$%world
 
+var=abc
+echo $var #abc
+var=
+echo $var #<blank>
+
+var1=abc var2=def 123 #error msg for 123
+echo $var1 $var2 #blank - var1 and var2 not assigned
+
+var=123 echo abc #output: abc
+var=123 echo $var #blank output
+var=123 && echo $var #123
+var=123 cat input.txt #input.txt contents displayed
+var=123 cat input.txt > a.txt #input.txt contents redirected to a.txt
+
+var=123
+echo $"$var" # 123
+echo $"$var$" #123$
+echo $"$var$" $"$var$" #123$ 123$
+
+var=
+$var #treated like empty line; not in history; no error
+$var echo abc #output: abc
+
+echo hello$*world #output: helloworld
+echo hello$%world #output: hello$%world
+
+var=123
+echo $"$var" # 123
+echo $"$var$" #123$
+echo $"$var$" $"$var$" #123$ 123$
+
+echo $"abc" #abc
+echo $'abc' #abc
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
 #############################################################################
@@ -177,6 +210,24 @@ ls '*.t' # there are no files ending with t; cannot access *.t
 ls "*.c" # cannot access *.c 
 ls '*.c' # cannot access *.c
 norminette ***.c
+
+var=*
+echo $var #prints all the files in working directory
+echo $var abc # prints all the files in working directory followed by abc
+echo "$var abc" #prints: * abc
+
+touch test'".c' #create file called: test".c
+ls *".c # counts as incomplete line until another " typed in
+ls *'".c' #prints 'test.".c'
+
+var=*
+echo $var #prints all the files in working directory
+echo $var abc # prints all the files in working directory followed by abc
+echo "$var abc" #prints: * abc
+
+touch test'".c' #create file called: test".c
+ls *".c # counts as incomplete line until another " typed in
+ls *'".c' #prints 'test.".c'
 
 var=*
 echo $var #prints all the files in working directory

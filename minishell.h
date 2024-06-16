@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 15:49:27 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/16 22:17:18 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,18 @@ typedef struct	s_file
 	int				flag;
 	struct s_file	*next;
 } t_file;
+// struct to save the contents of the current directory
+typedef struct s_dconts
+{
+	char *cont_name;
+	struct s_dconts *next;
+} t_dconts;
+
+// typedef struct s_list
+// {
+// 	char *arg_str;
+// 	struct s_list*next;
+// } t_list;
 
 // struct to save the contents of the current directory
 typedef struct s_dconts
@@ -181,10 +193,26 @@ int create_output_append_list(int code, t_token *token, t_ast **node);
 t_ast	*ast_tree_new(t_ast **node);
 void	ast_tree_print(t_ast *node);
 
+/*****************************************************************************/
+/*	expand																	 */
+/*****************************************************************************/
 // quote_remove.c 
 char	*ft_strjoin_free(char *s1, char *s2);
 char	*remove_quote_str(char *str);
 int	remove_quote_node(t_ast *node);
+
+// expand_var.c
+char	*ft_strjoin2(char const *s1, char const *s2);
+char  *expand_var(char *var, t_var *env);
+char *join_expand(char *temp, char *var, char *str, int i);
+char	*split_expand_join(char *str, int i, t_var *list);
+char	*expand_str(char *str, t_var *list);
+
+// expand_var_utils.c
+int	is_valid_varstart(char c);
+int	is_valid_varchar(char c);
+int	is_quote(char c);
+int contain_var(char *str);
 
 /*****************************************************************************/
 /*	execute																	 */
@@ -265,6 +293,7 @@ int var_length(char *str);
 int ft_strlen_b_$(char *str);
 // char *value(char *str , t_var **envp);
 int contain_var(char *str);
+
 t_dconts *create_conts_list(void);
 char *ft_strrev(char *str);
 int	ft_strcmp1(const char *s1, const char *s2);
@@ -277,6 +306,7 @@ void env_ops(t_var **list, t_token *token);
 // var_modif.c
 void print_export(t_var *envp);
 void print_envp(t_var *envp);
+
 void export(char *s1,char *s2, t_var **envp);
 void unset(char *s1,char *s2, t_var **envp);
 
