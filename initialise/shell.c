@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/07 16:58:52 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/17 11:32:51 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,17 @@ t_shell	*init_shell(char **envp)
 	if (!shell)
 		return (ft_putstr_fd("Malloc error for shell structure\n", 2), NULL);
 	shell->var_list = create_list(envp);
-	shell->directory_contents= create_conts_list();
+	// shell->directory_contents= create_conts_list();
 	if (!shell->var_list)
 		return (free_shell(shell), NULL);
 	shell->line = 0;
 	shell->tokens = 0;
 	shell->root = 0;
-	return (shell);	
+	shell-> exit_status = -1;
+	return (shell);
 }
 
-/*	free_shell frees the various structures within shell 
+/*	free_shell frees the various structures within shell
 	and then frees shell itself */
 void	free_shell(t_shell *shell)
 {

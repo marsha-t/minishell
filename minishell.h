@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/16 22:17:18 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/18 14:17:42 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@
 # include <limits.h>
 # include <errno.h>
 # include <stdarg.h>
+#include <fcntl.h>
 # include <dirent.h>
 #include <sys/stat.h>
 # include "libft/libft.h"
 # include "printf/ft_printf.h"
+#include <sys/wait.h>
+#include <time.h>
 
 # define TOKEN_TEMP 0
 # define TOKEN_CMD 1
@@ -53,14 +56,15 @@ typedef struct	s_file
 {
 	char			*file_name;
 	int				flag;
+	int 			fd;
 	struct s_file	*next;
 } t_file;
 // struct to save the contents of the current directory
-typedef struct s_dconts
-{
-	char *cont_name;
-	struct s_dconts *next;
-} t_dconts;
+// typedef struct s_dconts
+// {
+// 	char *cont_name;
+// 	struct s_dconts *next;
+// } t_dconts;
 
 // typedef struct s_list
 // {
@@ -80,6 +84,8 @@ typedef struct s_ast
 	char	*cmd;
 	int		code;
 	int		n_args;
+	int tmp_stdin_fd;
+	int tmp_stdout_fd;
    	t_list *args;
 	t_file *input_list;
 	t_file *output_list;
@@ -98,6 +104,7 @@ typedef struct s_var
 	int		flag;
 	int		env;
 	struct s_var *next;
+
 } t_var;
 
 // shell structure to hold all variables/data
@@ -108,6 +115,7 @@ typedef struct s_shell
 	char	*line;
 	t_token	*tokens;
 	t_ast	*root;
+	int	exit_status;
 }	t_shell;
 
 /*****************************************************************************/
@@ -196,7 +204,7 @@ void	ast_tree_print(t_ast *node);
 /*****************************************************************************/
 /*	expand																	 */
 /*****************************************************************************/
-// quote_remove.c 
+// quote_remove.c
 char	*ft_strjoin_free(char *s1, char *s2);
 char	*remove_quote_str(char *str);
 int	remove_quote_node(t_ast *node);
@@ -222,6 +230,10 @@ int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell);
 int	cmd_only_quote(char *cmd);
 int	execute_cmd_node(t_ast *node, t_shell *shell);
 int		execute_ast(t_ast *node, t_shell *shell);
+// redirection
+int		get_infile(t_ast *node);
+int get_outfile(t_ast *node);
+void close_files(t_ast *node);
 
 // builtin_cd.c
 int	builtin_cd(t_ast *node, int in_fd, int out_fd);
@@ -284,7 +296,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell);
 /*	misc																	 */
 /*****************************************************************************/
 // env_var_utils.c
-char  *expand_var(char **var, t_var **env);
+// char  *expand_var(char **var, t_var **env);
 char *expand_str(char *str, t_var *list);
 int key_len(char *str);
 char *return_key(char *str);

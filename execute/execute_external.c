@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/13 14:03:41 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/17 17:37:21 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	count_env(t_var *env)
 {
 	int	count;
 	t_var	*current;
-	
+
 	count = 0;
 	current = env;
 	while (current)
@@ -36,7 +36,7 @@ char	**envp_array(t_var *env)
 	char	**envp;
 	t_var	*current;
 	int	i;
-	
+
 	envp = malloc(sizeof(char *) * (count_env(env) + 1));
 	if (!envp)
 		return (ft_putstr_fd("Malloc error creating envp for envp_array\n", 2), NULL);
@@ -68,7 +68,7 @@ char **argv_array(t_ast *node)
 	char	**argv;
 	t_list	*current;
 	int		i;
-	
+
 	current = node->args;
 	argv = malloc(sizeof(char *) * (ft_lstsize(current) + 2));
 	if (!argv)
@@ -95,7 +95,7 @@ char **argv_array(t_ast *node)
 		current = current->next;
 	}
 	argv[i] = NULL;
-	return (argv);	
+	return (argv);
 }
 
 /*	get_filepath extracts the correct filepath for execve
@@ -107,7 +107,7 @@ char **argv_array(t_ast *node)
 char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
 {
 	char	*filepath;
-	
+
 	if (cmd[0] == '\0')
 	{
 		*exit_status = 127;
@@ -126,7 +126,7 @@ char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
 	return (filepath);
 }
 
-/*	run_external runs an external command 
+/*	run_external runs an external command
 	- by first preparing the arguments for execve */
 // work in progress: how to pass in_fd and out_fd to execve
 int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
@@ -148,8 +148,8 @@ int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	if (!envp)
 		return (1);
 	exit_status = execve(filename, argv, envp);
-	free(filename);
 	free_char_dp(argv);
 	free_char_dp(envp);
+	free(filename);
 	return (exit_status);
 }

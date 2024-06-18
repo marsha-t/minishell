@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/16 22:13:16 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/18 14:20:24 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
@@ -45,7 +46,7 @@ int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 int	cmd_only_quote(char *cmd)
 {
 	char quote;
-	
+
 	quote = 0;
 	while (*cmd == 34 || *cmd == 39)
 	{
@@ -63,7 +64,7 @@ int	cmd_only_quote(char *cmd)
 		return (1);
 }
 /*	check_empty_cmd checks whether cmd is an empty str
-	- returns 0 if 
+	- returns 0 if
 		- cmd is not empty
 		- cmd is empty but there are args
 	- returns 1 if cmd is empty and there are no args
@@ -88,15 +89,16 @@ int	check_empty_cmd(t_ast *node)
 	}
 	else
 		return (0);
+
 }
 
-/*	file_list_check_var calls contain_var and expand_str 
-	for each file provided in file linked list 
+/*	file_list_check_var calls contain_var and expand_str
+	for each file provided in file linked list
 	*/
 // int	file_list_check_var(t_file *file)
 // {
 // 	t_file	*curr_file;
-	
+
 // 	curr_file = file;
 // 	while (curr_file)
 // 	{
@@ -111,7 +113,7 @@ int	check_empty_cmd(t_ast *node)
 // 	return (0);
 // }
 
-/*	check_var_expansion checks whether variable expansions are needed 
+/*	check_var_expansion checks whether variable expansions are needed
 	- checks strings in cmd, args and files
 	- if needed, expands them
 	- returns 1 if errors with expansion
@@ -120,7 +122,7 @@ int	check_empty_cmd(t_ast *node)
 // {
 // 	t_list	*curr_arg;
 // 	t_file	*curr_file;
-	
+
 // 	if (contain_var(node->cmd) == 0)
 // 	{
 // 		node->cmd = expand_str(node->cmd);
@@ -156,10 +158,10 @@ int	check_empty_cmd(t_ast *node)
 // 		if (file_list_check_var(node->output_list) == 1)
 // 			return (1);
 // 	}
-// 	return (0);		
+// 	return (0);
 // }
 
-/*	check_wc_expansion checks whether wildcard expansions are needed 
+/*	check_wc_expansion checks whether wildcard expansions are needed
 	- checks strings in cmd, args and files
 	- if needed, expands them
 	- returns 1 if errors with expansion
@@ -180,25 +182,42 @@ int	check_empty_cmd(t_ast *node)
 // work in progress: need to add redirections
 int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
-	int	exit_status;
 	int in_fd;
 	int out_fd;
-
+	int id;
+	int status ;
+	status =0;
+	id = fork();
 	// if (check_var_expansion(node) == 1)
-	// 	return (1); 
+	// 	return (1);
 	// if (check_wc_expansion(node) == 1)
 	// 	return (1);
-	if (cmd_only_quote(node->cmd) == 0)
-		return (ft_putstr_fd("command not found\n", 2), 127);
-	if (check_empty_cmd(node) == 1)
-		return (1); // need to treat as if empty string was typed 
+	if (id == 0)
+	{
+		if (get_infile(node) == 1)
+			return(1);
+		if(get_outfile(node) == 1)
+			return(1);
+		if (cmd_only_quote(node->cmd) == 0)
+			return (ft_putstr_fd("command not found\n", 2), 127);
+		if (check_empty_cmd(node) == 1)
+			return (1); // need to treat as if empty string was typed
 	// if (remove_quote_node(node) == 1)
 	// 	return (1);
 	// handle redirections
-	in_fd = 0;
-	out_fd = 1;
-	exit_status = execute_cmd(node, in_fd, out_fd, shell);
-	return (exit_status);
+		in_fd = 0;
+		out_fd = 1;
+		shell -> exit_status = execute_cmd(node, in_fd, out_fd, shell);
+		if (dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
+			return(1);
+		if (dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
+			return(1);
+		close_files(node);
+		exit(EXIT_SUCCESS);
+	}
+	else
+		waitpid(id, &status, 0);
+	return (shell -> exit_status);
 }
 
 /*	execute_ast traverses AST for execution
@@ -209,7 +228,7 @@ int	execute_ast(t_ast *node, t_shell *shell)
 {
 	if (!node)
 		return (0);
-	if (!node->left && !node->right) 
+	if (!node->left && !node->right)
 		return (execute_cmd_node(node, shell));
 	else if (node->code == TOKEN_PIPE)
 	{
