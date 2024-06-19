@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/18 14:20:24 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/19 16:11:51 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,8 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	// 	return (1);
 	if (id == 0)
 	{
+		if(get_docs(node) == 1)
+			return(1);
 		if (get_infile(node) == 1)
 			return(1);
 		if(get_outfile(node) == 1)

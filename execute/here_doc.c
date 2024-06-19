@@ -1,0 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
+/*   Updated: 2024/06/19 17:30:16 by ryagoub          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+int open_file(t_file *current, char *line, int flag)
+{
+	current -> fd = open(current ->file_name,O_CREAT|O_RDWR,766);
+	printf("%d\n",current ->fd);
+	while(ft_strcmp(current->file_name,line))
+	{
+		ft_putstr_fd(line,current -> fd);
+		line = readline(">");
+	}
+	if(flag ==  0)
+	{
+		close(current -> fd);
+		unlink(current ->file_name);
+	}
+	return(0);
+}
+
+int get_docs(t_ast *node)
+{
+	char *line;
+	t_file *current;
+	int target_fd;
+
+	current = node -> heredoc_list;
+	if(!current)
+		return(0);
+	line = readline(">");
+	while (current && current -> next)
+	{
+		open_file(current , line,0);
+		current = current -> next;
+	}
+	open_file(current , line, 1);
+	node -> tmp_stdin_fd = dup(STDIN_FILENO);
+	printf ("%d \n",current ->fd );
+	target_fd = dup2(current ->fd , STDIN_FILENO);
+	close(current -> fd);
+	unlink(current ->file_name);
+	if (target_fd == -1)
+		return(1);
+	return(0);
+}

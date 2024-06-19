@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/18 14:17:42 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/19 16:05:08 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,7 @@ int		execute_ast(t_ast *node, t_shell *shell);
 int		get_infile(t_ast *node);
 int get_outfile(t_ast *node);
 void close_files(t_ast *node);
+int get_docs(t_ast *node);
 
 // builtin_cd.c
 int	builtin_cd(t_ast *node, int in_fd, int out_fd);
