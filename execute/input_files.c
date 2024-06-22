@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:57:08 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/17 19:12:54 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/20 22:07:08 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int get_infile(t_ast *node)
 	fd = open(current ->file_name, O_RDONLY);
 	if(fd == -1)
 		return(1);
-	 node ->tmp_stdin_fd = dup(STDIN_FILENO);
-	if (node ->tmp_stdin_fd == -1)
-		return(1);
+	//  node ->tmp_stdin_fd = dup(STDIN_FILENO);
+	// if (node ->tmp_stdin_fd == -1)
+	// 	return(1);
 	target_fd = dup2(fd, STDIN_FILENO);
 	close(fd);
 	if(target_fd == -1)

@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:56:37 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/18 11:10:24 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/20 21:33:15 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int create_output_append_list(int code, t_token *token, t_ast **node)
     if (!new->file_name)
         return (ft_putstr_fd("Malloc error creating t_file->file_name for output_list\n", 2), 1);
     new->next = NULL;
-	new -> fd = -1;
+	new -> fd = -2;
      current = (*node)-> output_list;
     if (current == 0)
     {
