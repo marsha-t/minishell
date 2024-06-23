@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/17 17:37:21 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/22 17:52:22 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	if (!envp)
 		return (1);
 	exit_status = execve(filename, argv, envp);
+	printf("im here \n");
 	free_char_dp(argv);
 	free_char_dp(envp);
 	free(filename);

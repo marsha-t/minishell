@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/20 22:49:12 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/22 22:04:43 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int get_docs(t_ast *node)
 	// node -> tmp_stdin_fd = dup(STDIN_FILENO);
 	close(current ->fd);
 	printf ("%d \n",current ->fd );
-	current ->fd=open(current->file_name,O_RDONLY,777);
+	current ->fd=open(current->file_name,O_RDONLY,0777);
 	target_fd = dup2(current ->fd , STDIN_FILENO);
 	close(current -> fd);
 	// unlink(current ->file_name);

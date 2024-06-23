@@ -11,7 +11,7 @@ EXPANSIONS_DIR = expansions
 EXPANSIONS_CFILES = expand_var.c expand_var_utils.c expand_wc.c expand_wc_utils.c #quote_remove.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c  execute_external.c execute_external_utils.c \
-	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c
+	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_pipe.c
 	# execute_assign.c builtin_cd.c builtin_env.c builtin_export.c builtin_export_unset_utils.c builtin_unset.c
 CFILES =  main.c \
 		$(addprefix $(INITIALISE_DIR)/, $(INITIALISE_CFILES)) \

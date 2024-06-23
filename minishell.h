@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/19 16:05:08 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/22 22:16:37 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include "printf/ft_printf.h"
 #include <sys/wait.h>
 #include <time.h>
+#include <string.h>
 
 # define TOKEN_TEMP 0
 # define TOKEN_CMD 1
@@ -94,6 +95,8 @@ typedef struct s_ast
 	struct s_ast	*next;
 	struct s_ast	*left;
 	struct s_ast	*right;
+	int			write_fd;
+	int			read_fd;
 } t_ast;
 
 // environment variables
@@ -235,6 +238,7 @@ int		get_infile(t_ast *node);
 int get_outfile(t_ast *node);
 void close_files(t_ast *node);
 int get_docs(t_ast *node);
+int handle_pipe(t_ast *node, t_shell *shell);
 
 // builtin_cd.c
 int	builtin_cd(t_ast *node, int in_fd, int out_fd);
