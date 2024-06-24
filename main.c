@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/20 19:58:01 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/24 13:41:27 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int main(int ac, char **av, char **envp)
 				free(shell->line);
 				continue;
 			}
-			free(shell->line);
+			// free(shell->line);
 			shell->root = parse_tokens(&shell->tokens);
 			if (!shell->root)
 				return (exit_shell(shell), 1);

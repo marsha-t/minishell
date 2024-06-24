@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/22 17:52:22 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:05:58 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,13 @@ int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	envp = envp_array(shell->var_list);
 	if (!envp)
 		return (1);
+
+	for (int i = 0; argv[i] != NULL; i++) {
+		dprintf(2, "argv[%d]: %s\n", i, argv[i]);
+	}
+
 	exit_status = execve(filename, argv, envp);
-	printf("im here \n");
+	dprintf(2, "im here \n");
 	free_char_dp(argv);
 	free_char_dp(envp);
 	free(filename);

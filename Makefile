@@ -30,7 +30,7 @@ LIBFT_DIR = libft
 FT_PRINTF =	libftprintf.a
 FT_PRINTF_DIR = printf
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 all: $(NAME)
 

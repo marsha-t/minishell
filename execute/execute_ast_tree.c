@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/22 23:58:16 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/24 19:45:24 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	// 	exit_status = run_assign(node, shell);
 	else
 	{
-		printf("im here \n");
+		dprintf(2, "im here \n");
 		exit_status = run_external(node, in_fd, out_fd, shell);}
 	return(exit_status);
 }
@@ -186,16 +186,16 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int in_fd;
 	int out_fd;
-	int id;
+	// int id;
 	int status ;
 	status =0;
-	id = fork();
+	// id = fork();
 	// if (check_var_expansion(node) == 1)
 	// 	return (1);
 	// if (check_wc_expansion(node) == 1)
 	// 	return (1);
-	if (id == 0)
-	{
+	// if (id == 0)
+	// {
 		if(get_docs(node) == 1)
 			return(1);
 		if (get_infile(node) == 1)
@@ -212,17 +212,17 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		in_fd = 0;
 		out_fd = 1;
 		shell -> exit_status = execute_cmd(node, in_fd, out_fd, shell);
-		printf("im here \n");
+		dprintf(2, "im here \n");
 		// if (dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
 		// 	return(1);
 		// if (dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
 		// 	return(1);
 		// close_files(node);
-		exit(EXIT_SUCCESS);
-	}
-	else
-	{
-		waitpid(id, &status, 0);}
+		// exit(EXIT_SUCCESS);
+	// }
+	// else
+	// {
+	// 	waitpid(id, &status, 0);}
 	return (shell -> exit_status);
 }
 
@@ -238,8 +238,10 @@ int	execute_ast(t_ast *node, t_shell *shell)
 		return (execute_cmd_node(node, shell));
 	else if (node->code == TOKEN_PIPE)
 	{
-		handle_pipe(node,shell);
-		return(0);
+		if(init_pipe(node, shell) == 1)
+			return(1);
+		if (handle_pipe(node,shell) == 0)
+			return(0);
 	}
 	else if (node->code == TOKEN_AND)
 	{
