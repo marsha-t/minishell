@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 14:14:41 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/19 13:16:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,9 +179,9 @@ int	check_assign_varname(t_ast *node)
 	- execute updated cmd node using execute_cmd
 */
 // work in progress since it uses execute_cmd_node() which is incomplete
-// it uses execute_cmd_node because redirections need to be setup; 
-// execute_cmd_node should find nothing to expand 
-int	run_assign_cmd(t_ast *node, t_shell *shell)
+// it uses execute_cmd_node because it needs to do cmd_only_quote check
+// expansions and redirections are not required to 'redo'
+int	run_assign_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	free(node->cmd);
 	node->cmd = node->args->content;
@@ -193,9 +193,11 @@ int	run_assign_cmd(t_ast *node, t_shell *shell)
 /*	run_assign runs the assignments in cmd and args (if any) 
 	- run_assign_str adds variables into shell->var_list
 		- each arg node is freed after each addition into var_list
-	- returns 1 if failure (malloc) */
-// work in progress: finish run_assign_cmd
-int	run_assign(t_ast *node, t_shell *shell)
+	- returns 1 if failure (malloc) 
+	- if there are remaining args after assignment, ast node is configured 
+		so first arg is a cmd
+	- otherwise, return 0 */
+int	run_assign(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	t_list	*curr_arg;
 
@@ -222,7 +224,7 @@ int	run_assign(t_ast *node, t_shell *shell)
 		}
 		if (curr_arg)
 		{
-			return (run_assign_cmd(node, shell));
+			return (run_assign_cmd(node, in_fd, out_fd, shell));
 		}
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/13 05:54:59 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/19 13:18:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,27 +55,16 @@ int	check_filepath(char *cmd)
 		return (ft_putstr_fd("Error calling access\n", 2), 1); // note: this should terminate shell
 }
 
-/*	value finds the value in var_list given a key*/
-// work in progress - this is likely a duplicate of a function in expansions; 
-// this is included in  minishell.h
-char *get_value(t_var *var, char *key)
-{
-	while (var)
-	{
-		if (ft_strcmp(var->key, key) == 0)
-			return (var->value);
-		var = var->next;
-	}
-	return (NULL);
-}
-
 /*	free_char_dp frees a char double pointer that is null-terminated*/
 void	free_char_dp(char **dp)
 {
-	while (*dp)
+	int	i;
+
+	i = 0;
+	while (dp[i])
 	{
-		free(*dp);
-		dp++;
+		free(dp[i]);
+		i++;
 	}
 	free(dp);
 }
@@ -104,9 +93,8 @@ int	has_current_wd(char *path)
 }
 
 /*	add_current_wd adds the current working directory to path 
-	and do so in the correct order */
-// work in progress: streamline to use ft_getcwd
-char *add_current_wd(char *path, int i)
+	and does so in the correct order */
+char *add_current_wd(char *path, int i, t_shell *shell)
 {
 	char *dir;
 	// int	size;
@@ -114,7 +102,7 @@ char *add_current_wd(char *path, int i)
 	int	j;
 	int	k;
 	
-	dir = ft_getcwd();
+	dir = ft_getcwd(shell);
 	if (!dir)
 		return (free(path), NULL); // terminate shell
 	if (i == 0)
@@ -169,7 +157,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	struct stat file_stat;
 	int	denied;
 	
-	value = ft_strdup(get_value(shell->var_list, "PATH"));
+	value = expand_var("PATH", shell->var_list);
 	if (!value)
 	{
 		*exit_status = 1;
@@ -177,7 +165,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	}
 	if (has_current_wd(value) > -1)
 	{
-		value = add_current_wd(value, has_current_wd(value));
+		value = add_current_wd(value, has_current_wd(value), shell);
 		if (!value) // malloc error 
 		{
 			*exit_status = 1;
