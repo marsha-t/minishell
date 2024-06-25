@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/24 19:43:55 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/25 07:09:16 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ typedef struct s_ast
 	struct s_ast	*next;
 	struct s_ast	*left;
 	struct s_ast	*right;
-	int			write_fd;
-	int			read_fd;
 	int			pipe_count;
 	int        **pipes;
 } t_ast;

@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:44:43 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/24 20:17:15 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/25 19:06:41 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,94 @@ int init_pipe(t_ast *node, t_shell *shell)
 	i = 0;
 	node ->pipe_count = nums_of_pipes(shell->line);
 	node->pipes = malloc(sizeof(int *)*node->pipe_count);
-	while( i <= node-> pipes)
+	while( i < node-> pipe_count)
 	{
 		node->pipes[i] = malloc(sizeof(int)*2);
+		node -> pipes[i][0] = -2;
+		node -> pipes[i][1] = -2;
 		i++;
 	}
 	if (! node ->pipes)
 		return(1);
 	return(0);
 }
+int piping_first_one(pid_t pid, t_ast *node, t_shell *shell)
+{
+	pid = fork();
+	if (pid == 0)
+	{
+		close (node -> pipes[node -> pipe_count - 1][0]);
+		if(dup2(node->pipes[node -> pipe_count - 1 ][1], STDOUT_FILENO) == -1)
+			return(0);
+		execute_cmd_node(node -> left,shell);
+		return (0);
+	}
+	pid = fork();
+	if(pid == 0)
+	{
+		close (node -> pipes[node -> pipe_count - 1][1]);
+		if(dup2(node -> pipes[node -> pipe_count - 1][0],STDIN_FILENO)== -1)
+			return(dprintf(2, "im here in the right process\n"),1);
+		execute_cmd_node(node -> right, shell);
+	}
+	// else
+	// {
+	// 	close (node -> pipes[node -> pipe_count - 1][0]);
+	// 	close (node -> pipes[node -> pipe_count - 1][1]);
+	// }
+	return(0);
+}
+int piping(t_ast *node, t_shell *shell, int i, pid_t pid)
+{
+	pid = fork();
+	if(pid == 0)
+	{
+		dup2(node -> pipes[i + 1][0], STDIN_FILENO);
+		close(node -> pipes[i + 1][0]);
+		dup2(node -> pipes[i][1], STDOUT_FILENO);
+		close(node -> pipes[i][1]);
+		execute_cmd_node(node -> right, shell);
+	}
+	return(0);
+}
 int handle_pipe(t_ast *node , t_shell *shell)
 {
 	static int i;
-	int pid[node -> pipe_count];
+	static int k;
+	pid_t pid[node -> pipe_count + 1];
 
 	if(node ->code != 3)
 		return(0);
 	pipe(node->pipes[i]);
 	i++;
 	if(node -> left -> code == TOKEN_PIPE)
-		node->read_fd = handle_pipe(node -> left, shell);
-	
+		 handle_pipe(node -> left, shell);
+	if(i == node ->pipe_count)
+	{
+		piping_first_one(pid[k], node,shell);
+		k++;
+	}
+	else
+		piping(node,shell,i,pid[k]);
+	k++;
 
-
-
-
+	printf(" this is k%d\n", k);
+	if(k == node -> pipe_count + 1)
+	{
+		 	close (node -> pipes[node -> pipe_count - 1][0]);
+			close (node -> pipes[node -> pipe_count - 1][1]);
+		dprintf(2, "im here1\n");
+		k =0;
+		while (k <= node -> pipe_count)
+		{
+			dprintf(2,"this is process %d and this is my exit_status%d\n", k,shell ->exit_status);
+			waitpid(pid[k], &shell ->exit_status, 0);
+			k ++;
+		}
+		k = 0;
+		i = 0;
+	}
+	return(0);
 }
 
 
