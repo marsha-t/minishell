@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 07:43:19 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 15:55:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/19 12:43:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,20 @@ int	builtin_echo(t_ast *node, int in_fd, int out_fd)
 	
 	(void)in_fd;
 	newline = 1;
-	if (node->n_args == 0 || (node->n_args > 0 && is_newline_arg(node->args->content) == 1))
+	if (node->n_args > 0 && is_newline_arg(node->args->content) == 1)
 		newline = 0;
-	curr_arg = node->args;
-	while (is_newline_arg(curr_arg->content) == 1)
-		curr_arg = curr_arg->next;
-	while (curr_arg)
+	if (node->n_args > 0)
 	{
-		write(out_fd, curr_arg->content, ft_strlen(curr_arg->content));
-		if (curr_arg->next)
-			write(out_fd, " ", 1);
-		curr_arg = curr_arg->next;
+		curr_arg = node->args;
+		while (is_newline_arg(curr_arg->content) == 1)
+			curr_arg = curr_arg->next;
+		while (curr_arg)
+		{
+			write(out_fd, curr_arg->content, ft_strlen(curr_arg->content));
+			if (curr_arg->next)
+				write(out_fd, " ", 1);
+			curr_arg = curr_arg->next;
+		}
 	}
 	if (newline == 1)
 		write(out_fd, "\n", 1);

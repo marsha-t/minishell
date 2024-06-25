@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/18 14:17:42 by ryagoub          ###   ########.fr       */
+*   Updated: 2024/06/25 14:35:46 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ int	is_newline_arg(char *arg);
 int	builtin_echo(t_ast *node, int in_fd, int out_fd);
 
 // builtin_env.c
+void print_envp(t_var *envp, int out_fd);
 int	builtin_env(t_ast *node, int in_fd, int out_fd, t_shell *shell);
 
 // builtin_exit.c
@@ -254,14 +255,12 @@ void	exit_shell(t_shell *shell);
 int	builtin_exit(t_ast *node, t_shell *shell);
 
 // builtin_export.c
+void print_export(t_var *envp, int out_fd);
+t_var *check_exist(char *word, t_var *list);
 int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell);
 
-// builtin_export_unset_utils.c
-t_var *check_exist(char *word, t_var *list);
-t_var *search_for_node(char *s2, t_var **list);
-
 // builtin_pwd.c
-char	*ft_getcwd(void);
+char	*ft_getcwd(t_shell *shell);
 int	builtin_pwd(t_ast *node, int in_fd, int out_fd);
 
 // builtin_unset.c
@@ -285,11 +284,10 @@ int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell);
 
 // execute_external_utils.c
 void	free_num(int num, ...); // move to basic utils?
-char *get_value(t_var *var, char *key);
 int	check_filepath(char *cmd);
 void	free_char_dp(char **dp);
 int	has_current_wd(char *path);
-char *add_current_wd(char *path, int i);
+char *add_current_wd(char *path, int i, t_shell *shell);
 char	*find_cmd(char *cmd, int *exit_status, t_shell *shell);
 
 /*****************************************************************************/
@@ -303,7 +301,6 @@ char *return_key(char *str);
 char  *search_for_key(char *key,char *str);
 int var_length(char *str);
 int ft_strlen_b_$(char *str);
-// char *value(char *str , t_var **envp);
 int contain_var(char *str);
 
 t_dconts *create_conts_list(void);
@@ -312,15 +309,7 @@ int	ft_strcmp1(const char *s1, const char *s2);
 t_dconts *expand_wildcard(char *str, t_dconts *conts_list);
 int list_size(t_dconts *list);
 
-// environment_vars_op.c
-void env_ops(t_var **list, t_token *token);
 
-// var_modif.c
-void print_export(t_var *envp);
-void print_envp(t_var *envp);
-
-void export(char *s1,char *s2, t_var **envp);
-void unset(char *s1,char *s2, t_var **envp);
 
 
 #endif

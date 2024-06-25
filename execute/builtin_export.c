@@ -6,11 +6,53 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/16 22:18:24 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/19 13:00:31 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*	print_export prints the environment variables 
+	(prompted by export command)*/
+void print_export(t_var *envp, int out_fd)
+{
+	t_var *current;
+
+	current = envp;
+	while (current)
+	{
+		if (current->env == 1)
+		{
+			write(out_fd, "declare -x ", 11);
+			write(out_fd, current->key, ft_strlen(current->key));
+			if (current->value)
+			{
+				write(out_fd, "=\"", 2);
+				write(out_fd, current->value, ft_strlen(current->value));
+				write(out_fd, "\"", 1);
+			}
+			write(out_fd, "\n", 1);
+		}
+		current = current -> next;
+	}
+}
+
+/*	check_exist checks whether a variable already exists
+	- returns pointer to variable node if it does
+	- returns NULL if not*/
+t_var *check_exist(char *word, t_var *list)
+{
+	t_var *current;
+
+	current = list;
+	while (current)
+	{
+		if (ft_strcmp(current->key, var) == 0)
+			return (current);
+		current = current -> next;
+	}
+	return (NULL);
+}
 
 /*	builtin_export runs the export command
 	- if no args, prints environment variable list 
@@ -23,9 +65,10 @@
 			- if no equal, change to env (if originally normal); original value is retained
 			- if equal, replace in list
 		- if key doesn't exist, create new node in list 
+			- if no equal, value = NULL
+			- if equal, value = empty string
 	- options are treated as invalid variable names
 */
-// work in progress: check_exist not updated since it is used for expansions too 
 // work in progress: to terminate shell for malloc issues
 // work in progress: update to use in_fd and out_fd
 int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
@@ -39,7 +82,7 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	(void)in_fd;
 	(void)out_fd;
 	if (node->n_args == 0)
-		return (print_export(shell->var_list), 0);
+		return (print_export(shell->var_list, out_fd), 0);
 	else
 	{
 		curr_arg = node->args;
@@ -84,30 +127,3 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	}
 	return (0);
 }
-
-// void export(char *s1,char *s2, t_var **envp)
-// {
-// 	t_var *current;
-// 	// t_var *p;
-// 	t_var *new;
-
-// 	current = *envp;
-// 	new = malloc(sizeof(t_var));
-// 	if(ft_strcmp(s1, "export") == 0 && s2 )
-// 	{
-// 		if(check_exist(s2,*envp))
-// 		{
-// 			new= check_exist(s2, *envp);
-// 			new ->content = s2;
-// 		}
-// 		else
-// 		{
-// 			*envp = new;
-// 			new -> next = current;
-// 			new ->content = s2;
-// 			if(!(ft_strchr(s2,'=')))
-// 				new-> flag = 1;
-// 		}
-// 	}
-// }
-

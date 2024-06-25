@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/18 14:20:24 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/19 13:06:52 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
-// work in progress - whether to give in_fd and out_fd to run_assign
 int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	int	exit_status;
@@ -35,7 +34,7 @@ int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	else if (ft_strcmp(node->cmd, "exit") == 0)
 		exit_status = builtin_exit(node, shell);
 	// else if (ft_strchr(node->cmd, '=') != NULL)
-	// 	exit_status = run_assign(node, shell);
+	// 	exit_status = run_assign(node, in_fd, out_fd, shell);
 	else
 		exit_status = run_external(node, in_fd, out_fd, shell);
 	return(exit_status);
