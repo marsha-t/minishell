@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/11 20:29:10 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/17 20:16:50 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ t_ast	*ast_node_init(void)
 	new->next = 0;
 	new->left = 0;
 	new->right = 0;
+	new ->tmp_stdin_fd = 0;
+	new ->tmp_stdout_fd = 0;
 	return (new);
 }
 
@@ -116,17 +118,17 @@ int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current)
 			return (ft_putstr_fd("Malloc error creating t_ast for ast_node_append\n", 2), 1);
 		*current = *start;
 	}
-	else if (*start && (*current)->code != TOKEN_CMD)
-	{
-		(*current)->next = ast_node_init();
-		if (!(*current)->next)
-			return (ft_putstr_fd("Malloc error creating t_ast for ast_node_append\n", 2), 1);
-		*current = (*current)->next;
-	}
+	// else if (*start && (*current)->code != TOKEN_CMD)
+	// {
+	// 	(*current)->next = ast_node_init();
+	// 	if (!(*current)->next)
+	// 		return (ft_putstr_fd("Malloc error creating t_ast for ast_node_append\n", 2), 1);
+	// 	*current = (*current)->next;
+	// }
 	if ((*tokens)->code == TOKEN_INPUT)
 	{
 		if ((create_in_list((*tokens)->next, current)) == 1)
-			return (1);
+				return (1);
 	}
 	else if ((*tokens)->code == TOKEN_HEREDOC)
 	{

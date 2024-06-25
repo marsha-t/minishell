@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
 /*   Updated: 2024/06/19 13:18:58 by mateo            ###   ########.fr       */
@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-/*	free_num frees an arbitrary number of pointers 
+/*	free_num frees an arbitrary number of pointers
 	num = number of pointers to be freed*/
 void	free_num(int num, ...)
 {
@@ -26,7 +26,7 @@ void	free_num(int num, ...)
 	va_end(args);
 }
 
-/*	check_filepath checks whether a filepath can be accessed 
+/*	check_filepath checks whether a filepath can be accessed
 	- returns exit_status depending on error trying to access file */
 // work in progress: to terminate shell when error calling stat
 // work in progress: catered for other errno as error calling access - this should terminate shell?
@@ -34,7 +34,7 @@ int	check_filepath(char *cmd)
 {
 	int	error;
 	struct stat file_stat;
-	
+
 	error = access(cmd, X_OK);
 	if (error == 0)
 	{
@@ -55,6 +55,7 @@ int	check_filepath(char *cmd)
 		return (ft_putstr_fd("Error calling access\n", 2), 1); // note: this should terminate shell
 }
 
+
 /*	free_char_dp frees a char double pointer that is null-terminated*/
 void	free_char_dp(char **dp)
 {
@@ -74,7 +75,7 @@ void	free_char_dp(char **dp)
 int	has_current_wd(char *path)
 {
 	int i;
-	
+
 	if (path[0] == ':')
 		return (0);
 	else if (path[ft_strlen(path) - 1] == ':')
@@ -101,8 +102,8 @@ char *add_current_wd(char *path, int i, t_shell *shell)
 	char *new_path;
 	int	j;
 	int	k;
-	
-	dir = ft_getcwd(shell);
+
+  dir = ft_getcwd(shell);
 	if (!dir)
 		return (free(path), NULL); // terminate shell
 	if (i == 0)
@@ -144,11 +145,11 @@ char *add_current_wd(char *path, int i, t_shell *shell)
 
 /*	find_cmd finds the command across the PATH directories
 	and checks whether it exists and permissions are granted
-	- it also updates exit_status 
+	- it also updates exit_status
 	- PATH may not exist if it has been unset or set to null
 		- return null, exit_status = 127 */
 // work in progress: depends on deconflict of value
-// work in progress: what about other errors from access 
+// work in progress: what about other errors from access
 char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 {
 	char	*value;
@@ -156,7 +157,6 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	char	*path_cmd;
 	struct stat file_stat;
 	int	denied;
-	
 	value = expand_var("PATH", shell->var_list);
 	if (!value)
 	{
@@ -194,11 +194,13 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 				*exit_status = 1;
 				free(path_cmd);
 				free_char_dp(paths);
-				return (ft_putstr_fd("Error calling stat\n", 2), NULL); // need to terminate shell 
+				return (ft_putstr_fd("Error calling stat\n", 2), NULL); // need to terminate shell
 			}
 			else if (!S_ISDIR(file_stat.st_mode))
 			{
-				free_char_dp(paths);
+
+				// free_char_dp(paths);
+				// printf("im herrre\n");
 				return (path_cmd);
 			}
 		}

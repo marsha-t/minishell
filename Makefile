@@ -11,7 +11,7 @@ EXPANSIONS_DIR = expansions
 EXPANSIONS_CFILES = expand_var.c expand_var_utils.c expand_wc.c expand_wc_utils.c #quote_remove.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c  execute_external.c execute_external_utils.c \
-	builtin_echo.c builtin_exit.c  builtin_pwd.c 
+	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c
 	# execute_assign.c builtin_cd.c builtin_env.c builtin_export.c builtin_export_unset_utils.c builtin_unset.c
 CFILES =  main.c \
 		$(addprefix $(INITIALISE_DIR)/, $(INITIALISE_CFILES)) \
@@ -20,7 +20,7 @@ CFILES =  main.c \
 		$(addprefix $(PARSE_DIR)/, $(PARSE_CFILES)) \
 		expansions/quote_remove.c \
 		$(addprefix $(EXECUTE_DIR)/, $(EXECUTE_CFILES)) \
-		# $(addprefix $(EXPANSION_DIR)/, $(EXPANSION_CFILES)) 
+		# $(addprefix $(EXPANSION_DIR)/, $(EXPANSION_CFILES))
 
 OFILES = ${CFILES:.c=.o}
 
@@ -30,7 +30,7 @@ LIBFT_DIR = libft
 FT_PRINTF =	libftprintf.a
 FT_PRINTF_DIR = printf
 
-CFLAGS = -Wall -Wextra -Werror -g3 
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 all: $(NAME)
 

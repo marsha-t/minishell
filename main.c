@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/16 22:11:23 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/17 19:01:21 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int main(int ac, char **av, char **envp)
 			free(shell->line);
 			shell->root = parse_tokens(&shell->tokens);
 			if (!shell->root)
-				return (exit_shell(shell), 1); 
+				return (exit_shell(shell), 1);
 			ast_tree_print(shell->root);
-			printf("before execute\n");
+			printf("after execute\n");
 			execute_ast(shell->root, shell);
     	}
 	}
