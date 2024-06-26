@@ -36,6 +36,7 @@ t_shell	*init_shell(char **envp)
 	shell->tokens = 0;
 	shell->root = 0;
 	shell-> exit_status = -1;
+	shell -> pipe_data = 0;
 	return (shell);
 }
 

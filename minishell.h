@@ -53,6 +53,13 @@ typedef struct	s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_pipe_info
+{
+	int			pipe_count;
+	int        **pipes;
+	int			*pid;
+}t_pipe_info;
+
 typedef struct	s_file
 {
 	char			*file_name;
@@ -95,9 +102,6 @@ typedef struct s_ast
 	struct s_ast	*next;
 	struct s_ast	*left;
 	struct s_ast	*right;
-	int			pipe_count;
-	int        **pipes;
-	int			*pid;
 } t_ast;
 
 // environment variables
@@ -119,6 +123,7 @@ typedef struct s_shell
 	char	*line;
 	t_token	*tokens;
 	t_ast	*root;
+	t_pipe_info *pipe_data;
 	int	exit_status;
 }	t_shell;
 

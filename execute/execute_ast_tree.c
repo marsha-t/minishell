@@ -187,8 +187,6 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	int in_fd;
 	int out_fd;
 	// int id;
-	int status ;
-	status =0;
 	// id = fork();
 	// if (check_var_expansion(node) == 1)
 	// 	return (1);
