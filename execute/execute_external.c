@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/25 18:56:01 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/26 12:08:24 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
 /*	run_external runs an external command
 	- by first preparing the arguments for execve */
 // work in progress: how to pass in_fd and out_fd to execve
-int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+int	 run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 {
 	int		exit_status;
 	char	*filename;
@@ -160,9 +160,8 @@ int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	// 	dprintf(2, "I couldn't close\n");
 	// else
 	// 	dprintf(2, "I closed succesfully\n");
-
 	exit_status = execve(filename, argv, envp);
-	dprintf(2, "im here execve failed \n");
+
 	free_char_dp(argv);
 	free_char_dp(envp);
 	free(filename);

@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/25 07:09:16 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/26 11:46:28 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct s_ast
 	struct s_ast	*right;
 	int			pipe_count;
 	int        **pipes;
+	int			*pid;
 } t_ast;
 
 // environment variables

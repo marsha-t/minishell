@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:44:43 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/25 19:06:41 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/26 16:57:00 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,21 @@ int init_pipe(t_ast *node, t_shell *shell)
 {
 	int i;
 	i = 0;
-	node ->pipe_count = nums_of_pipes(shell->line);
-	node->pipes = malloc(sizeof(int *)*node->pipe_count);
-	while( i < node-> pipe_count)
+	while (node -> left)
 	{
-		node->pipes[i] = malloc(sizeof(int)*2);
-		node -> pipes[i][0] = -2;
-		node -> pipes[i][1] = -2;
-		i++;
+		node ->pipe_count = nums_of_pipes(shell->line);
+		node->pid = malloc(sizeof(int *)*node->pipe_count + 1);
+		node->pipes = malloc(sizeof(int *)*node->pipe_count);
+		while( i < node-> pipe_count)
+		{
+			node->pipes[i] = malloc(sizeof(int)*2);
+			node -> pipes[i][0] = -2;
+			node -> pipes[i][1] = -2;
+			i++;
+		}
+		node = node -> left;
 	}
-	if (! node ->pipes)
+	if (!node ->pipes)
 		return(1);
 	return(0);
 }
@@ -91,40 +96,45 @@ int handle_pipe(t_ast *node , t_shell *shell)
 {
 	static int i;
 	static int k;
-	pid_t pid[node -> pipe_count + 1];
+	static int pipe_count;
 
+	if (i == 0)
+		pipe_count = node -> pipe_count;
 	if(node ->code != 3)
 		return(0);
-	pipe(node->pipes[i]);
+	printf("%p\n", node->pipes[i]);
+	if ( i < pipe_count)
+		pipe(node->pipes[i]);
 	i++;
-	if(node -> left -> code == TOKEN_PIPE)
-		 handle_pipe(node -> left, shell);
-	if(i == node ->pipe_count)
+	printf(" cmd -> code %d\n", node ->left-> code );
+	if(node -> left && node -> left -> code == TOKEN_PIPE)
 	{
-		piping_first_one(pid[k], node,shell);
+		handle_pipe(node -> left, shell);}
+	if(i == pipe_count)
+	{
+		piping_first_one(node ->pid[k], node,shell);
 		k++;
 	}
 	else
-		piping(node,shell,i,pid[k]);
+		piping(node,shell,i,node ->pid[k]);
 	k++;
-
-	printf(" this is k%d\n", k);
-	if(k == node -> pipe_count + 1)
+	if(k == pipe_count + 1)
 	{
-		 	close (node -> pipes[node -> pipe_count - 1][0]);
-			close (node -> pipes[node -> pipe_count - 1][1]);
-		dprintf(2, "im here1\n");
+		close (node -> pipes[node -> pipe_count - 1][0]);
+		close (node -> pipes[node -> pipe_count - 1][1]);
 		k =0;
-		while (k <= node -> pipe_count)
+
+		while (k <= pipe_count)
 		{
 			dprintf(2,"this is process %d and this is my exit_status%d\n", k,shell ->exit_status);
-			waitpid(pid[k], &shell ->exit_status, 0);
+			waitpid(node -> pid[k], &shell ->exit_status, 0);
 			k ++;
 		}
 		k = 0;
 		i = 0;
+		pipe_count = 0;
 	}
-	return(0);
+	return(dprintf(2, "this is me the main finished but stucked\n"),0);
 }
 
 

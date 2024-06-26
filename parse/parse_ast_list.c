@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/25 07:09:36 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/26 11:46:45 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_ast	*ast_node_init(void)
 	new->next = 0;
 	new->left = 0;
 	new->right = 0;
+	new -> pid = 0;
 	new ->tmp_stdin_fd = 0;
 	new ->tmp_stdout_fd = 0;
 	return (new);
