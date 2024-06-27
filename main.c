@@ -60,6 +60,7 @@ int main(int ac, char **av, char **envp)
 			ast_tree_print(shell->root);
 			printf("after execute\n");
 			execute_ast(shell->root, shell);
+			free_shell(shell);
     	}
 	}
 	exit_shell(shell);

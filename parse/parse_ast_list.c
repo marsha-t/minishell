@@ -32,7 +32,6 @@ t_ast	*ast_node_init(void)
 	new->next = 0;
 	new->left = 0;
 	new->right = 0;
-	new -> pid = 0;
 	new ->tmp_stdin_fd = 0;
 	new ->tmp_stdout_fd = 0;
 	return (new);

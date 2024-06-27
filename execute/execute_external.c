@@ -161,7 +161,6 @@ int	 run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	// else
 	// 	dprintf(2, "I closed succesfully\n");
 	exit_status = execve(filename, argv, envp);
-
 	free_char_dp(argv);
 	free_char_dp(envp);
 	free(filename);

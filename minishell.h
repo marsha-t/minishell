@@ -246,7 +246,7 @@ void close_files(t_ast *node);
 int get_docs(t_ast *node);
 // execute_pipes
 int handle_pipe(t_ast *node, t_shell *shell);
-int init_pipe(t_ast *node, t_shell *shell);
+int init_pipe( t_shell *shell);
 
 // builtin_cd.c
 int	builtin_cd(t_ast *node, int in_fd, int out_fd);

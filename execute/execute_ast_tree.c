@@ -235,7 +235,7 @@ int	execute_ast(t_ast *node, t_shell *shell)
 		return (execute_cmd_node(node, shell));
 	else if (node->code == TOKEN_PIPE)
 	{
-		if(init_pipe(node, shell) == 1)
+		if(init_pipe(shell) == 1)
 			return(1);
 		if (handle_pipe(node,shell) == 0)
 			return(0);
