@@ -181,7 +181,8 @@ int	check_assign_varname(t_ast *node)
 // work in progress since it uses execute_cmd_node() which is incomplete
 // it uses execute_cmd_node because it needs to do cmd_only_quote check
 // expansions and redirections are not required to 'redo'
-int	run_assign_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+// can consider creating another function instead of execute_cmd_node()
+int	run_assign_cmd(t_ast *node, t_shell *shell)
 {
 	free(node->cmd);
 	node->cmd = node->args->content;
@@ -197,7 +198,7 @@ int	run_assign_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 	- if there are remaining args after assignment, ast node is configured 
 		so first arg is a cmd
 	- otherwise, return 0 */
-int	run_assign(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+int	run_assign(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
 
@@ -224,7 +225,7 @@ int	run_assign(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 		}
 		if (curr_arg)
 		{
-			return (run_assign_cmd(node, in_fd, out_fd, shell));
+			return (run_assign_cmd(node, shell));
 		}
 	}
 	return (0);

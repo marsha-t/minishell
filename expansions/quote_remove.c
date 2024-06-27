@@ -88,7 +88,7 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i)
 		in_quote = strdup_range(&str[*start], &str[*i - 1]);
 	if (!in_quote)
 		return (ft_putstr_fd("Malloc error creating in_quote\n", 2), NULL);
-	if (*i == ft_strlen(str) - 1)
+	if (*i == (int)ft_strlen(str) - 1)
 		after_quote = ft_strdup("");
 	else
 		after_quote = strdup_range(&str[*i + 1], &str[ft_strlen(str) - 1]);

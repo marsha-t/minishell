@@ -7,6 +7,10 @@
 echo -n abc   # i.e., add 3 spaces after abc; prints abc without new line and spaces
 echo abc    def #output: abc def
 
+    echo abc #isn't recorded in history 
+
+echo       abc #history includes all the spaces
+
 #############################################################################
 # QUOTES ####################################################################
 #############################################################################
@@ -261,6 +265,71 @@ chmod 0 a.txt
 echo abc > a.txt # error msg: Permission denied
 
 #############################################################################
+# HEREDOC ###################################################################
+#############################################################################
+cat << abc << def
+abc
+text
+def
+# output: text
+# history: all 4 lines
+
+cat << abc << def
+abc 
+def
+#output: nothing 
+#history: all 3 lines
+
+var=abc
+cat << def
+$var
+def
+#output: abc
+#history: cat << def \n $var \n def
+
+var=abc
+cat << abc
+text
+$var
+abc
+#output: ddd \n abc
+#history: all lines but with $var
+
+var=abc
+cat << $var
+text
+abc
+$var
+#output: text \n abc
+
+cat << a b c
+a b c
+a
+#output: error because no such file or directory for b and c
+
+cat << a a.txt b.txt
+text
+a
+#output: text followed by content of a.txt and b.txt
+
+echo abc << a >a.txt
+text
+a
+# output of abc redirected to a.txt
+
+echo abc && cat << a
+fff
+a
+# output: abc \n fff
+
+cat << abc"d"
+text
+abcd
+# output: text
+# history: includes the quotes
+
+
+#############################################################################
 # ECHO ######################################################################
 #############################################################################
 echo -n abc       # output: abc without new line
@@ -324,6 +393,7 @@ env #var=123
 export var=123
 export var= #updates var to empty string 
 env #var is listed
+
 
 export abc
 export #declare -x abc

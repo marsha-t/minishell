@@ -55,7 +55,7 @@ int main(int ac, char **av, char **envp)
 			if (!shell->root)
 				return (exit_shell(shell), 1);
 			ast_tree_print(shell->root);
-			printf("after execute\n");
+			printf("before execute\n");
 			execute_ast(shell->root, shell);
     	}
 	}

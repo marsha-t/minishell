@@ -13,11 +13,20 @@
 #include "../minishell.h"
 
 /*	update_pwd updates PWD in environment variables 
-	with dir (from getcwd())*/
-// work in progress: complete function 
+	with a copy of dir (from getcwd())
+	- if PWD doesn't exist, it returns with success 
+	- note that dir is duplicated here*/
 int	update_pwd(char *dir, t_shell *shell)
 {
+	t_var	*pwd_node;
 	
+	pwd_node = check_exist("PWD", shell->var_list);
+	if (!pwd_node)
+		return (0);
+	pwd_node->value = ft_strdup(dir);
+	if (!pwd_node->value)
+		return (ft_putstr_fd("Malloc error creating t_var->value\n", 2), 1);
+	return (0);
 }
 
 /*	ft_getcwd uses getcwd to get latest working dir
@@ -25,7 +34,6 @@ int	update_pwd(char *dir, t_shell *shell)
 	- doubles dir size if not enough space initially 
 	- updates PWD*/
 // work in progress - should we set a max limit for dir size e.g., while (size < 10240)?
-// work in progress - update PWD in environment variables every time getcwd is called
 char	*ft_getcwd(t_shell *shell)
 {
 	char *dir;
@@ -61,18 +69,17 @@ char	*ft_getcwd(t_shell *shell)
 	*/
 // work in progress: need to terminate shell when error running getcwd
 // work in progress: check whether this function needs in_fd?
-int	builtin_pwd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+int	builtin_pwd(t_ast *node, t_shell *shell)
 {
 	char	*dir;
 	
-	(void)in_fd;
 	if (node->n_args > 0 && ft_strncmp(node->args->content, "-", 1))
 		return (ft_putstr_fd("pwd: does not support options", 2), 1);
 	dir = ft_getcwd(shell);
 	if (!dir)
 		return (1); // terminate shell
-	write(out_fd, dir, ft_strlen(dir));
-	write(out_fd, "\n", 1);
+	write(STDOUT_FILENO, dir, ft_strlen(dir));
+	write(STDOUT_FILENO, "\n", 1);
 	free(dir);
 	return (0);
 }

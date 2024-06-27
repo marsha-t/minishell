@@ -128,16 +128,13 @@ char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
 
 /*	run_external runs an external command
 	- by first preparing the arguments for execve */
-// work in progress: how to pass in_fd and out_fd to execve
-int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+int	run_external(t_ast *node, t_shell *shell)
 {
 	int		exit_status;
 	char	*filename;
 	char	**argv;
 	char	**envp;
 
-	(void)in_fd;
-	(void)out_fd;
 	filename = get_filepath(node->cmd, &exit_status, shell);
 	if (!filename)
 		return (exit_status);

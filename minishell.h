@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-*   Updated: 2024/06/25 14:35:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/25 14:35:46 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,8 @@ void	ast_tree_print(t_ast *node);
 /*****************************************************************************/
 // quote_remove.c
 char	*ft_strjoin_free(char *s1, char *s2);
+char	*strjoin_num_free(int num, ...);
+char	*remove_quote_join(char *str, char *before_quote, int *start, int *i);
 char	*remove_quote_str(char *str);
 int	remove_quote_node(t_ast *node);
 
@@ -226,7 +228,7 @@ int contain_var(char *str);
 /*	execute																	 */
 /*****************************************************************************/
 // execute_ast_tree.c
-int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+int	execute_cmd(t_ast *node, t_shell *shell);
 int	cmd_only_quote(char *cmd);
 int	execute_cmd_node(t_ast *node, t_shell *shell);
 int		execute_ast(t_ast *node, t_shell *shell);
@@ -236,15 +238,15 @@ int get_outfile(t_ast *node);
 void close_files(t_ast *node);
 
 // builtin_cd.c
-int	builtin_cd(t_ast *node, int in_fd, int out_fd);
+int	builtin_cd(t_ast *node);
 
 // builtin_echo.c
 int	is_newline_arg(char *arg);
-int	builtin_echo(t_ast *node, int in_fd, int out_fd);
+int	builtin_echo(t_ast *node);
 
 // builtin_env.c
-void print_envp(t_var *envp, int out_fd);
-int	builtin_env(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+void print_envp(t_var *envp);
+int	builtin_env(t_ast *node, t_shell *shell);
 
 // builtin_exit.c
 unsigned long long	ft_atoi_ull(char *str);
@@ -255,16 +257,18 @@ void	exit_shell(t_shell *shell);
 int	builtin_exit(t_ast *node, t_shell *shell);
 
 // builtin_export.c
-void print_export(t_var *envp, int out_fd);
+void print_export(t_var *envp);
 t_var *check_exist(char *word, t_var *list);
-int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+int builtin_export(t_ast *node, t_shell *shell);
 
 // builtin_pwd.c
 char	*ft_getcwd(t_shell *shell);
-int	builtin_pwd(t_ast *node, int in_fd, int out_fd);
+int	update_pwd(char *dir, t_shell *shell);
+int	builtin_pwd(t_ast *node, t_shell *shell);
+
 
 // builtin_unset.c
-int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+int	builtin_unset(t_ast *node, t_shell *shell);
 
 // execute_assign.c
 int	valid_varname(char *name);
@@ -280,7 +284,7 @@ int	count_env(t_var *env);
 char	**envp_array(t_var *env);
 char	**argv_array(t_ast *node);
 char *get_filepath(char *cmd, int *exit_status, t_shell *shell);
-int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+int	run_external(t_ast *node, t_shell *shell);
 
 // execute_external_utils.c
 void	free_num(int num, ...); // move to basic utils?

@@ -20,16 +20,13 @@
 	- unset works for environment and normal vars
 	- options are treated as invalid variable names
 	*/
-// work in progress: are in_fd and out_fd needed?
-int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+int	builtin_unset(t_ast *node, t_shell *shell)
 {
 	t_var	*current;
 	t_var	*del_node;
 	int		exit_status;
 	t_list	*curr_arg;
 	
-	(void)in_fd;
-	(void)out_fd;
 	exit_status = 0;
 	if (node->n_args == 0)
 		return (0);
@@ -65,5 +62,5 @@ int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 		}
 		curr_arg = curr_arg->next;
 	}
-	return (0);
+	return (exit_status);
 }

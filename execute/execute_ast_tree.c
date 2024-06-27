@@ -15,28 +15,28 @@
 
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
-int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+int	execute_cmd(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
 
 	if (ft_strcmp(node->cmd, "echo") == 0)
-		exit_status = builtin_echo(node, in_fd, out_fd);
+		exit_status = builtin_echo(node);
 	// else if (ft_strcmp(node->cmd, "cd") == 0)
-	// 	exit_status = builtin_cd(node, in_fd, out_fd);
+	// 	exit_status = builtin_cd(node);
 	else if (ft_strcmp(node->cmd, "pwd") == 0)
-		exit_status = builtin_pwd(node, in_fd, out_fd);
-	// else if (ft_strcmp(node->cmd, "export") == 0)
-	// 	exit_status = builtin_export(node, in_fd, out_fd, shell);
-	// else if (ft_strcmp(node->cmd, "unset") == 0)
-	// 	exit_status = builtin_unset(node, in_fd, out_fd, shell);
-	// else if (ft_strcmp(node->cmd, "env") == 0)
-	// 	exit_status = builtin_env(node, in_fd, out_fd, shell);
+		exit_status = builtin_pwd(node, shell);
+	else if (ft_strcmp(node->cmd, "export") == 0)
+		exit_status = builtin_export(node, shell);
+	else if (ft_strcmp(node->cmd, "unset") == 0)
+		exit_status = builtin_unset(node, shell);
+	else if (ft_strcmp(node->cmd, "env") == 0)
+		exit_status = builtin_env(node, shell);
 	else if (ft_strcmp(node->cmd, "exit") == 0)
 		exit_status = builtin_exit(node, shell);
 	// else if (ft_strchr(node->cmd, '=') != NULL)
-	// 	exit_status = run_assign(node, in_fd, out_fd, shell);
+	// 	exit_status = run_assign(node, shell);
 	else
-		exit_status = run_external(node, in_fd, out_fd, shell);
+		exit_status = run_external(node, shell);
 	return(exit_status);
 }
 
@@ -178,25 +178,23 @@ int	check_empty_cmd(t_ast *node)
 	- executes command with updated input/output fd */
 // work in progress: need to return from check_empty_cmd if empty str was typed
 // work in progress: need to integrate quote removal
-// work in progress: need to add redirections
 int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
-	int in_fd;
-	int out_fd;
-	int id;
-	int status ;
-	status =0;
-	id = fork();
+	// int id;
+	// int status;
+
+	// status =0;
+	// id = fork();
 	// if (check_var_expansion(node) == 1)
 	// 	return (1);
 	// if (check_wc_expansion(node) == 1)
 	// 	return (1);
-	if (id == 0)
-	{
-		if (get_infile(node) == 1)
-			return(1);
-		if(get_outfile(node) == 1)
-			return(1);
+	// if (id == 0)
+	// {
+		// if (get_infile(node) == 1)
+		// 	return(1);
+		// if(get_outfile(node) == 1)
+		// 	return(1);
 		if (cmd_only_quote(node->cmd) == 0)
 			return (ft_putstr_fd("command not found\n", 2), 127);
 		if (check_empty_cmd(node) == 1)
@@ -204,19 +202,17 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	// if (remove_quote_node(node) == 1)
 	// 	return (1);
 	// handle redirections
-		in_fd = 0;
-		out_fd = 1;
-		shell -> exit_status = execute_cmd(node, in_fd, out_fd, shell);
-		if (dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
-			return(1);
-		if (dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
-			return(1);
-		close_files(node);
-		exit(EXIT_SUCCESS);
-	}
-	else
-		waitpid(id, &status, 0);
-	return (shell -> exit_status);
+		shell -> exit_status = execute_cmd(node, shell);
+		// if (dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
+		// 	return(1);
+		// if (dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
+		// 	return(1);
+		// close_files(node);
+		// exit (shell->exit_status);
+	// }
+	// else
+	// 	waitpid(id, &status, 0);
+	return (shell->exit_status);
 }
 
 /*	execute_ast traverses AST for execution

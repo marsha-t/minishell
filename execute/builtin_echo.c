@@ -34,13 +34,11 @@ int	is_newline_arg(char *arg)
 	- error can occur from write errors
 	- multiple newline arguments are all considered as newline arguments
 	- invalid options are taken as arguments and printed */
-// work in progress: should in_fd do anything?
-int	builtin_echo(t_ast *node, int in_fd, int out_fd)
+int	builtin_echo(t_ast *node)
 {
 	int		newline;
 	t_list	*curr_arg;
 	
-	(void)in_fd;
 	newline = 1;
 	if (node->n_args > 0 && is_newline_arg(node->args->content) == 1)
 		newline = 0;
@@ -51,13 +49,13 @@ int	builtin_echo(t_ast *node, int in_fd, int out_fd)
 			curr_arg = curr_arg->next;
 		while (curr_arg)
 		{
-			write(out_fd, curr_arg->content, ft_strlen(curr_arg->content));
+			write(STDOUT_FILENO, curr_arg->content, ft_strlen(curr_arg->content));
 			if (curr_arg->next)
-				write(out_fd, " ", 1);
+				write(STDOUT_FILENO, " ", 1);
 			curr_arg = curr_arg->next;
 		}
 	}
 	if (newline == 1)
-		write(out_fd, "\n", 1);
+		write(STDOUT_FILENO, "\n", 1);
 	return (0);
 }

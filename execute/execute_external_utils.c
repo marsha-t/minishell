@@ -157,6 +157,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	char	*path_cmd;
 	struct stat file_stat;
 	int	denied;
+
 	value = expand_var("PATH", shell->var_list);
 	if (!value)
 	{
