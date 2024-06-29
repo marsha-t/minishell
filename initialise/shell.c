@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/17 11:32:51 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/28 16:25:45 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,17 @@ t_shell	*init_shell(char **envp)
 	shell -> pipe_data = 0;
 	return (shell);
 }
+void free_pipe(t_pipe_info *pipe)
+{
+	int k;
+	k = 0;
+	while (k < pipe ->pipe_count)
+	{
+		free(pipe->pipes[k]);
+		k++;
+	}
+	free(pipe->pipes);
+}
 
 /*	free_shell frees the various structures within shell
 	and then frees shell itself */
@@ -50,6 +61,8 @@ void	free_shell(t_shell *shell)
 		free_var_list(shell->var_list);
 	if (shell->tokens)
 		free_tokens(shell->tokens);
+	if(shell ->pipe_data)
+		free_pipe(shell->pipe_data);
 	free(shell);
 	// ast_tree_free(shell->root);
 }
