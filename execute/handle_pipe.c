@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:44:43 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/28 21:48:47 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/30 22:27:29 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,46 @@ int nums_of_pipes(char * line)
 	}
 	return(pipes_count);
 }
-
+void close_and_wait( t_shell *shell,int k)
+{
+	// (void)k;
+	int j;
+	j = 0;
+	while (j < shell ->pipe_data->pipe_count)
+	{
+		close (shell ->pipe_data-> pipes[j][0]);
+		close (shell ->pipe_data-> pipes[j][1]);
+		j++;
+	}
+	j = 0;
+	while (k != 0)
+	{
+		dprintf(2,"im waiting here %d\n",j);
+		wait(NULL);
+		j++;
+		k--;
+	}
+}
+void close_pipes( t_shell *shell)
+{
+	// (void)k;
+	int j;
+	j = 0;
+	while (j < shell ->pipe_data->pipe_count)
+	{
+		close (shell ->pipe_data-> pipes[j][0]);
+		close (shell ->pipe_data-> pipes[j][1]);
+		j++;
+	}
+	// j = 0;
+	// while (k != 0)
+	// {
+	// 	dprintf(2,"im waiting here %d\n",j);
+	// 	wait(NULL);
+	// 	j++;
+	// 	k--;
+	// }
+}
 
 int init_pipe( t_shell *shell)
 {
@@ -59,88 +98,57 @@ int piping_first_one(pid_t *pid, int *k, t_ast *node, t_shell *shell)
 	if (pid[*k] == 0)
 	{
 		close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][0]);
-		dprintf(2, "%d\n",shell->pipe_data -> pipe_count );
 
 		if(dup2(shell->pipe_data->pipes[shell->pipe_data -> pipe_count - 1 ][1], STDOUT_FILENO) == -1)
 			return(1);
 		close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]);
-		if (shell->pipe_data -> pipe_count != 1)
-		{
-			close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][0]);
-			close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][1]);
-		}
+		// if (shell->pipe_data -> pipe_count != 1)
+		// {
+		// 	close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][0]);
+		// 	close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][1]);
+		// }
+		close_pipes(shell);
 		execute_cmd_node(node -> left,shell);
 		return (0);
 	}
-	else
-	{
-		dprintf(2, "%d\n",shell->pipe_data -> pipe_count );
-		(*k)++;
-		pid[*k] = fork();
-		if(pid[*k] == 0)
-		{
-			dprintf(2, "im here in the right process\n");
-			if(dup2(shell->pipe_data -> pipes[shell->pipe_data -> pipe_count - 1][0],STDIN_FILENO)== -1)
-				return(dprintf(2, "im here in the right process\n"),1);
-			if (shell->pipe_data -> pipe_count != 1)
-			{
-				if(dup2(shell->pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1], STDOUT_FILENO) == -1)
-					return(1);
-				// dprintf(2, "fd closed is %d\n",shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][0]);
-				// dprintf(2, "fd closed is %d\n",shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]);
-				// dprintf(2, "fd closed is %d\n",shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][0]);
-				// dprintf(2, "fd closed is %d\n",shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][1]);
-				close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][0]);
-				close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]);
-				close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count -2][0]);
-				close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][1]);
-			}
-			else
-			{
-				close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][0]);
-				close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]);
-			}
-			execute_cmd_node(node -> right, shell);
-			return(0);
-		}
-
-	}
-	// else
-	// {
-	// 	close (node -> pipes[node -> pipe_count - 1][0]);
-	// 	close (node -> pipes[node -> pipe_count - 1][1]);
-	// }
-	return(0);
+	return(close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]),0);
 }
 int piping(t_ast *node, t_shell *shell, int i, pid_t pid)
 {
-	dprintf(2, "im here in piping\n");
-	dprintf(2, " this is i  in piping%d \n ", i);
-	dprintf(2,"this is the first command in piping %s\n",node ->right -> cmd);
-	dprintf(2, "%d\n",shell->pipe_data -> pipe_count );
+	int flag;
+	flag = 0;
 	pid = fork();
 	if(pid == 0)
 	{
-		close (shell->pipe_data -> pipes[i][1]);
-		dup2(shell->pipe_data -> pipes[i][0], STDIN_FILENO);
-		close(shell->pipe_data -> pipes[i][0]);
-		if(i != 1)
+		if ( i == shell->pipe_data -> pipe_count)
 		{
-			dprintf(2, "in if this is i  in piping child%d \n ", i);
+			dprintf(2,"im not suppose to be here\n");
+			if (i == 1)
+				flag = 1;
+			i =shell->pipe_data -> pipe_count - 1;
+			dup2(shell->pipe_data -> pipes[i][0], STDIN_FILENO);
+			if (flag == 0)
+			{
+				dprintf(2, "in if this is 11  in piping child in flag = 0%d \n ", i -1);
+				if(dup2(shell->pipe_data->pipes[i - 1][1],STDOUT_FILENO)==-1)
+						dprintf(2, " this failed%d \n ", i);
+			}
+			close_pipes(shell);
+			execute_cmd_node(node -> right, shell);
+		}
+		dprintf(2, "in if this is 11  in piping child%d \n ", i);
+		dup2(shell->pipe_data -> pipes[i -1][0], STDIN_FILENO);
+		if(i != 1 )
+		{
+			dprintf(2, "in if this is 11  in piping child%d \n ", i);
 			dup2(shell->pipe_data-> pipes[i - 1][1], STDOUT_FILENO);
 		}
-		close(shell->pipe_data -> pipes[i - 1][1]);
-		dprintf(2, " this is i  in piping child%d \n ", i);
-		close(shell->pipe_data -> pipes[i - 1][0]);
-
-		// dprintf(2, "fd closed is %d\n",shell-> pipe_data->pipes[i][0]);
-		// dprintf(2, "fd closed is %d\n",shell-> pipe_data->pipes[i][1]);
-		// dprintf(2, "fd closed is %d\n",shell-> pipe_data->pipes[i - 1][0]);
-		// dprintf(2, "fd closed is %d\n",shell-> pipe_data->pipes[i - 1][1]);
-
+		close_pipes(shell);
 		execute_cmd_node(node -> right, shell);
 	}
-	return(0);
+	if(i == shell->pipe_data -> pipe_count)
+		return(close(shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]),0);
+	return(close(shell->pipe_data -> pipes[i - 1][1]),0);
 }
 int handle_pipe(t_ast *node , t_shell *shell)
 {
@@ -150,8 +158,7 @@ int handle_pipe(t_ast *node , t_shell *shell)
 	if(node ->code != 3)
 		return(0);
 	if ( i < shell -> pipe_data->pipe_count)
-	{
-		pipe(shell->pipe_data->pipes[i]);}
+		pipe(shell->pipe_data->pipes[i]);
 	i++;
 	if(node -> left && node -> left -> code == TOKEN_PIPE)
 	{
@@ -160,11 +167,9 @@ int handle_pipe(t_ast *node , t_shell *shell)
 	}
 	if(i == shell -> pipe_data-> pipe_count)
 		piping_first_one(shell->pipe_data ->pid, &k, node,shell);
-	else
-		piping(node,shell,i,shell ->pipe_data ->pid[k]);
+	piping(node,shell,i,shell ->pipe_data ->pid[k]);
 	k++;
 	dprintf(2,"the value of k is %d and I am call %d\n", k, i);
-	// if(k ==shell -> pipe_data-> pipe_count + 1)
 	if(i == 1)
 	{
 		dprintf(2, "this should be printed only once\n");
@@ -174,30 +179,20 @@ int handle_pipe(t_ast *node , t_shell *shell)
 		{
 			close (shell ->pipe_data-> pipes[j][0]);
 			close (shell ->pipe_data-> pipes[j][1]);
-			// dprintf(2, "main closed %d\n", shell ->pipe_data-> pipes[j][0]);
-			// dprintf(2, "main closed %d\n", shell ->pipe_data-> pipes[j][1]);
 			j++;
 		}
 		j = 0;
+		// while (j != -1)
+		// 	j = wait(NULL);
 		while (j <= shell ->pipe_data->pipe_count)
 		{
 			dprintf(2, "im here in the waiting%d\n",j);
-			// waitpid(shell->pipe_data->pid[j], &shell ->exit_status, 0);
 			wait(NULL);
 			j++;
 		}
 		k = 0;
 		i = 0;
 	}
-	// int j = 0;
-	// while (j < shell ->pipe_data->pipe_count)
-	// {
-	// 	close (shell ->pipe_data-> pipes[j][0]);
-	// 	close (shell ->pipe_data-> pipes[j][1]);
-	// 	dprintf(2, "main closed %d\n", shell ->pipe_data-> pipes[j][0]);
-	// 	dprintf(2, "main closed %d\n", shell ->pipe_data-> pipes[j][1]);
-	// 	j++;
-	// }
 	return(0);
 }
 
