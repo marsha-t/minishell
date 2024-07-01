@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 07:43:19 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 15:55:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/01 21:38:17 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	builtin_echo(t_ast *node, int in_fd, int out_fd)
 {
 	int		newline;
 	t_list	*curr_arg;
-	
+
 	(void)in_fd;
 	newline = 1;
 	if (node->n_args == 0 || (node->n_args > 0 && is_newline_arg(node->args->content) == 1))

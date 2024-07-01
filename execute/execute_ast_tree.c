@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/26 16:23:11 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/01 21:40:25 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 		exit_status = builtin_exit(node, shell);
 	// else if (ft_strchr(node->cmd, '=') != NULL)
 	// 	exit_status = run_assign(node, shell);
-	else
-	{
+	else {
 		dprintf(2, "im here \n");
-		exit_status = run_external(node, in_fd, out_fd, shell);}
+		exit_status = run_external(node, in_fd, out_fd, shell);
+	}
 	return(exit_status);
 }
 

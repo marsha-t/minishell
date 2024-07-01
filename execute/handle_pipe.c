@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:44:43 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/30 22:27:29 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/01 20:48:41 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,61 +98,44 @@ int piping_first_one(pid_t *pid, int *k, t_ast *node, t_shell *shell)
 	if (pid[*k] == 0)
 	{
 		close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][0]);
-
 		if(dup2(shell->pipe_data->pipes[shell->pipe_data -> pipe_count - 1 ][1], STDOUT_FILENO) == -1)
 			return(1);
 		close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]);
-		// if (shell->pipe_data -> pipe_count != 1)
-		// {
-		// 	close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][0]);
-		// 	close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 2][1]);
-		// }
 		close_pipes(shell);
 		execute_cmd_node(node -> left,shell);
 		return (0);
 	}
-	return(close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]),0);
+	return(/*close (shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]),*/0);
 }
-int piping(t_ast *node, t_shell *shell, int i, pid_t pid)
+int piping(t_ast *node, t_shell *shell, int j, pid_t pid)
 {
-	int flag;
-	flag = 0;
+	static int call_count;
+	// int flag;
+	// flag = 0;
+	dprintf(2,"this is call_count %d \n",call_count);
+	dprintf(2, "and j (pipe_index) is %d\n", j - 1);
 	pid = fork();
 	if(pid == 0)
 	{
-		if ( i == shell->pipe_data -> pipe_count)
-		{
-			dprintf(2,"im not suppose to be here\n");
-			if (i == 1)
-				flag = 1;
-			i =shell->pipe_data -> pipe_count - 1;
-			dup2(shell->pipe_data -> pipes[i][0], STDIN_FILENO);
-			if (flag == 0)
-			{
-				dprintf(2, "in if this is 11  in piping child in flag = 0%d \n ", i -1);
-				if(dup2(shell->pipe_data->pipes[i - 1][1],STDOUT_FILENO)==-1)
-						dprintf(2, " this failed%d \n ", i);
-			}
-			close_pipes(shell);
-			execute_cmd_node(node -> right, shell);
-		}
-		dprintf(2, "in if this is 11  in piping child%d \n ", i);
-		dup2(shell->pipe_data -> pipes[i -1][0], STDIN_FILENO);
-		if(i != 1 )
-		{
-			dprintf(2, "in if this is 11  in piping child%d \n ", i);
-			dup2(shell->pipe_data-> pipes[i - 1][1], STDOUT_FILENO);
-		}
+		dprintf(2, "in if this is 11  in piping child%d \n ", j);
+		dup2(shell->pipe_data -> pipes[j-1][0], STDIN_FILENO);
+		if(j != 1 )
+			dup2(shell->pipe_data-> pipes[j - 2][1], STDOUT_FILENO);
 		close_pipes(shell);
 		execute_cmd_node(node -> right, shell);
 	}
-	if(i == shell->pipe_data -> pipe_count)
-		return(close(shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]),0);
-	return(close(shell->pipe_data -> pipes[i - 1][1]),0);
+	call_count++;
+	dprintf(2, "i at the end of piping function is = %d \n\n\n ", j);
+	if(j == shell-> pipe_data -> pipe_count)
+		return(/*close(shell-> pipe_data->pipes[shell->pipe_data -> pipe_count - 1][1]),*/0);
+	if (j == 1)
+		return(0);
+	return(/*close(shell->pipe_data -> pipes[j - 2][1]),*/0);
 }
 int handle_pipe(t_ast *node , t_shell *shell)
 {
 	static int i;
+	static int j;
 	static int k;
 
 	if(node ->code != 3)
@@ -160,18 +143,22 @@ int handle_pipe(t_ast *node , t_shell *shell)
 	if ( i < shell -> pipe_data->pipe_count)
 		pipe(shell->pipe_data->pipes[i]);
 	i++;
+	j++;
 	if(node -> left && node -> left -> code == TOKEN_PIPE)
 	{
 		handle_pipe(node -> left, shell);
 		i--;
+		j--;
+		dprintf(2, "i at handle pipe function is = %d \n ", i);
 	}
 	if(i == shell -> pipe_data-> pipe_count)
 		piping_first_one(shell->pipe_data ->pid, &k, node,shell);
-	piping(node,shell,i,shell ->pipe_data ->pid[k]);
+	piping(node,shell, j, shell ->pipe_data ->pid[k]);
 	k++;
 	dprintf(2,"the value of k is %d and I am call %d\n", k, i);
 	if(i == 1)
 	{
+		dprintf(2, "I am in the final process and my iterator j is %d\n", j);
 		dprintf(2, "this should be printed only once\n");
 		int j;
 		j = 0;
