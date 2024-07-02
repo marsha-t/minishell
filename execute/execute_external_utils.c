@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/19 13:18:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/28 01:05:08 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,8 @@ void	free_num(int num, ...)
 
 /*	check_filepath checks whether a filepath can be accessed
 	- returns exit_status depending on error trying to access file */
-// work in progress: to terminate shell when error calling stat
 // work in progress: catered for other errno as error calling access - this should terminate shell?
-int	check_filepath(char *cmd)
+int	check_filepath(char *cmd, t_shell *shell)
 {
 	int	error;
 	struct stat file_stat;
@@ -39,7 +38,10 @@ int	check_filepath(char *cmd)
 	if (error == 0)
 	{
 		if (stat(cmd, &file_stat) == -1)
+		{
+			shell->exit_shell = 1;
 			return (ft_putstr_fd("Error calling stat\n", 2), 1); // note: this should terminate shell
+		}
 		else if (S_ISDIR(file_stat.st_mode))
 			return (ft_putstr_fd("Is a directory\n", 2), 126);
 		else
@@ -52,7 +54,10 @@ int	check_filepath(char *cmd)
 	else if (errno == ENOENT)
 		return (ft_putstr_fd("No such file or directory\n", 2), 127);
 	else
+	{
+		shell->exit_shell = 1;
 		return (ft_putstr_fd("Error calling access\n", 2), 1); // note: this should terminate shell
+	}
 }
 
 
@@ -148,7 +153,6 @@ char *add_current_wd(char *path, int i, t_shell *shell)
 	- it also updates exit_status
 	- PATH may not exist if it has been unset or set to null
 		- return null, exit_status = 127 */
-// work in progress: depends on deconflict of value
 // work in progress: what about other errors from access
 char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 {
@@ -162,6 +166,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	if (!value)
 	{
 		*exit_status = 1;
+		shell->exit_shell = 1;
 		return (ft_putstr_fd("No such file or directory\n", 2), NULL);
 	}
 	if (has_current_wd(value) > -1)
@@ -170,6 +175,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		if (!value) // malloc error 
 		{
 			*exit_status = 1;
+			shell->exit_shell = 1;
 			return (NULL); // need to terminate shell
 		}
 	}
@@ -178,6 +184,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	if (!paths)
 	{
 		*exit_status = 1;
+		shell->exit_shell = 1;
 		return (ft_putstr_fd("Malloc error splitting PATH\n", 2), NULL);
 	}
 	while (*paths)
@@ -186,6 +193,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		if (!path_cmd)
 		{
 			free_char_dp(paths);
+			shell->exit_shell = 1;
 			return (ft_putstr_fd("Malloc error creating path_cmd\n", 2), NULL); // terminate shell
 		}
 		if (access(path_cmd, X_OK) == 0)
@@ -193,15 +201,14 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 			if (stat(path_cmd, &file_stat) == -1)
 			{
 				*exit_status = 1;
+				shell->exit_shell = 1;
 				free(path_cmd);
 				free_char_dp(paths);
 				return (ft_putstr_fd("Error calling stat\n", 2), NULL); // need to terminate shell
 			}
 			else if (!S_ISDIR(file_stat.st_mode))
 			{
-
-				// free_char_dp(paths);
-				// printf("im herrre\n");
+				free_char_dp(paths);
 				return (path_cmd);
 			}
 		}

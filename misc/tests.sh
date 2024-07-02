@@ -322,12 +322,48 @@ fff
 a
 # output: abc \n fff
 
-cat << abc"d"
-text
-abcd
-# output: text
-# history: includes the quotes
+var=123
+cat << abc
+$var
+"$var"
+'$var'
+abc
+#output: 123\n"123"\n'123'
 
+cat << ab"c"
+$var
+"$var"
+'$var'
+abc
+#output: $var\n"$var"\n'$var'
+
+cat << ab'c'
+$var
+"$var"
+'$var'
+abc
+#output: $var\n"$var"\n'$var'
+
+cat << ab"c"
+ab"c"
+ab'c'
+abc
+#output: ab"c"\nab'c'
+
+cat << ab'c'
+ab"c"
+ab'c'
+abc
+#output: ab"c"\nab'c'
+
+cat << abc"'"
+abc'
+#output: nothing
+
+cat << abc "''"
+abc
+abc''
+#output: abc
 
 #############################################################################
 # ECHO ######################################################################

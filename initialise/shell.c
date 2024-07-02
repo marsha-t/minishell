@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/17 11:32:51 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/27 23:48:20 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ t_shell	*init_shell(char **envp)
 	shell->line = 0;
 	shell->tokens = 0;
 	shell->root = 0;
-	shell-> exit_status = -1;
+	shell->exit_status = -1;
+	shell->exit_shell = 0;
 	return (shell);
 }
 

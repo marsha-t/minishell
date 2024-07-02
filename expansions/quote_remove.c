@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/25 14:38:04 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/28 01:13:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ char	*ft_strjoin_free(char *s1, char *s2)
 		ptr[i++] = s2[j++];
 	ptr[i] = '\0';
 	free_num(2, s1, s2);
-	// free(s1);
-	// free(s2);
 	return (ptr);
 }
 
@@ -150,9 +148,25 @@ char	*remove_quote_str(char *str)
 	return (str);
 }
 
+/*	remove_quote_file removes quotes from file names
+	- works with input_list, output_list and heredoc_list */
+int	remove_quote_file(t_file *file)
+{
+	t_file	*current;
+	
+	current = file;
+	while (current)
+	{
+		current->file_name = remove_quote_str(current->file_name);
+		if (!current->file_name)
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}
+
 /*	remove_quote_node removes quotes from command node:
-	- removed from cmd, arg, file*/
-	// work in progress depending on structure of ast node for args, input and output_append
+	- removed from cmd, arg, input_file, output_file and heredoc_file*/
 int	remove_quote_node(t_ast *node)
 {
 	int i;
@@ -167,37 +181,16 @@ int	remove_quote_node(t_ast *node)
 		while (i < node->n_args)
 		{
 			node->args->content = remove_quote_str(node->args->content);
-			if (node->args->content)
+			if (!node->args->content)
 				return (1);
 			i++;
 		}
 	}
-	if (node->input_list)
-	{
-		current = node->input_list;
-		while (current)
-		{
-			current->file_name = remove_quote_str(current->file_name);
-			current = current->next;
-		}
-	}
-	if (node->output_list)
-	{
-		current = node->output_list;
-		while (current)
-		{
-			current->file_name = remove_quote_str(current->file_name);
-			current = current->next;
-		}
-	}
-	if (node->heredoc_list)
-	{
-		current = node->heredoc_list;
-		while (current)
-		{
-			current->file_name = remove_quote_str(current->file_name);
-			current = current->next;
-		}
-	}
+	if (node->input_list && remove_quote_file(node->input_list) == 1)
+		return (1);
+	if (node->output_list && remove_quote_file(node->output_list) == 1)
+		return (1);
+	if (node->heredoc_list && remove_quote_file(node->heredoc_list) == 1)
+		return (1);
 	return (0);
 }

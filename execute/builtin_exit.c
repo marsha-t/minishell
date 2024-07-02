@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 14:16:14 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/28 00:00:38 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	exit_shell(t_shell *shell)
 {
 	free_shell(shell);
 	// rl_clear_history();
+	exit(shell->exit_status);
 }
 
 /*	builtin_exit runs the exit command
@@ -105,7 +106,6 @@ void	exit_shell(t_shell *shell)
 	- errors: 
 		- numeric argument required: exit status = 2
 		- too many arguments: exit status = 1 */
-// work in progress: need to find a way to terminate shell after exit_shell()
 int	builtin_exit(t_ast *node, t_shell *shell)
 {
 	int	exit_status;

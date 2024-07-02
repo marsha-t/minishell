@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/25 14:35:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/28 01:12:24 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct	s_file
 	int 			fd;
 	struct s_file	*next;
 } t_file;
+
 // struct to save the contents of the current directory
 // typedef struct s_dconts
 // {
@@ -116,6 +117,7 @@ typedef struct s_shell
 	t_token	*tokens;
 	t_ast	*root;
 	int	exit_status;
+	int	exit_shell;
 }	t_shell;
 
 /*****************************************************************************/
@@ -209,6 +211,7 @@ char	*ft_strjoin_free(char *s1, char *s2);
 char	*strjoin_num_free(int num, ...);
 char	*remove_quote_join(char *str, char *before_quote, int *start, int *i);
 char	*remove_quote_str(char *str);
+int	remove_quote_file(t_file *file);
 int	remove_quote_node(t_ast *node);
 
 // expand_var.c
@@ -238,7 +241,7 @@ int get_outfile(t_ast *node);
 void close_files(t_ast *node);
 
 // builtin_cd.c
-int	builtin_cd(t_ast *node);
+int	builtin_cd(t_ast *node, t_shell *shell);
 
 // builtin_echo.c
 int	is_newline_arg(char *arg);
@@ -275,7 +278,7 @@ int	valid_varname(char *name);
 int	create_key_value(char *str, char **equal, char **key, char **value);
 int	create_node_normal(t_var **v, char *key, char *value);
 int	run_assign_str(char *cmd, t_shell *shell);
-int	check_assign_varname(t_ast *node);
+int	check_assign_varname(t_ast *node, t_shell *shell);
 int	run_assign_cmd(t_ast *node, t_shell *shell);
 int	run_assign(t_ast *node, t_shell *shell);
 
@@ -288,7 +291,7 @@ int	run_external(t_ast *node, t_shell *shell);
 
 // execute_external_utils.c
 void	free_num(int num, ...); // move to basic utils?
-int	check_filepath(char *cmd);
+int	check_filepath(char *cmd, t_shell *shell);
 void	free_char_dp(char **dp);
 int	has_current_wd(char *path);
 char *add_current_wd(char *path, int i, t_shell *shell);

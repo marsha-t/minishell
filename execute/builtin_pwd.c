@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:03:01 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/17 01:58:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/28 00:03:14 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ int	update_pwd(char *dir, t_shell *shell)
 		return (0);
 	pwd_node->value = ft_strdup(dir);
 	if (!pwd_node->value)
+	{
+		shell->exit_shell = 1;
 		return (ft_putstr_fd("Malloc error creating t_var->value\n", 2), 1);
+	}
 	return (0);
 }
 
@@ -45,7 +48,10 @@ char	*ft_getcwd(t_shell *shell)
 	{
 		dir = malloc(sizeof(char) *size);
 		if (!dir)
+		{
+			shell->exit_shell = 1;
 			return (ft_putstr_fd("Malloc error creating dir\n", 2), NULL);
+		}
 		if (getcwd(dir, size) != NULL)
 			break;
 		else if (errno == ERANGE)
@@ -53,6 +59,7 @@ char	*ft_getcwd(t_shell *shell)
 		else
 		{
 			free(dir);
+			shell->exit_shell = 1;
 			return(ft_putstr_fd("Error calling getcwd\n", 2), NULL);
 		}
 	}
@@ -67,8 +74,6 @@ char	*ft_getcwd(t_shell *shell)
 		- malloc error for dir  
 		- error from getcwd that are not due to dir size 
 	*/
-// work in progress: need to terminate shell when error running getcwd
-// work in progress: check whether this function needs in_fd?
 int	builtin_pwd(t_ast *node, t_shell *shell)
 {
 	char	*dir;

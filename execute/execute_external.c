@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/17 17:37:21 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/28 01:03:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
 	}
 	if (ft_strchr(cmd, '/') != 0)
 	{
-		*exit_status = check_filepath(cmd);
+		*exit_status = check_filepath(cmd, shell);
 		if (*exit_status == 0)
 			filepath = cmd;
 		else

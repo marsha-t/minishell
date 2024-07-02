@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/19 13:16:12 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/28 00:05:43 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,10 @@ int	run_assign_str(char *cmd, t_shell *shell)
 	t_var	*exist;
 	
 	if (create_key_value(cmd, &equal, &key, &value) == 1)
+	{
+		shell->exit_shell = 1;
 		return (1);
+	}
 	if (valid_varname(key) == 1)
 	{
 		free_num(2, key, value);
@@ -138,7 +141,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 
 /*	check_assign_varname checks that key in assignments is valid
 	- checks cmd and args (only args that have the equal sign) */
-int	check_assign_varname(t_ast *node)
+int	check_assign_varname(t_ast *node, t_shell *shell)
 {
 	char	*equal;
 	char	*key;
@@ -147,7 +150,10 @@ int	check_assign_varname(t_ast *node)
 	equal = ft_strchr(node->cmd, '=');
 	key = strdup_range(node->cmd, equal - 1);
 	if (!key)
+	{
+		shell->exit_shell = 1;
 		return (ft_putstr_fd("Malloc error creating key for check_assign_varname\n", 2), 1);
+	}
 	if (valid_varname(key) == 1)
 		return (ft_putstr_fd("Invalid variable name provided", 2), 1);
 	free(key);
@@ -161,7 +167,10 @@ int	check_assign_varname(t_ast *node)
 			{
 				key = strdup_range(curr_arg->content, equal - 1);
 				if (!key)
+				{
+					shell->exit_shell = 1;
 					return (ft_putstr_fd("Malloc error creating key for check_assign_varname\n", 2), 1);
+				}
 				if (valid_varname(key) == 1)
 					return (ft_putstr_fd("Invalid variable name provided", 2), 1);
 				free(key);
@@ -202,7 +211,7 @@ int	run_assign(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
 
-	if (check_assign_varname(node) == 1)
+	if (check_assign_varname(node, shell) == 1)
 		return (1);
 	if (run_assign_str(node->cmd, shell) == 1)
 		return (1);

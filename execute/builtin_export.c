@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/19 13:00:31 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/28 00:01:38 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ t_var *check_exist(char *word, t_var *list)
 			- if equal, value = empty string
 	- options are treated as invalid variable names
 */
-// work in progress: to terminate shell for malloc issues
 int builtin_export(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
@@ -86,7 +85,10 @@ int builtin_export(t_ast *node, t_shell *shell)
 		while (curr_arg)
 		{
 			if (create_key_value(curr_arg->content, &equal, &key, &value) == 1)
-				return (1); // terminate shell
+			{
+				shell->exit_shell = 1;
+				return (1);
+			}
 			if (valid_varname(key) == 1)
 			{
 				free_num(2, key, value);
@@ -111,12 +113,18 @@ int builtin_export(t_ast *node, t_shell *shell)
 				if (equal)
 				{
 					if (create_node(&shell->var_list, curr_arg->content, 1) == 1)
-						return (1); // need to terminate shell
+					{
+						shell->exit_shell = 1;
+						return (1); 
+					}
 				}
 				else
 				{
 					if (create_node(&shell->var_list, curr_arg->content, 0) == 1)
-						return (1); // need to terminate shell
+					{
+						shell->exit_shell = 1;
+						return (1);
+					}
 				}
 			}
 			curr_arg = curr_arg->next;

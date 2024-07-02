@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/19 13:06:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/27 23:59:04 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,15 @@
 
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
+// work in progress: check that exit_shell works properly  
 int	execute_cmd(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
 
 	if (ft_strcmp(node->cmd, "echo") == 0)
 		exit_status = builtin_echo(node);
-	// else if (ft_strcmp(node->cmd, "cd") == 0)
-	// 	exit_status = builtin_cd(node);
+	else if (ft_strcmp(node->cmd, "cd") == 0)
+		exit_status = builtin_cd(node, shell);
 	else if (ft_strcmp(node->cmd, "pwd") == 0)
 		exit_status = builtin_pwd(node, shell);
 	else if (ft_strcmp(node->cmd, "export") == 0)
@@ -37,6 +38,8 @@ int	execute_cmd(t_ast *node, t_shell *shell)
 	// 	exit_status = run_assign(node, shell);
 	else
 		exit_status = run_external(node, shell);
+	// if (shell->exit_shell == 1)
+		// return (exit_shell(shell), 1);
 	return(exit_status);
 }
 
