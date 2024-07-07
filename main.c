@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/26 12:37:19 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/06 21:04:08 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	shell = init_shell(envp);
+	control_signals();
 	if (!shell)
 		return (1);
 	while (1)
 	{
 		shell->line = readline("minishell$");
-		if (shell->line == NULL) // may need to amend for heredoc
+		if (shell->line == NULL) // may need to amend for heredoc this also can be used to control control d which is used to exit the shell
 			return (exit_shell(shell), 1);
 		shell->line = ft_strtrim(shell->line, " \t");
 		if (!shell->line)

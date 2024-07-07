@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 16:25:45 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/06 17:07:19 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,6 @@ void	free_shell(t_shell *shell)
 		free_tokens(shell->tokens);
 	if(shell ->pipe_data)
 		free_pipe(shell->pipe_data);
-	free(shell);
+	// free(shell);
 	// ast_tree_free(shell->root);
 }

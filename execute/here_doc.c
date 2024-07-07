@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/22 22:04:43 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/07 21:21:49 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,22 @@
 int open_file(t_file *current, int flag)
 {
 	char	*line;
-
+	LOC =2;
 	current -> fd = open(current ->file_name, O_CREAT | O_RDWR, 0777);
 	printf("%d\n",current ->fd);
 	line = readline(">");
 	while(ft_strcmp(current->file_name,line))
 	{
+		if (flag == 1)
+		{
+			if(LOC == 123)
+			{
+				close(current -> fd);
+				unlink(current ->file_name);
+				exit (EXIT_SUCCESS);
+			}
+			printf("im here this is loc%d\n",LOC);
+		}
 		ft_putstr_fd(line,current -> fd);
 		ft_putstr_fd("\n",current -> fd);
 		line = readline(">");

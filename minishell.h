@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/26 11:46:28 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/07 12:01:51 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <string.h>
+# include <signal.h>
+#include "global.h"
+
 
 # define TOKEN_TEMP 0
 # define TOKEN_CMD 1
@@ -45,7 +48,6 @@
 # define TOKEN_OBRACKET 11
 # define TOKEN_CBRACKET 12
 # define TOKEN_IONUM 13
-
 typedef struct	s_token
 {
 	char			*str;
@@ -247,6 +249,9 @@ int get_docs(t_ast *node);
 // execute_pipes
 int handle_pipe(t_ast *node, t_shell *shell);
 int init_pipe( t_shell *shell);
+
+// handling signals
+void  control_signals(void);
 
 // builtin_cd.c
 int	builtin_cd(t_ast *node, int in_fd, int out_fd);
