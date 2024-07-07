@@ -21,8 +21,10 @@ void print_envp(t_var *envp)
 	current = envp;
 	while (current)
 	{
-		if (current->env == 1 && current->flag == 0)
+		if (current->env == 1 && current->flag == 1)
 		{
+			write(STDOUT_FILENO, current->key, ft_strlen(current->key));
+			write(STDOUT_FILENO, "=", 1);
 			write(STDOUT_FILENO, current->value, ft_strlen(current->value));
 			write(STDOUT_FILENO, "\n", 1);
 		}

@@ -38,8 +38,8 @@ int	execute_cmd(t_ast *node, t_shell *shell)
 	// 	exit_status = run_assign(node, shell);
 	else
 		exit_status = run_external(node, shell);
-	// if (shell->exit_shell == 1)
-		// return (exit_shell(shell), 1);
+	if (shell->exit_shell == 1)
+		return (exit_shell(shell), 1);
 	return(exit_status);
 }
 
@@ -65,6 +65,7 @@ int	cmd_only_quote(char *cmd)
 	else
 		return (1);
 }
+
 /*	check_empty_cmd checks whether cmd is an empty str
 	- returns 0 if
 		- cmd is not empty
@@ -91,77 +92,75 @@ int	check_empty_cmd(t_ast *node)
 	}
 	else
 		return (0);
-
 }
 
 /*	file_list_check_var calls contain_var and expand_str
 	for each file provided in file linked list
 	*/
-// int	file_list_check_var(t_file *file)
-// {
-// 	t_file	*curr_file;
+int	file_list_check_var(t_file *file, t_shell *shell)
+{
+	t_file	*curr_file;
 
-// 	curr_file = file;
-// 	while (curr_file)
-// 	{
-// 		if (contain_var(curr_file->file_name) == 0)
-// 		{
-// 			curr_file->file_name = expand_str(curr_file->file_name);
-// 			if (!curr_file->file_name)
-// 				return (1);
-// 		}
-// 		curr_file = curr_file->next;
-// 	}
-// 	return (0);
-// }
+	curr_file = file;
+	while (curr_file)
+	{
+		if (contain_var(curr_file->file_name) == 0)
+		{
+			curr_file->file_name = expand_str(curr_file->file_name, shell->var_list);
+			if (!curr_file->file_name)
+				return (1);
+		}
+		curr_file = curr_file->next;
+	}
+	return (0);
+}
 
 /*	check_var_expansion checks whether variable expansions are needed
 	- checks strings in cmd, args and files
 	- if needed, expands them
 	- returns 1 if errors with expansion
 	*/
-// int	check_var_expansion(t_ast *node)
-// {
-// 	t_list	*curr_arg;
-// 	t_file	*curr_file;
+int	check_var_expansion(t_ast *node, t_shell *shell)
+{
+	t_list	*curr_arg;
 
-// 	if (contain_var(node->cmd) == 0)
-// 	{
-// 		node->cmd = expand_str(node->cmd);
-// 		if (!node->cmd)
-// 			return (1);
-// 	}
-// 	if (node->n_args > 0)
-// 	{
-// 		curr_arg = node->args;
-// 		while (curr_arg)
-// 		{
-// 			if (contain_var(curr_arg->content) == 0)
-// 			{
-// 				curr_arg->content = expand_str(curr_arg->content);
-// 				if (!curr_arg->content)
-// 					return (1);
-// 			}
-// 			curr_arg = curr_arg->next;
-// 		}
-// 	}
-// 	if (node->input_list)
-// 	{
-// 		if (file_list_check_var(node->input_list) == 1)
-// 			return (1);
-// 	}
-// 	if (node->heredoc_list)
-// 	{
-// 		if (file_list_check_var(node->heredoc_list) == 1)
-// 			return (1);
-// 	}
-// 	if (node->output_list)
-// 	{
-// 		if (file_list_check_var(node->output_list) == 1)
-// 			return (1);
-// 	}
-// 	return (0);
-// }
+	if (contain_var(node->cmd) == 0)
+	{
+		node->cmd = expand_str(node->cmd, shell->var_list);
+		if (!node->cmd)
+			return (1);
+	}
+	if (node->n_args > 0)
+	{
+		curr_arg = node->args;
+		while (curr_arg)
+		{
+			if (contain_var(curr_arg->content) == 0)
+			{
+				curr_arg->content = expand_str(curr_arg->content, shell->var_list);
+				if (!curr_arg->content)
+					return (1);
+			}
+			curr_arg = curr_arg->next;
+		}
+	}
+	if (node->input_list)
+	{
+		if (file_list_check_var(node->input_list, shell) == 1)
+			return (1);
+	}
+	if (node->heredoc_list)
+	{
+		if (file_list_check_var(node->heredoc_list, shell) == 1)
+			return (1);
+	}
+	if (node->output_list)
+	{
+		if (file_list_check_var(node->output_list, shell) == 1)
+			return (1);
+	}
+	return (0);
+}
 
 /*	check_wc_expansion checks whether wildcard expansions are needed
 	- checks strings in cmd, args and files
@@ -188,8 +187,8 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 
 	// status =0;
 	// id = fork();
-	// if (check_var_expansion(node) == 1)
-	// 	return (1);
+	if (check_var_expansion(node, shell) == 1)
+		return (1);
 	// if (check_wc_expansion(node) == 1)
 	// 	return (1);
 	// if (id == 0)
@@ -202,8 +201,8 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 			return (ft_putstr_fd("command not found\n", 2), 127);
 		if (check_empty_cmd(node) == 1)
 			return (1); // need to treat as if empty string was typed
-	// if (remove_quote_node(node) == 1)
-	// 	return (1);
+	if (remove_quote_node(node) == 1)
+		return (1);
 	// handle redirections
 		shell -> exit_status = execute_cmd(node, shell);
 		// if (dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)

@@ -29,8 +29,8 @@ char	*ft_getcwd()
 }
 
 int main() {
-    // char *path = "C:\\Users\\marsh\\OneDrive\\Desktop\\minishell\\execute";
-    char *path = "..\\execute";
+    // char *path = "/workspaces/minishell/execute";
+    char *path = "../execute";
 
     printf("Before: %s\n", ft_getcwd());
     

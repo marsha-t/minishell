@@ -170,7 +170,6 @@ int	remove_quote_file(t_file *file)
 int	remove_quote_node(t_ast *node)
 {
 	int i;
-	t_file	*current;
 	
 	node->cmd = remove_quote_str(node->cmd);
 	if (!node->cmd)

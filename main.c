@@ -25,16 +25,17 @@ int main(int ac, char **av, char **envp)
 	while (1)
 	{
 		shell->line = readline("minishell$");
-		if (shell->line == NULL) // may need to amend for heredoc
+		if (shell->line == NULL)
 			return (exit_shell(shell), 1);
+		if (shell->line[0] != ' ' && shell->line[0] != '\t' && shell->line[0] != '\0')
+			add_history(shell->line);
 		shell->line = ft_strtrim(shell->line, " \t");
 		if (!shell->line)
-			return (ft_putstr_fd("Malloc error creating ft_strtrim(shell->line)\n", 2), free_shell(shell), 1);
+			return (err_printf("Malloc error creating ft_strtrim(shell->line)\n"), free_shell(shell), 1);
 		if (shell->line[0] == '\0')
 			free(shell->line);
 		else
 		{
-			add_history(shell->line);
 			if (check_all(shell->line) != 0)
 			{
 				exit_status = 2;

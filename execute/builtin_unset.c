@@ -55,8 +55,9 @@ int	builtin_unset(t_ast *node, t_shell *shell)
 					{
 						current->next = del_node->next;
 						free_num(3, del_node->key, del_node->value, del_node);
+						break;
 					}
-					current = current-> next;
+					current = current->next;
 				}
 			}
 		}

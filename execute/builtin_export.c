@@ -33,7 +33,7 @@ void print_export(t_var *envp)
 			}
 			write(STDOUT_FILENO, "\n", 1);
 		}
-		current = current -> next;
+		current = current->next;
 	}
 }
 
@@ -76,7 +76,9 @@ int builtin_export(t_ast *node, t_shell *shell)
 	char	*value;
 	char	*equal;
 	t_var	*exist;
+	int	exit_status;
 
+	exit_status = 0;
 	if (node->n_args == 0)
 		return (print_export(shell->var_list), 0);
 	else
@@ -92,7 +94,10 @@ int builtin_export(t_ast *node, t_shell *shell)
 			if (valid_varname(key) == 1)
 			{
 				free_num(2, key, value);
-				return (ft_putstr_fd("export: invalid environment variable name\n", 2), 1);
+				ft_putstr_fd("export: invalid environment variable name\n", 2);
+				exit_status = 1;
+				curr_arg = curr_arg->next;
+				continue;
 			}
 			exist = check_exist(key, shell->var_list);
 			if (exist)
@@ -130,5 +135,5 @@ int builtin_export(t_ast *node, t_shell *shell)
 			curr_arg = curr_arg->next;
 		}
 	}
-	return (0);
+	return (exit_status);
 }

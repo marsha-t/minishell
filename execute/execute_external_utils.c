@@ -161,6 +161,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	char	*path_cmd;
 	struct stat file_stat;
 	int	denied;
+	int	paths_index;
 
 	value = expand_var("PATH", shell->var_list);
 	if (!value)
@@ -172,11 +173,11 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	if (has_current_wd(value) > -1)
 	{
 		value = add_current_wd(value, has_current_wd(value), shell);
-		if (!value) // malloc error 
+		if (!value)
 		{
 			*exit_status = 1;
 			shell->exit_shell = 1;
-			return (NULL); // need to terminate shell
+			return (NULL);
 		}
 	}
 	paths = ft_split(value, ':');
@@ -187,9 +188,10 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		shell->exit_shell = 1;
 		return (ft_putstr_fd("Malloc error splitting PATH\n", 2), NULL);
 	}
-	while (*paths)
+	paths_index = 0;
+	while (paths[paths_index])
 	{
-		path_cmd = ft_strjoin_free(ft_strjoin_free(ft_strdup(*paths), ft_strdup("/")), ft_strdup(cmd));
+		path_cmd = ft_strjoin_free(ft_strjoin_free(ft_strdup(paths[paths_index]), ft_strdup("/")), ft_strdup(cmd));
 		if (!path_cmd)
 		{
 			free_char_dp(paths);
@@ -215,7 +217,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		else if (errno == EACCES)
 			denied = 1;
 		free(path_cmd);
-		paths++;
+		paths_index++;
 	}
 	free_char_dp(paths);
 	if (denied == 1)

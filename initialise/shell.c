@@ -18,9 +18,28 @@ void	free_safe(void *pointer)
 	pointer = 0;
 }
 
+/*	shlvl_increment adds one to SHLVL
+	- if SHLVL doesn't exist, it creates it */
+int	shlvl_increment(t_shell *shell)
+{
+	t_var	*shlvl_node;
+	int	new_shlvl;
+
+	shlvl_node = check_exist("SHLVL", shell->var_list);
+	if (!shlvl_node)
+		return (create_node(&shell->var_list, "SHLVL=1", 1));
+	new_shlvl = ft_atoi(shlvl_node->value) + 1;
+	free(shlvl_node->value);
+	shlvl_node->value = ft_itoa(new_shlvl);
+	if (!shlvl_node->value)
+		return (ft_putstr_fd("Malloc error using ft_itoa", 2), 1);
+	return (0);
+}
+
 /*	init_shell initialises t_shell
 	- creates linked list of environment variables
 	- initialises the rest to 0/NULL */
+// work in progress: to add shlvl_increment and check that error handling makes sense
 t_shell	*init_shell(char **envp)
 {
 	t_shell	*shell;
@@ -37,6 +56,8 @@ t_shell	*init_shell(char **envp)
 	shell->root = 0;
 	shell->exit_status = -1;
 	shell->exit_shell = 0;
+	if (shlvl_increment(shell) == 1)
+		return (NULL);
 	return (shell);
 }
 

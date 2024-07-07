@@ -21,6 +21,8 @@ int	valid_varname(char *name)
 	int	i;
 
 	i = 0;
+	if (name == NULL)
+		return (1);
 	while (name[i])
 	{
 		if (ft_isalnum(name[i]) == 1 || name[i] == '_')
@@ -39,25 +41,33 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 	*equal = ft_strchr(str, '=');
 	if (*equal)
 	{
-		*key = strdup_range(str, *equal - 1);
-		if (!*key)
-			return (ft_putstr_fd("Malloc error creating key", 2), 1);
-		if (*(*equal + 1) == '\0')
+		if (*equal == str)
 		{
-			*value = ft_strdup("");
-			if (!*value)
-			{
-				free(*key);
-				return (ft_putstr_fd("Malloc error creating value", 2), 1);
-			}
+			*key = 0;
+			*value = 0;
 		}
 		else
 		{
-			*value = strdup_range(*equal + 1, str + ft_strlen(str));
-			if (!*value)
+			*key = strdup_range(str, *equal - 1);
+			if (!*key)
+				return (ft_putstr_fd("Malloc error creating key", 2), 1);
+			if (*(*equal + 1) == '\0')
 			{
-				free(*key);
-				return (ft_putstr_fd("Malloc error creating value", 2), 1);
+				*value = ft_strdup("");
+				if (!*value)
+				{
+					free(*key);
+					return (ft_putstr_fd("Malloc error creating value", 2), 1);
+				}
+			}
+			else
+			{
+				*value = strdup_range(*equal + 1, str + ft_strlen(str));
+				if (!*value)
+				{
+					free(*key);
+					return (ft_putstr_fd("Malloc error creating value", 2), 1);
+				}
 			}
 		}
 	}

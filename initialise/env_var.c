@@ -23,7 +23,7 @@ int create_node(t_var **v, char *str, int flag)
 	if(!new)
 		return (ft_putstr_fd("Malloc error creating t_var in create_node\n", 2), 1);
 	if (create_key_value(str, &equal, &new->key, &new->value) == 1)
-		return (1); // terminate shell 
+		return (1);
 	new->flag = flag;
 	new->env = 1;
 	new->next = NULL;

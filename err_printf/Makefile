@@ -10,8 +10,8 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libftprintf.a
-CFILES = ft_putnbr.c ft_putchar.c ft_putstr.c ft_printf.c ft_puthexa.c ft_puthexal.c ft_putunsigned.c
+NAME = err_printf.a
+CFILES = err_putnbr.c err_putchar.c err_putstr.c err_printf.c err_puthexa.c err_puthexal.c err_putunsigned.c
 CFLAGS = -Wall -Wextra -Werror -g3
 OFILES = $(CFILES:.c=.o)
 

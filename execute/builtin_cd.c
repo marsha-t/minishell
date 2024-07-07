@@ -13,14 +13,13 @@
 #include "../minishell.h"
 
 /*	builtin_cd runs the cd command
-	- if no arg, sets to $HOME*/
+	- if no arg, sets to $HOME
+	- error if 
+		- more than 1 argument
+		- file given instead of directory
+		- no permission given for directory
+	- chdir will work with relative and absolute path */
 /* work in progress: 
-	test: 	cd with no args;
-			cd with more than 1 arg;
-			cd to a file (exit number)
-			cd to permission denied
-			cd to long filename
-			cd to nonexist file or directory
 	work in progress: catered for other errno as error calling access - this should terminate shell?
 	work in progress: need to free path when node->n_args == 0; 
 		else expand_var to not strdup
@@ -33,19 +32,22 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 	
 	if (node->n_args == 0)
 		path = expand_var("HOME", shell->var_list);
+	else if (node->n_args > 1)
+		return (err_printf("cd: too many arguments\n"), 1);
 	else
 		path = node->args->content;
+
 	error = access(path, F_OK);
-	if (error = 0)
+	if (error == 0)
 	{
-		if (stat(cmd, &file_stat) == -1)
+		if (stat(path, &file_stat) == -1)
 		{
 			shell->exit_shell = 1;
-			return (ft_putstr_fd("Error calling stat\n", 2), 1); // note: this should terminate shell
+			return (err_printf("Error calling stat\n", 2), 1);
 		}
 		if (!S_ISDIR(file_stat.st_mode))
 		{
-			ft_putstr_fd("Error?"); // cd given path to file instead of directory
+			ft_putstr_fd("Not a directory\n", 2);
 			return (1);
 		}
 		else
