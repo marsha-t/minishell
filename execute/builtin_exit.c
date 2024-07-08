@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 00:00:38 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 15:53:59 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,9 @@ int	builtin_exit(t_ast *node, t_shell *shell)
 	int	exit_status;
 
 	if (node->n_args > 0 && check_exit_arg(node->args->content) == 1)
-		return (ft_putstr_fd("exit: numeric argument required\n", 2), 2);
+		return (ft_putstr_fd("minishell: exit: numeric argument required\n", 2), 2);
 	if (node->n_args > 1)
-		return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
+		return (ft_putstr_fd("minishell: exit: too many arguments\n", 2), 1);
 	if (node->n_args == 0)
 		exit_status = 0;
 	else

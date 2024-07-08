@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/27 23:48:20 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:08:16 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	shlvl_increment(t_shell *shell)
 	free(shlvl_node->value);
 	shlvl_node->value = ft_itoa(new_shlvl);
 	if (!shlvl_node->value)
-		return (ft_putstr_fd("Malloc error using ft_itoa", 2), 1);
+		return (err_printf("minishell: malloc error using ft_itoa\n"), 1);
 	return (0);
 }
 
@@ -46,7 +46,7 @@ t_shell	*init_shell(char **envp)
 
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
-		return (ft_putstr_fd("Malloc error for shell structure\n", 2), NULL);
+		return (err_printf("minishell: malloc error for shell structure\n"), NULL);
 	shell->var_list = create_list(envp);
 	// shell->directory_contents= create_conts_list();
 	if (!shell->var_list)

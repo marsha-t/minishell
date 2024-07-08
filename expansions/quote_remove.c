@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 01:13:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:40:20 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ char	*strjoin_num_free(int num, ...)
 	arg = va_arg(strs, char *);
 	temp = ft_strdup(arg);
 	if (!temp)
-		return (ft_putstr_fd("Malloc error creating strjoin temp\n", 2), NULL); // add error msg
+		return (err_printf("minishell: malloc error: strjoin temp\n"), NULL);
 	free(arg);
 	while (--num)
 	{
 		arg = va_arg(strs, char *);
 		temp = ft_strjoin_free(temp, arg);
 		if (!temp)
-			return (ft_putstr_fd("Malloc error creating strjoin temp\n", 2), NULL);
+			return (err_printf("minishell: malloc error: strjoin temp\n"), NULL);
 	}
 	va_end(strs);
 	return (temp);
@@ -85,7 +85,7 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i)
 	else
 		in_quote = strdup_range(&str[*start], &str[*i - 1]);
 	if (!in_quote)
-		return (ft_putstr_fd("Malloc error creating in_quote\n", 2), NULL);
+		return (err_printf("minishell: malloc error: in_quote\n"), NULL);
 	if (*i == (int)ft_strlen(str) - 1)
 		after_quote = ft_strdup("");
 	else
@@ -93,7 +93,7 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i)
 	if (!after_quote)
 	{
 		free(in_quote);
-		return (ft_putstr_fd("Malloc error creating after_quote\n", 2), NULL);
+		return (err_printf("minishell: malloc error: after_quote\n"), NULL);
 	}
 	free(str);
 	*i = ft_strlen(before_quote) + ft_strlen(in_quote) - 1;
@@ -132,7 +132,7 @@ char	*remove_quote_str(char *str)
 				else
 					before_quote = strdup_range(&str[0], &str[i - 1]);
 				if (!before_quote)
-					return (ft_putstr_fd("Malloc error creating before_quote\n", 2), NULL);
+					return (err_printf("minishell: malloc error: before_quote\n"), NULL);
 				start = i + 1;
 			}
 			else if (quote == str[i])

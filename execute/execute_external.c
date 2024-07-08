@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 01:03:01 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:38:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	**envp_array(t_var *env)
 
 	envp = malloc(sizeof(char *) * (count_env(env) + 1));
 	if (!envp)
-		return (ft_putstr_fd("Malloc error creating envp for envp_array\n", 2), NULL);
+		return (err_printf("minishell: malloc error: envp for envp_array\n"), NULL);
 	i = 0;
 	current = env;
 	while (current)
@@ -52,7 +52,7 @@ char	**envp_array(t_var *env)
 				while (i--)
 					free(envp[i]);
 				free(envp);
-				return (ft_putstr_fd("Malloc error creating envp[i] for envp_array\n", 2), NULL);
+				return (err_printf("minishell: malloc error: envp[i] for envp_array\n"), NULL);
 			}
 			i++;
 		}
@@ -72,12 +72,12 @@ char **argv_array(t_ast *node)
 	current = node->args;
 	argv = malloc(sizeof(char *) * (ft_lstsize(current) + 2));
 	if (!argv)
-		return (ft_putstr_fd("Malloc error creating argv for argv_array\n", 2), NULL);
+		return (err_printf("minishell: malloc error: argv for argv_array\n"), NULL);
 	argv[0] = ft_strdup(node->cmd);
 	if (!argv[0])
 	{
 		free(argv);
-		return (ft_putstr_fd("Malloc error creating argv[i] for argv_array\n", 2), NULL);
+		return (err_printf("minishell: malloc error: argv[i] for argv_array\n"), NULL);
 	}
 	i = 1;
 	current = node->args;
@@ -89,7 +89,7 @@ char **argv_array(t_ast *node)
 			while (i--)
 				free(argv[i]);
 			free(argv);
-			return (ft_putstr_fd("Malloc error creating argv[i] for argv_array\n", 2), NULL);
+			return (err_printf("minishell: malloc error: argv[i] for argv_array\n"), NULL);
 		}
 		i++;
 		current = current->next;
@@ -111,7 +111,7 @@ char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
 	if (cmd[0] == '\0')
 	{
 		*exit_status = 127;
-		return (ft_putstr_fd("command not found\n", 2), NULL);
+		return (ft_putstr_fd("minishell: command not found\n", 2), NULL);
 	}
 	if (ft_strchr(cmd, '/') != 0)
 	{

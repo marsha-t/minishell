@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:28:19 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/02 17:28:34 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 15:43:26 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,17 @@ int	check_direct(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if ((line[i] == '>' && line[i + 1] == '<') || (line[i] == '<' && line[i + 1] == '>'))
-			return (ft_putstr_fd("minishell: syntax error near unexpected token\n", 2), 1);
+		if (line[i] == '>' && line[i + 1] == '<') 
+			return (err_printf("minishell: syntax error near unexpected token `<'\n"), 1);
+		else if  (line[i] == '<' && line[i + 1] == '>')
+			return (err_printf("minishell: syntax error near unexpected token `newline'\n"), 1);
 		else if (((line[i] == '>' && line[i + 1] == '>') || (line[i] == '<' && line[i + 1] == '<')))
 		{
 			i = i + 2;
 			while (line [i] == ' ' || line[i] == '\t')
 				i++;
 			if (line[i] == '\0')
-				return (ft_putstr_fd("minishell: syntax error near unexpected token", 2), 1);
+				return (err_printf("minishell: syntax error near unexpected token `newline'\n"), 1);
 		}
 		else if ((line[i] == '>' || line[i] == '<' ))
 		{
@@ -38,7 +40,7 @@ int	check_direct(char *line)
 			while (line [i] == ' ' || line[i] == '\t')
 				i++;
 			if (line[i] == '\0')
-				return (ft_putstr_fd("minishell: syntax error near unexpected token\n", 2), 1);
+				return (err_printf("minishell: syntax error near unexpected token `newline'\n"), 1);
 		}
 		i++;
 	}
@@ -61,7 +63,7 @@ int	check_quotes(char *line)
 			while (line[i] != '\0' && line[i] != quote_t)
 				i++;
 			if (line[i] == '\0')
-				return (ft_putstr_fd("minishell: mismatched quotes used\n", 2), 1);
+				return (err_printf("minishell: syntax error near mismatched quotes\n"), 1);
 			else
 				i++;
 		}
@@ -84,13 +86,13 @@ int	check_pipes(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '|' && line [1] != '|')
-			return (write(2, "minishell: syntax error near unexpected token `|'\n", 46), 1);
+			return (err_printf("minishell: syntax error near unexpected token `|'\n"), 1);
 		j = i;
 		while ((line[i] == 32 || line[i] == 9))
 		{
 			i++;
 			if (line[i] == '|' && line [i + 1] != '|' && j == 0)
-				return (write(2, "minishell: syntax error near unexpected token `|'\n", 46), 1);
+				return (err_printf("minishell: syntax error near unexpected token `|'\n"), 1);
 		}
 		if (line[i] == '|' && line [i + 1] != '|' && line[i - 1] != '|')
 		{

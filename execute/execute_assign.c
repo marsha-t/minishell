@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 00:05:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:38:11 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 		{
 			*key = strdup_range(str, *equal - 1);
 			if (!*key)
-				return (ft_putstr_fd("Malloc error creating key", 2), 1);
+				return (err_printf("minishell: malloc error: key\n"), 1);
 			if (*(*equal + 1) == '\0')
 			{
 				*value = ft_strdup("");
 				if (!*value)
 				{
 					free(*key);
-					return (ft_putstr_fd("Malloc error creating value", 2), 1);
+					return (err_printf("minishell: malloc error: value\n"), 1);
 				}
 			}
 			else
@@ -66,7 +66,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 				if (!*value)
 				{
 					free(*key);
-					return (ft_putstr_fd("Malloc error creating value", 2), 1);
+					return (err_printf("minishell: malloc error: value\n"), 1);
 				}
 			}
 		}
@@ -75,7 +75,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 	{
 		*key = ft_strdup(str);
 		if (!*key)
-			return (ft_putstr_fd("Malloc error creating key\n", 2), 1);
+			return (err_printf("minishell: malloc error: key\n"), 1);
 		*value = 0;
 	}
 	return (0);
@@ -90,7 +90,7 @@ int	create_node_normal(t_var **v, char *key, char *value)
 
 	new = malloc(sizeof(t_var));
 	if (!new)
-		return (ft_putstr_fd("Malloc error creating t_var\n", 2), 1);
+		return (err_printf("minishell: malloc error: t_var\n"), 1);
 	new->key = key;
 	new->value = value;
 	new->env = 0;
@@ -128,7 +128,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 	if (valid_varname(key) == 1)
 	{
 		free_num(2, key, value);
-		return (ft_putstr_fd("Invalid variable name\n", 2), 1);
+		return (ft_putstr_fd("minishell: Invalid variable name\n", 2), 1);
 	}
 	exist = check_exist(key, shell->var_list);
 	if (exist)
@@ -162,10 +162,10 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 	if (!key)
 	{
 		shell->exit_shell = 1;
-		return (ft_putstr_fd("Malloc error creating key for check_assign_varname\n", 2), 1);
+		return (err_printf("minishell: malloc error: key for check_assign_varname\n"), 1);
 	}
 	if (valid_varname(key) == 1)
-		return (ft_putstr_fd("Invalid variable name provided", 2), 1);
+		return (ft_putstr_fd("minishell: Invalid variable name provided", 2), 1);
 	free(key);
 	curr_arg = node->args;
 	if (node->n_args > 0)
@@ -179,10 +179,10 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 				if (!key)
 				{
 					shell->exit_shell = 1;
-					return (ft_putstr_fd("Malloc error creating key for check_assign_varname\n", 2), 1);
+					return (err_printf("minishell: malloc error: key for check_assign_varname\n"), 1);
 				}
 				if (valid_varname(key) == 1)
-					return (ft_putstr_fd("Invalid variable name provided", 2), 1);
+					return (ft_putstr_fd("minishell: Invalid variable name provided", 2), 1);
 				free(key);
 			}
 			else

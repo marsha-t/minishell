@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 15:21:37 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:41:13 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ int	add_token(t_token **tokens, char *str, int code)
 	t_token	*new;
 
 	if (!str)
-		return (ft_putstr_fd("Malloc error creating token->str\n", 2), 1);
+		return (err_printf("minishell: malloc error: token->str\n"), 1);
 	new = new_token(str, code);
 	if (!new)
 	{
 		free(str);
-		return (ft_putstr_fd("Malloc error creating token\n", 2), 1);
+		return (err_printf("minishell: malloc error: token\n"), 1);
 	}
 	if (!*tokens)
 		*tokens = new;

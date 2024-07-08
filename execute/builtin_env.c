@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 05:34:55 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/19 12:53:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 15:53:43 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ void print_envp(t_var *envp)
 int	builtin_env(t_ast *node, t_shell *shell)
 {
 	if (node->n_args > 0)
-		return (ft_putstr_fd("env: too many arguments/options\n", 2), 1);
+		return (ft_putstr_fd("minishell: env: too many arguments/options\n", 2), 1);
 	return (print_envp(shell->var_list), 0);
 }

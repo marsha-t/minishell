@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 14:25:58 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/02 17:28:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 15:37:19 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ int	check_and(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '&' && line[1] == '&')
-			return (write(2, "minishell: syntax error near unexpected token `&&'\n", 46), 1);
+			return (err_printf("minishell: syntax error near unexpected token `&&'\n"), 1);
 		j = i;
 		while (line[i] == 32 || line[i] == 9)
 		{
 			i++;
 			if (line[i] == '&' && line[i + 1] == '&' && j == 0)
-				return (write(2, "minishell: syntax error near unexpected token `&&'\n", 46), 1);
+				return (err_printf("minishell: syntax error near unexpected token `&&'\n"), 1);
 		}
 		if (line[i] == '&' && line[i + 1] == '&')
 		{
@@ -56,13 +56,13 @@ int	check_or(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '|' && line[1] == '|')
-			return (write(2, "minishell: syntax error near unexpected token `||'\n", 46), 1);
+			return (err_printf("minishell: syntax error near unexpected token `||'\n"), 1);
 		j = i;
 		while (line[i] == 32 || line[i] == 9)
 		{
 			i++;
 			if (line[i] == '|' && line[i + 1] == '|' && j == 0)
-				return (write(2, "minishell: syntax error near unexpected token `||'\n", 46), 1);
+				return (err_printf("minishell: syntax error near unexpected token `||'\n"), 1);
 		}
 		if (line[i] == '|' && line[i + 1] == '|')
 		{
@@ -125,7 +125,7 @@ int	check_close_para(char *line)
 	}
 	if (close_p > open_p)
 	{
-		write(2, "minishell: syntax error near unexpected token `)'\n", 51);
+		err_printf("minishell: syntax error near unexpected token `)'\n");
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 01:05:08 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:38:59 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,23 @@ int	check_filepath(char *cmd, t_shell *shell)
 		if (stat(cmd, &file_stat) == -1)
 		{
 			shell->exit_shell = 1;
-			return (ft_putstr_fd("Error calling stat\n", 2), 1); // note: this should terminate shell
+			return (err_printf("minishell: error calling stat\n"), 1);
 		}
 		else if (S_ISDIR(file_stat.st_mode))
-			return (ft_putstr_fd("Is a directory\n", 2), 126);
+			return (ft_putstr_fd("minishell: Is a directory\n", 2), 126);
 		else
 			return (0);
 	}
 	else if (errno == EACCES)
-		return (ft_putstr_fd("Permission denied\n", 2), 126);
+		return (ft_putstr_fd("minishell: Permission denied\n", 2), 126);
 	else if (errno == ENAMETOOLONG)
-		return (ft_putstr_fd("Filename too long\n", 2), 126);
+		return (ft_putstr_fd("minishell: File name too long\n", 2), 126);
 	else if (errno == ENOENT)
-		return (ft_putstr_fd("No such file or directory\n", 2), 127);
+		return (ft_putstr_fd("minishell: No such file or directory\n", 2), 127);
 	else
 	{
 		shell->exit_shell = 1;
-		return (ft_putstr_fd("Error calling access\n", 2), 1); // note: this should terminate shell
+		return (err_printf("minishell: error calling access\n"), 1);
 	}
 }
 
@@ -110,18 +110,27 @@ char *add_current_wd(char *path, int i, t_shell *shell)
 
   dir = ft_getcwd(shell);
 	if (!dir)
-		return (free(path), NULL); // terminate shell
+	{
+		shell->exit_shell = 1;	
+		return (free(path), NULL);
+	}
 	if (i == 0)
 	{
 		new_path = ft_strjoin_free(ft_strjoin_free(dir, ft_strdup(":")), path);
 		if (!new_path)
-			return (ft_putstr_fd("Malloc creating new_path\n", 2), NULL); // terminate shell
+		{
+			shell->exit_shell = 1;
+			return (err_printf("minishell: malloc creating new_path\n"), NULL);
+		}
 	}
 	else if (i == (int)ft_strlen(path) - 1)
 	{
 		new_path = ft_strjoin_free(ft_strjoin_free(path, ":"), dir);
 		if (!new_path)
-			return(ft_putstr_fd("Malloc creating new_path\n", 2), NULL); // terminate shell
+		{
+			shell->exit_shell = 1;
+			return(err_printf("minishell: malloc: new_path\n"), NULL);
+		}
 	}
 	else
 	{
@@ -129,7 +138,8 @@ char *add_current_wd(char *path, int i, t_shell *shell)
 		if (!new_path)
 		{
 			free_num(2, dir, path);
-			return (ft_putstr_fd("Malloc error creating new_path\n", 2), NULL); // terminate shell
+			shell->exit_shell = 1;
+			return (err_printf("minishell: malloc error: new_path\n"), NULL);
 		}
 		j = 0;
 		while (j <= i)
@@ -168,7 +178,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	{
 		*exit_status = 1;
 		shell->exit_shell = 1;
-		return (ft_putstr_fd("No such file or directory\n", 2), NULL);
+		return (ft_putstr_fd("minishell: No such file or directory\n", 2), NULL);
 	}
 	if (has_current_wd(value) > -1)
 	{
@@ -186,7 +196,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	{
 		*exit_status = 1;
 		shell->exit_shell = 1;
-		return (ft_putstr_fd("Malloc error splitting PATH\n", 2), NULL);
+		return (err_printf("minishell: malloc error splitting PATH\n"), NULL);
 	}
 	paths_index = 0;
 	while (paths[paths_index])
@@ -196,7 +206,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		{
 			free_char_dp(paths);
 			shell->exit_shell = 1;
-			return (ft_putstr_fd("Malloc error creating path_cmd\n", 2), NULL); // terminate shell
+			return (err_printf("minishell: malloc error: path_cmd\n"), NULL);
 		}
 		if (access(path_cmd, X_OK) == 0)
 		{
@@ -206,7 +216,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 				shell->exit_shell = 1;
 				free(path_cmd);
 				free_char_dp(paths);
-				return (ft_putstr_fd("Error calling stat\n", 2), NULL); // need to terminate shell
+				return (err_printf("minishell: error calling stat\n"), NULL);
 			}
 			else if (!S_ISDIR(file_stat.st_mode))
 			{
@@ -223,8 +233,8 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	if (denied == 1)
 	{
 		*exit_status = 126;
-		return (ft_putstr_fd("Permission denied\n", 2), NULL);
+		return (ft_putstr_fd("minishell: Permission denied\n", 2), NULL);
 	}
 	*exit_status = 127;
-	return (ft_putstr_fd("Command not found\n", 2), NULL);
+	return (ft_putstr_fd("minishell: Command not found\n", 2), NULL);
 }

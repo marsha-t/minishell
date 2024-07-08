@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 09:32:47 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/09 15:24:30 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/07 16:36:56 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char *ft_strrev(char *str)
 	i = 0;
 	strrev = malloc(sizeof(char)*(ft_strlen(str) + 1));
 	if(!strrev)
-		return(ft_putstr_fd("error from strrev in expand_wc",2),NULL);
+		return(ft_putstr_fd("minishell: error from strrev in expand_wc",2),NULL);
 	l = ft_strlen(str) -1;
 	while (l >= 0)
 	{

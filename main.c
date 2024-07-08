@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 06:35:42 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 01:09:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:40:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int main(int ac, char **av, char **envp)
 			add_history(shell->line);
 		shell->line = ft_strtrim(shell->line, " \t");
 		if (!shell->line)
-			return (err_printf("Malloc error creating ft_strtrim(shell->line)\n"), free_shell(shell), 1);
+			return (err_printf("minishell: malloc error: ft_strtrim(shell->line)\n"), free_shell(shell), 1);
 		if (shell->line[0] == '\0')
 			free(shell->line);
 		else

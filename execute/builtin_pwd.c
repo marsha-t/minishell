@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:03:01 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 00:03:14 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:38:50 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	update_pwd(char *dir, t_shell *shell)
 	if (!pwd_node->value)
 	{
 		shell->exit_shell = 1;
-		return (ft_putstr_fd("Malloc error creating t_var->value\n", 2), 1);
+		return (err_printf("minishell: malloc error: t_var->value\n"), 1);
 	}
 	return (0);
 }
@@ -50,7 +50,7 @@ char	*ft_getcwd(t_shell *shell)
 		if (!dir)
 		{
 			shell->exit_shell = 1;
-			return (ft_putstr_fd("Malloc error creating dir\n", 2), NULL);
+			return (err_printf("minishell: malloc error: dir\n"), NULL);
 		}
 		if (getcwd(dir, size) != NULL)
 			break;
@@ -60,7 +60,7 @@ char	*ft_getcwd(t_shell *shell)
 		{
 			free(dir);
 			shell->exit_shell = 1;
-			return(ft_putstr_fd("Error calling getcwd\n", 2), NULL);
+			return(err_printf("minishell: error calling getcwd\n"), NULL);
 		}
 	}
 	if (update_pwd(dir, shell) == 1)
@@ -79,7 +79,7 @@ int	builtin_pwd(t_ast *node, t_shell *shell)
 	char	*dir;
 	
 	if (node->n_args > 0 && ft_strncmp(node->args->content, "-", 1))
-		return (ft_putstr_fd("pwd: does not support options", 2), 1);
+		return (ft_putstr_fd("minishell: pwd: does not support options", 2), 1);
 	dir = ft_getcwd(shell);
 	if (!dir)
 		return (1); // terminate shell

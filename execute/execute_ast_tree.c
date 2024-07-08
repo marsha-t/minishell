@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/27 23:59:04 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:35:27 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		// if(get_outfile(node) == 1)
 		// 	return(1);
 		if (cmd_only_quote(node->cmd) == 0)
-			return (ft_putstr_fd("command not found\n", 2), 127);
+			return (ft_putstr_fd("minishell: command not found\n", 2), 127);
 		if (check_empty_cmd(node) == 1)
 			return (1); // need to treat as if empty string was typed
 	if (remove_quote_node(node) == 1)

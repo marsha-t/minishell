@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_redir_lists.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:56:37 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/18 11:10:24 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/07 16:40:46 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int create_in_list(t_token *token, t_ast **node)
 
     new = malloc(sizeof(t_file));
     if(!new)
-        return(ft_putstr_fd("Malloc error creating t_file for in_list\n", 2), 1);
+        return(err_printf("minishell: malloc error: t_file for in_list\n"), 1);
     new->flag = TOKEN_INPUT;
     new->file_name= ft_strdup(token->str);
     if (!new->file_name)
-        return (ft_putstr_fd("Malloc error creating t_file->file_name for in_list\n", 2), 1);
+        return (err_printf("minishell: malloc error: t_file->file_name for in_list\n"), 1);
     new ->next = NULL;
     current = (*node)-> input_list;
     if (current == 0)
@@ -48,11 +48,11 @@ int create_heredoc_list(t_token *token, t_ast **node)
 
     new = malloc(sizeof(t_file));
     if(!new)
-        return(ft_putstr_fd("Malloc error creating t_file for heredoc_list\n", 2), 1);
+        return(err_printf("minishell: malloc error: t_file for heredoc_list\n"), 1);
     new -> flag = TOKEN_HEREDOC;
     new->file_name= ft_strdup(token->str);
     if (!new->file_name)
-        return (ft_putstr_fd("Malloc error creating t_file->file_name for heredoc_list\n", 2), 1);
+        return (err_printf("minishell: malloc error: t_file->file_name for heredoc_list\n"), 1);
     new->next = NULL;
     current = (*node)->heredoc_list;
     if (current == 0)
@@ -75,11 +75,11 @@ int create_output_append_list(int code, t_token *token, t_ast **node)
 
     new = malloc(sizeof(t_file));
     if(!new)
-        return(ft_putstr_fd("Malloc error creating t_file for output_list\n", 2), 1);
+        return(err_printf("minishell: malloc error: t_file for output_list\n"), 1);
     new->flag = code;
     new->file_name= ft_strdup(token->str);
     if (!new->file_name)
-        return (ft_putstr_fd("Malloc error creating t_file->file_name for output_list\n", 2), 1);
+        return (err_printf("minishell: malloc error: t_file->file_name for output_list\n"), 1);
     new->next = NULL;
 	new -> fd = -1;
      current = (*node)-> output_list;

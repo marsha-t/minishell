@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 06:17:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/17 02:05:28 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:35:10 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	builtin_unset(t_ast *node, t_shell *shell)
 	{
 		if (valid_varname(curr_arg->content) == 1)
 		{
-			ft_putstr_fd("unset: invalid environment variable name\n", 2);
+			ft_putstr_fd("minishell: unset: invalid environment variable name\n", 2);
 			exit_status = 1;
 		}
 		else if (check_exist(curr_arg->content, shell->var_list))

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:35:36 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/28 00:00:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:34:25 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 	if (node->n_args == 0)
 		path = expand_var("HOME", shell->var_list);
 	else if (node->n_args > 1)
-		return (err_printf("cd: too many arguments\n"), 1);
+		return (err_printf("minishell: cd: too many arguments\n"), 1);
 	else
 		path = node->args->content;
 
@@ -43,11 +43,11 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 		if (stat(path, &file_stat) == -1)
 		{
 			shell->exit_shell = 1;
-			return (err_printf("Error calling stat\n", 2), 1);
+			return (err_printf("minishell: cd: error calling stat\n", 2), 1);
 		}
 		if (!S_ISDIR(file_stat.st_mode))
 		{
-			ft_putstr_fd("Not a directory\n", 2);
+			err_printf("minishell: cd: %s: Not a directory\n", path);
 			return (1);
 		}
 		else
@@ -57,20 +57,20 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 			else
 			{
 				shell->exit_shell = 1;
-				return (ft_putstr_fd("Error calling chdir\n", 2), 1);			
+				return (err_printf("minishell: cd: error calling chdir\n"), 1);			
 			}
 		}
 	}
 	else if (errno == EACCES)
-		return (ft_putstr_fd("Permission denied\n", 2), 126);
+		return (ft_putstr_fd("minishell: Permission denied\n", 2), 126);
 	else if (errno == ENAMETOOLONG)
-		return (ft_putstr_fd("Filename too long\n", 2), 126);
+		return (err_printf("minishell: cd: %s: File name too long\n", path), 126);
 	else if (errno == ENOENT)
-		return (ft_putstr_fd("No such file or directory\n", 2), 127);
+		return (err_printf("minishell: cd: %s: No such file or directory\n", path), 127);
 	else
 	{
 		shell->exit_shell = 1;
-		return (ft_putstr_fd("Error calling access\n", 2), 1);
+		return (err_printf("minishell: cd: error calling access\n"), 1);
 	}
 	return (0);
 }

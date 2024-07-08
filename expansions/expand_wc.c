@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/11 21:45:36 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/07 16:37:34 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void create_conts_node(char *str, t_dconts **list)
 	if(!str)
 		return ;
     if(!new)
-        return ft_putstr_fd("malloc error :create directory_contents\n", 2) ;
+        return err_printf("minishell: malloc error: directory_contents\n") ;
     new->cont_name = ft_strdup(str);
     new -> next = NULL;
     if(!curr)
@@ -44,7 +44,7 @@ t_dconts *create_conts_list(void)
     dd= opendir(".");
     list = ft_calloc(1,sizeof(t_dconts));
     if(!list)
-     return (ft_putstr_fd("malloc error :create directory_contents\n", 2), NULL );
+     return (err_printf("minishell: malloc error: directory_contents\n", 2), NULL );
     content = readdir(dd);
     while (content)
     {
