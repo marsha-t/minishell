@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 12:01:51 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/10 09:54:43 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ typedef struct s_shell
 // shell.c
 t_shell	*init_shell(char **envp);
 void	free_shell(t_shell *shell);
+void	free_after_command(t_shell *shell);
 
 // env_var.c
 int create_node(t_var **v, char *str, int flag);
@@ -245,23 +246,25 @@ int contain_var(char *str);
 // char *word_pref(char *str, char *word_b);
 // t_dconts *goal_list(t_dconts *conts_list,char *word_b,char *word_e);
 // t_dconts *expand_wildcard(char *str, t_dconts *conts_list);
-void	free_conts_list(t_dconts *list);
-void	print_conts_list(t_dconts *list);
+// void	free_conts_list(t_dconts *list);
+// void	print_conts_list(t_dconts *list);
 
-int contain_wc(char *str);
-int	file_list_check_wc(t_file *file, t_shell *shell);
-int	check_wc_expansion(t_ast *node, t_shell *shell);
+// int contain_wc(char *str);
+// int	file_list_check_wc(t_file *file, t_shell *shell);
+// int	check_wc_expansion(t_ast *node, t_shell *shell);
 
-// expand_wc_utils.c
-char *ft_strrev(char *str);
-int	ft_strcmp1(const char *s1, const char *s2);
-int list_size(t_dconts *list);
+// // expand_wc_utils.c
+// char *ft_strrev(char *str);
+// int	ft_strcmp1(const char *s1, const char *s2);
+// int list_size(t_dconts *list);
 
 /*****************************************************************************/
 /*	execute																	 */
 /*****************************************************************************/
 // execute_ast_tree.c
-int	execute_cmd(t_ast *node, t_shell *shell);
+int	execute_cmd_builtin(t_ast *node, t_shell *shell);
+int	execute_cmd_others(t_ast *node, t_shell *shell);
+
 int	cmd_only_quote(char *cmd);
 int	execute_cmd_node(t_ast *node, t_shell *shell);
 int		execute_ast(t_ast *node, t_shell *shell);

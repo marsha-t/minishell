@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/06 17:07:19 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/10 09:39:35 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,19 @@ void	free_shell(t_shell *shell)
 		free_pipe(shell->pipe_data);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
-	if (shell->directory_contents)
-		free_conts_list(shell->directory_contents);
-// 	free(shell);
+	// if (shell->directory_contents)
+	// 	free_conts_list(shell->directory_contents);
+	free(shell);
+}
+
+void	free_after_command(t_shell *shell)
+{
+	if (shell->line)
+		free(shell->line);
+	if (shell->tokens)
+		free_tokens(shell->tokens);
+	if(shell ->pipe_data)
+		free_pipe(shell->pipe_data);
+	if (shell->ast_list)
+		ast_list_free(shell->ast_list);
 }

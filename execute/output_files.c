@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:11:04 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/20 22:46:19 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/10 09:52:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int get_outfile(t_ast *node)
 		current->fd =	open(current ->file_name, O_TRUNC | O_CREAT | O_RDWR, mode);
 	else if (current ->flag == TOKEN_APPEND)
 		current->fd =	open(current ->file_name, O_APPEND | O_CREAT | O_RDWR, mode);
-	// node ->tmp_stdout_fd = dup(STDOUT_FILENO);
+	node ->tmp_stdout_fd = dup(STDOUT_FILENO);
 	target_fd = dup2(current -> fd , STDOUT_FILENO);
 	// printf("I am file %s and my fd is %d\n", current->file_name, current->fd);
 	close(current->fd);

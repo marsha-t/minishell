@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/06 21:04:08 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/10 10:01:41 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int main(int ac, char **av, char **envp)
 			ast_tree_print(shell->root);
 			printf("before execute\n");
 			execute_ast(shell->root, shell);
-			free_shell(shell);
+			free_after_command(shell);
     	}
 	}
 	exit_shell(shell, 0);

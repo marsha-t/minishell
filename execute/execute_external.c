@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/26 12:08:24 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/10 09:28:45 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int	run_external(t_ast *node, t_shell *shell)
 	{
 		shell->exit_shell = 1;
 		return (1);
-
+	}
 	for (int i = 0; argv[i] != NULL; i++) {
 		dprintf(2, "argv[%d]: %s\n", i, argv[i]);
 	}

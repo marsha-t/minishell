@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/09 17:04:49 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/10 09:53:05 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int get_docs(t_ast *node)
 		unlink(current ->file_name);
 		return(1);
 	}
-	// node -> tmp_stdin_fd = dup(STDIN_FILENO);
+	node -> tmp_stdin_fd = dup(STDIN_FILENO);
 	printf ("%d \n",current ->fd );
 	current ->fd=open(current->file_name,O_RDONLY,0777);
 	target_fd = dup2(current ->fd , STDIN_FILENO);

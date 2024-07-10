@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 15:53:59 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/10 09:41:35 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void	exit_shell(t_shell *shell, int exit_status)
 {
 	free_shell(shell);
 	// rl_clear_history();
+	printf("there2\n");
+
 	exit(exit_status);
 }
 
@@ -118,6 +120,9 @@ int	builtin_exit(t_ast *node, t_shell *shell)
 		exit_status = 0;
 	else
 		exit_status = get_exit_status(node->args->content);
+	printf("there\n");
+	
 	exit_shell(shell, exit_status);
+	printf("here\n");
 	return (exit_status);
 }

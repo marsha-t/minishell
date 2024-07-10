@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:57:08 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/22 15:35:10 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/10 09:52:44 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	get_infile(t_ast *node)
 	fd = open(current ->file_name, O_RDONLY);
 	if(fd == -1)
 		return(1);
-	//  node ->tmp_stdin_fd = dup(STDIN_FILENO);
-	// if (node ->tmp_stdin_fd == -1)
-	// 	return(1);
+	 node ->tmp_stdin_fd = dup(STDIN_FILENO);
+	if (node ->tmp_stdin_fd == -1)
+		return(1);
 	target_fd = dup2(fd, STDIN_FILENO);
 	close(fd);
 	if (target_fd == -1)

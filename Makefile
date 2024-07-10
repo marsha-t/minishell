@@ -8,11 +8,11 @@ TOKENISE_CFILES = tokenise.c tokenise_token_utils.c tokenise_misc_utils.c
 PARSE_DIR = parse
 PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c create_redir_lists.c
 EXPANSIONS_DIR = expansions
-EXPANSIONS_CFILES = expand_var.c expand_var_utils.c expand_wc.c  quote_remove.c
+EXPANSIONS_CFILES = expand_var.c expand_var_utils.c  quote_remove.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c  execute_external.c execute_external_utils.c \
-	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_pipe.c handle_signals.c
-	execute_assign.c builtin_cd.c builtin_env.c builtin_export.c builtin_export_unset_utils.c builtin_unset.c
+	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_pipe.c handle_signals.c \
+	execute_assign.c builtin_cd.c builtin_env.c builtin_export.c builtin_unset.c
 MISC_UTILS_DIR = misc_utils
 MISC_UTILS_CFILES = free_utils.c str_utils.c
 
@@ -37,7 +37,9 @@ FT_PRINTF_DIR = printf
 
 # yousef addition for readline
 # PREFIX = /Users/$(USER)/.brew/opt/readline
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address #-I$(PREFIX)/include -g3  -Werror -Wextra -Wall
+CFLAGS = -Wall -Wextra -Werror 
+# -g3 -fsanitize=address 
+#-I$(PREFIX)/include -g3  -Werror -Wextra -Wall
 
 ERR_PRINTF = err_printf.a
 ERR_PRINTF_DIR = err_printf
