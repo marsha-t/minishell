@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 16:38:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/26 12:08:24 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,20 @@ int	run_external(t_ast *node, t_shell *shell)
 	{
 		shell->exit_shell = 1;
 		return (1);
+
+	for (int i = 0; argv[i] != NULL; i++) {
+		dprintf(2, "argv[%d]: %s\n", i, argv[i]);
 	}
+
+	// if (close(3) == -1)
+	// 	dprintf(2, "I couldn't close\n");
+	// else
+	// 	dprintf(2, "I closed succesfully\n");
+	// if (close(4) == -1)
+	// 	dprintf(2, "I couldn't close\n");
+	// else
+	// 	dprintf(2, "I closed succesfully\n");
+
 	exit_status = execve(filename, argv, envp);
 	free_char_dp(argv);
 	free_char_dp(envp);

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 13:07:05 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/06 17:07:19 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,24 @@ t_shell	*init_shell(char **envp)
 	shell->tokens = 0;
 	shell->ast_list = 0;
 	shell->root = 0;
+	shell-> exit_status = -1;
+	shell -> pipe_data = 0;
 	// shell->directory_contents= create_conts_list();
-	shell->exit_status = -1;
 	shell->exit_shell = 0;
 	if (shlvl_increment(shell) == 1)
 		return (free_shell(shell), NULL);
 	return (shell);
+}
+void free_pipe(t_pipe_info *pipe)
+{
+	int k;
+	k = 0;
+	while (k < pipe ->pipe_count)
+	{
+		free(pipe->pipes[k]);
+		k++;
+	}
+	free(pipe->pipes);
 }
 
 /*	free_shell frees the various structures within shell
@@ -66,9 +78,11 @@ void	free_shell(t_shell *shell)
 		free_var_list(shell->var_list);
 	if (shell->tokens)
 		free_tokens(shell->tokens);
+	if(shell ->pipe_data)
+		free_pipe(shell->pipe_data);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
 	if (shell->directory_contents)
 		free_conts_list(shell->directory_contents);
-	free(shell);
+// 	free(shell);
 }

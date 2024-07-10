@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:56:37 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/07 16:40:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/06/20 21:33:15 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int create_output_append_list(int code, t_token *token, t_ast **node)
     if (!new->file_name)
         return (err_printf("minishell: malloc error: t_file->file_name for output_list\n"), 1);
     new->next = NULL;
-	new -> fd = -1;
+	new -> fd = -2;
      current = (*node)-> output_list;
     if (current == 0)
     {

@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:57:08 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/17 19:12:54 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/06/22 15:35:10 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ int	get_infile(t_ast *node)
 		exit (1);
 	}
 	fd = open(current ->file_name, O_RDONLY);
-	if (fd == -1)
-		return (1);
-	node->tmp_stdin_fd = dup(STDIN_FILENO);
-	if (node ->tmp_stdin_fd == -1)
-		return (1);
+	if(fd == -1)
+		return(1);
+	//  node ->tmp_stdin_fd = dup(STDIN_FILENO);
+	// if (node ->tmp_stdin_fd == -1)
+	// 	return(1);
 	target_fd = dup2(fd, STDIN_FILENO);
 	close(fd);
 	if (target_fd == -1)

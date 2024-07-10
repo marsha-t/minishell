@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_assign.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 16:38:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/09 14:43:54 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*	valid_varname checks whether a name is valid 
+/*	valid_varname checks whether a name is valid
 	- only contains letters, digits or _
 	- cannot start with a digit
 	- returns 0 if name is valid; 1 otherwise */
@@ -81,7 +81,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 	return (0);
 }
 
-/*	create_node_normal creates a node for a normal variable 
+/*	create_node_normal creates a node for a normal variable
 	and adds it to the end of shell->var_list*/
 int	create_node_normal(t_var **v, char *key, char *value)
 {
@@ -110,7 +110,7 @@ int	create_node_normal(t_var **v, char *key, char *value)
 
 /*	run_assign_str runs the assignment given (either in cmd or arg)
 	- if key name already exists, replace value
-	- else checks if key name is valid 
+	- else checks if key name is valid
 		if yes, new key added to end of linked list
 		if not, error msg */
 // work in progress: is valid_varname checked twice?
@@ -202,6 +202,7 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 // it uses execute_cmd_node because it needs to do cmd_only_quote check
 // expansions and redirections are not required to 'redo'
 // can consider creating another function instead of execute_cmd_node()
+
 int	run_assign_cmd(t_ast *node, t_shell *shell)
 {
 	free(node->cmd);
@@ -211,7 +212,7 @@ int	run_assign_cmd(t_ast *node, t_shell *shell)
 	return (execute_cmd_node(node, shell));
 }
 
-/*	run_assign runs the assignments in cmd and args (if any) 
+/*	run_assign runs the assignments in cmd and args (if any)
 	- run_assign_str adds variables into shell->var_list
 		- each arg node is freed after each addition into var_list
 	- returns 1 if failure (malloc) 

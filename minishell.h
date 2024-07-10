@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 13:17:42 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 12:01:51 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@
 # include <sys/stat.h>
 # include "libft/libft.h"
 # include "printf/ft_printf.h"
+#include <sys/wait.h>
+#include <time.h>
+#include <string.h>
+# include <signal.h>
+#include "global.h"
 # include "err_printf/err_printf.h"
-# include <sys/wait.h>
-# include <time.h>
 
 # define TOKEN_TEMP 0
 # define TOKEN_CMD 1
@@ -45,13 +48,19 @@
 # define TOKEN_OBRACKET 11
 # define TOKEN_CBRACKET 12
 # define TOKEN_IONUM 13
-
 typedef struct	s_token
 {
 	char			*str;
 	int				code;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_pipe_info
+{
+	int			pipe_count;
+	int        **pipes;
+	int			*pid;
+}t_pipe_info;
 
 typedef struct	s_file
 {
@@ -118,6 +127,7 @@ typedef struct s_shell
 	t_token	*tokens;
 	t_ast	*ast_list;
 	t_ast	*root;
+	t_pipe_info *pipe_data;
 	int	exit_status;
 	int	exit_shell;
 }	t_shell;
@@ -262,6 +272,13 @@ int		get_infile(t_ast *node);
 // output_files.c
 int get_outfile(t_ast *node);
 void close_files(t_ast *node);
+int get_docs(t_ast *node);
+// execute_pipes
+int handle_pipe(t_ast *node, t_shell *shell);
+int init_pipe( t_shell *shell);
+
+// handling signals
+void  control_signals(void);
 
 // builtin_cd.c
 int	builtin_cd(t_ast *node, t_shell *shell);
