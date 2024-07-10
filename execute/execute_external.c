@@ -35,7 +35,7 @@ char	**envp_array(t_var *env)
 {
 	char	**envp;
 	t_var	*current;
-	int	i;
+	int		i;
 
 	envp = malloc(sizeof(char *) * (count_env(env) + 1));
 	if (!envp)
@@ -46,7 +46,7 @@ char	**envp_array(t_var *env)
 	{
 		if (current->env == 1)
 		{
-			envp[i] = ft_strjoin(ft_strjoin(current->key, "="), current->value);
+			envp[i] = ft_strjoin_free(ft_strjoin_free(ft_strdup(current->key), ft_strdup("=")), ft_strdup(current->value));
 			if (!envp[i])
 			{
 				while (i--)
@@ -100,24 +100,26 @@ char **argv_array(t_ast *node)
 
 /*	get_filepath extracts the correct filepath for execve
 	- checks whether cmd is a specified path or a cmd
-		- error if cmd is empty str
 		- specified path will start with '.' or '/'
 	- if specified path, call check_filepath() to check the file
 	- if cmd, call find_cmd() to find filepath */
-char *get_filepath(char *cmd, int *exit_status, t_shell *shell)
+char	*get_filepath(char *cmd, int *exit_status, t_shell *shell)
 {
 	char	*filepath;
 
-	if (cmd[0] == '\0')
-	{
-		*exit_status = 127;
-		return (ft_putstr_fd("minishell: command not found\n", 2), NULL);
-	}
 	if (ft_strchr(cmd, '/') != 0)
 	{
 		*exit_status = check_filepath(cmd, shell);
 		if (*exit_status == 0)
-			filepath = cmd;
+		{
+			filepath = ft_strdup(cmd);
+			if (!filepath)
+			{
+				*exit_status = 1;
+				shell->exit_shell = 1;
+				return (err_printf("minishell: malloc error: filepath in get_filepath\n"), NULL);
+			}
+		}
 		else
 			filepath = 0;
 	}
@@ -140,10 +142,16 @@ int	run_external(t_ast *node, t_shell *shell)
 		return (exit_status);
 	argv = argv_array(node);
 	if (!argv)
+	{
+		shell->exit_shell = 1;
 		return (1);
+	}
 	envp = envp_array(shell->var_list);
 	if (!envp)
+	{
+		shell->exit_shell = 1;
 		return (1);
+	}
 	exit_status = execve(filename, argv, envp);
 	free_char_dp(argv);
 	free_char_dp(envp);

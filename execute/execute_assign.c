@@ -113,13 +113,14 @@ int	create_node_normal(t_var **v, char *key, char *value)
 	- else checks if key name is valid 
 		if yes, new key added to end of linked list
 		if not, error msg */
+// work in progress: is valid_varname checked twice?
 int	run_assign_str(char *cmd, t_shell *shell)
 {
 	char	*equal;
 	char	*key;
 	char	*value;
 	t_var	*exist;
-	
+
 	if (create_key_value(cmd, &equal, &key, &value) == 1)
 	{
 		shell->exit_shell = 1;
@@ -128,7 +129,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 	if (valid_varname(key) == 1)
 	{
 		free_num(2, key, value);
-		return (ft_putstr_fd("minishell: Invalid variable name\n", 2), 1);
+		return (err_printf("minishell: %s: command not found\n", cmd), 1);
 	}
 	exist = check_exist(key, shell->var_list);
 	if (exist)
@@ -137,7 +138,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 		exist->value = value;
 		free(key);
 	}
-	else 
+	else
 	{
 		if (create_node_normal(&shell->var_list, key, value) == 1)
 		{
@@ -156,7 +157,7 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 	char	*equal;
 	char	*key;
 	t_list	*curr_arg;
-	
+
 	equal = ft_strchr(node->cmd, '=');
 	key = strdup_range(node->cmd, equal - 1);
 	if (!key)
@@ -165,7 +166,7 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 		return (err_printf("minishell: malloc error: key for check_assign_varname\n"), 1);
 	}
 	if (valid_varname(key) == 1)
-		return (ft_putstr_fd("minishell: Invalid variable name provided", 2), 1);
+		return (err_printf("minishell: %s: command not found\n", node->cmd), 1);
 	free(key);
 	curr_arg = node->args;
 	if (node->n_args > 0)
@@ -182,15 +183,15 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 					return (err_printf("minishell: malloc error: key for check_assign_varname\n"), 1);
 				}
 				if (valid_varname(key) == 1)
-					return (ft_putstr_fd("minishell: Invalid variable name provided", 2), 1);
+					return (err_printf("minishell: %s: command not found\n", curr_arg->content), 1);
 				free(key);
 			}
 			else
-				break;
+				break ;
 			curr_arg = curr_arg->next;
 		}
 	}
-	return (0);	
+	return (0);
 }
 
 /*	run_assign_cmd runs the remaining args in assignment as a simple command
@@ -240,7 +241,7 @@ int	run_assign(t_ast *node, t_shell *shell)
 				curr_arg = node->args;
 			}
 			else
-				break;
+				break ;
 		}
 		if (curr_arg)
 		{

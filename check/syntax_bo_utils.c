@@ -14,6 +14,7 @@
 
 /*	pipe_mid returns 0 if line[i] (a pipe) is in the middle of a line
 	- if pipe is at end of line, it prompts for more input and returns 1 */
+// work in progress: incomplete line
 int	pipe_mid(int i, char *line)
 {
 	i++;
@@ -27,6 +28,7 @@ int	pipe_mid(int i, char *line)
 /*	and_mid returns 0 if only whitespace follow line[i]
 	i.e., && ends the line (with or without whitespace)
 	- before returning 1, it prompts for more input*/
+// work in progress: incomplete line
 int	and_mid(int i, char *line)
 {
 	i = i + 2;
@@ -40,6 +42,7 @@ int	and_mid(int i, char *line)
 /*	or_mid returns 0 if only whitespace follow line[i]
 	i.e., || ends the line (with or without whitespace)
 	- before returning 1, it prompts for more input*/
+// work in progress: incomplete line
 int	or_mid(int i, char *line)
 {
 	i = i + 2;

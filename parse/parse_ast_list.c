@@ -86,9 +86,11 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 	while ((*tokens) && (*tokens)->code == TOKEN_ARG)
 	{
 		new = malloc(sizeof(t_list));
+		if (!new)
+			return (err_printf("minishell: malloc error: t_ast for ast_node_append_arg\n"), 1);
 		new->content= ft_strdup((*tokens)->str);
 		if (!new->content)
-			return (err_printf("minishell: malloc error: t_ast->arg\n"), 1);
+			return (err_printf("minishell: malloc error: t_ast->arg for ast_node_append_arg\n"), 1);
 		new->next = NULL;
 		if(!current->args)
 			current->args = new;
@@ -115,16 +117,16 @@ int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current)
 	{
 		*start = ast_node_init();
 		if (!*start)
-			return (err_printf("minishell: malloc error: t_ast for ast_node_append\n"), 1);
+			return (err_printf("minishell: malloc error: t_ast for ast_node_append_misc\n"), 1);
 		*current = *start;
 	}
-	// else if (*start && (*current)->code != TOKEN_CMD)
-	// {
-	// 	(*current)->next = ast_node_init();
-	// 	if (!(*current)->next)
-	// 		return (err_printf("minishell: malloc error: t_ast for ast_node_append\n"), 1);
-	// 	*current = (*current)->next;
-	// }
+	else if (*start && (*current)->code != TOKEN_CMD)
+	{
+		(*current)->next = ast_node_init();
+		if (!(*current)->next)
+			return (err_printf("minishell: malloc error: t_ast for ast_node_append_misc\n"), 1);
+		*current = (*current)->next;
+	}
 	if ((*tokens)->code == TOKEN_INPUT)
 	{
 		if ((create_in_list((*tokens)->next, current)) == 1)

@@ -12,7 +12,7 @@
 
 #include "err_printf.h"
 
-size_t	ft_strlen1(const char *s)
+static size_t	ft_strlen1(const char *s)
 {
 	size_t	i;
 

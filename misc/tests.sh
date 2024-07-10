@@ -27,11 +27,14 @@ ech"o" "a"b"cd'ef" 1> a".txt" #abcd'ef in a.txt
 "" #error: command not found (127)
 "" echo abc #error: command not found (127)
 '' echo abc #error: command not found (127)
+
 #############################################################################
 # PIPES #####################################################################
 #############################################################################
 echo a | wc -l # results in 1
 echo a > a.txt | wc - l # results in 0; a is directed to a.txt
+export abc=1 | echo $abc # blank (i.e., abc was set by export but inside a process)
+export 1 | echo a # output: export error message followed by a (checked using Mac)
 
 #############################################################################
 # REDIRECTION ###############################################################
@@ -246,6 +249,20 @@ ls *".c # counts as incomplete line until another " typed in
 ls *'".c' #prints 'test.".c'
 
 echo e$*e #ee
+
+echo e*x*p* #lists files/directories that match pattern with space between: expansions explore
+ls e*x*p #lists files/directories that match pattern as well as lists files inside the matched directories
+
+./test*exit*sh #runs test_exit.sh i.e., wildcard can be cmd
+
+./a* #if a1.out and a2.out exists, a1.out will be run i.e., similar to ./a1.out ./a2.out
+touch "a b c.c"
+echo a*" "* #output: a b c.c
+
+echo e*p* # if it exists (e.g., expansions and explore), output = expansions explore; otherwise, output = e*p*
+
+
+
 #############################################################################
 # REDIRECTION ORDER #########################################################
 #############################################################################
@@ -440,6 +457,11 @@ export #declare -x abc=""
 #############################################################################
 # CD ######################################################################## 
 #############################################################################
+cd #set to $HOME
+
+unset $HOME
+cd #error: cd: HOME not set (exit status = 1)
+
 cd a.out # error: a.out: Not a directory (exit status = 1)
 
 chmod 0 test_dir

@@ -13,7 +13,7 @@
 #include "ft_printf.h"
 
 
-char	*ft_strchr1(const char *s, int c)
+static char	*ft_strchr1(const char *s, int c)
 {
 	int		i;
 	char	*str;
@@ -35,7 +35,7 @@ char	*ft_strchr1(const char *s, int c)
 	return (0);
 }
 
-int	output(const char*format, int i, va_list args)
+static int	output(const char*format, int i, va_list args)
 {
 	int	outputlength;
 

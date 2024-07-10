@@ -33,10 +33,11 @@ void print_envp(t_var *envp)
 }
 
 /*	builtin_env runs the env command
-	- if no args, prints environment variable list with flag = 0*/
+	- error if there are args
+	- otherwise, prints env var list with flag = 0*/
 int	builtin_env(t_ast *node, t_shell *shell)
 {
 	if (node->n_args > 0)
-		return (ft_putstr_fd("minishell: env: too many arguments/options\n", 2), 1);
+		return (err_printf("minishell: env: too many arguments/options\n"), 1);
 	return (print_envp(shell->var_list), 0);
 }

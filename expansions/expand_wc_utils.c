@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 09:32:47 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/07 16:36:56 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/09 04:05:28 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ char *ft_strrev(char *str)
 	int i;
 	int l;
 	i = 0;
-	strrev = malloc(sizeof(char)*(ft_strlen(str) + 1));
-	if(!strrev)
-		return(ft_putstr_fd("minishell: error from strrev in expand_wc",2),NULL);
+	strrev = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!strrev)
+		return(err_printf("minishell: malloc error: strrev in expand_wc"), NULL);
 	l = ft_strlen(str) -1;
 	while (l >= 0)
 	{
@@ -29,19 +29,21 @@ char *ft_strrev(char *str)
 		i++;
 	}
 	strrev[i] = '\0';
-	return(strrev);
+	return (strrev);
 }
+
 int	ft_strcmp1(const char *s1, const char *s2)
 {
 	size_t	i;
 
 	i = 0;
-	if(!s1 || !s2)
+	if (!s1 || !s2)
 		return(0);
 	while ((s1[i] == s2[i]) && (s1[i] != '\0'))
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
+
 int list_size(t_dconts *list)
 {
 	int i;

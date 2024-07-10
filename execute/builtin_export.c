@@ -76,7 +76,7 @@ int builtin_export(t_ast *node, t_shell *shell)
 	char	*value;
 	char	*equal;
 	t_var	*exist;
-	int	exit_status;
+	int		exit_status;
 
 	exit_status = 0;
 	if (node->n_args == 0)
@@ -97,7 +97,7 @@ int builtin_export(t_ast *node, t_shell *shell)
 				free_num(2, key, value);
 				exit_status = 1;
 				curr_arg = curr_arg->next;
-				continue;
+				continue ;
 			}
 			exist = check_exist(key, shell->var_list);
 			if (exist)
@@ -120,7 +120,7 @@ int builtin_export(t_ast *node, t_shell *shell)
 					if (create_node(&shell->var_list, curr_arg->content, 1) == 1)
 					{
 						shell->exit_shell = 1;
-						return (1); 
+						return (1);
 					}
 				}
 				else

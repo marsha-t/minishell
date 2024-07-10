@@ -19,7 +19,7 @@
 int	update_pwd(char *dir, t_shell *shell)
 {
 	t_var	*pwd_node;
-	
+
 	pwd_node = check_exist("PWD", shell->var_list);
 	if (!pwd_node)
 		return (0);
@@ -39,28 +39,28 @@ int	update_pwd(char *dir, t_shell *shell)
 // work in progress - should we set a max limit for dir size e.g., while (size < 10240)?
 char	*ft_getcwd(t_shell *shell)
 {
-	char *dir;
-	int	size;
+	char	*dir;
+	int		size;
 	
 	dir = 0;
 	size = 1024;
 	while (1)
 	{
-		dir = malloc(sizeof(char) *size);
+		dir = malloc(sizeof(char) * size);
 		if (!dir)
 		{
 			shell->exit_shell = 1;
 			return (err_printf("minishell: malloc error: dir\n"), NULL);
 		}
 		if (getcwd(dir, size) != NULL)
-			break;
+			break ;
 		else if (errno == ERANGE)
 			size *= 2;
 		else
 		{
 			free(dir);
 			shell->exit_shell = 1;
-			return(err_printf("minishell: error calling getcwd\n"), NULL);
+			return (err_printf("minishell: error calling getcwd\n"), NULL);
 		}
 	}
 	if (update_pwd(dir, shell) == 1)
@@ -77,12 +77,15 @@ char	*ft_getcwd(t_shell *shell)
 int	builtin_pwd(t_ast *node, t_shell *shell)
 {
 	char	*dir;
-	
+
 	if (node->n_args > 0 && ft_strncmp(node->args->content, "-", 1))
-		return (ft_putstr_fd("minishell: pwd: does not support options", 2), 1);
+		return (err_printf("minishell: pwd: does not support options"), 1);
 	dir = ft_getcwd(shell);
 	if (!dir)
-		return (1); // terminate shell
+	{
+		shell->exit_shell = 1;
+		return (1);
+	}
 	write(STDOUT_FILENO, dir, ft_strlen(dir));
 	write(STDOUT_FILENO, "\n", 1);
 	free(dir);

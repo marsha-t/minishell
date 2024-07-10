@@ -26,7 +26,7 @@ int	builtin_unset(t_ast *node, t_shell *shell)
 	t_var	*del_node;
 	int		exit_status;
 	t_list	*curr_arg;
-	
+
 	exit_status = 0;
 	if (node->n_args == 0)
 		return (0);
@@ -35,7 +35,7 @@ int	builtin_unset(t_ast *node, t_shell *shell)
 	{
 		if (valid_varname(curr_arg->content) == 1)
 		{
-			ft_putstr_fd("minishell: unset: invalid environment variable name\n", 2);
+			err_printf("minishell: unset: %s: not a valid identifier\n", curr_arg->content);
 			exit_status = 1;
 		}
 		else if (check_exist(curr_arg->content, shell->var_list))
@@ -55,7 +55,7 @@ int	builtin_unset(t_ast *node, t_shell *shell)
 					{
 						current->next = del_node->next;
 						free_num(3, del_node->key, del_node->value, del_node);
-						break;
+						break ;
 					}
 					current = current->next;
 				}

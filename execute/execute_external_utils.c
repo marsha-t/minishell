@@ -6,29 +6,14 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 16:38:59 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/09 04:02:08 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*	free_num frees an arbitrary number of pointers
-	num = number of pointers to be freed*/
-void	free_num(int num, ...)
-{
-	va_list	args;
-
-	va_start(args, num);
-	while (num--)
-	{
-		free(va_arg(args, void *));
-	}
-	va_end(args);
-}
-
 /*	check_filepath checks whether a filepath can be accessed
 	- returns exit_status depending on error trying to access file */
-// work in progress: catered for other errno as error calling access - this should terminate shell?
 int	check_filepath(char *cmd, t_shell *shell)
 {
 	int	error;
@@ -43,16 +28,16 @@ int	check_filepath(char *cmd, t_shell *shell)
 			return (err_printf("minishell: error calling stat\n"), 1);
 		}
 		else if (S_ISDIR(file_stat.st_mode))
-			return (ft_putstr_fd("minishell: Is a directory\n", 2), 126);
+			return (err_printf("minishell: %s: Is a directory\n", cmd), 126);
 		else
 			return (0);
 	}
 	else if (errno == EACCES)
-		return (ft_putstr_fd("minishell: Permission denied\n", 2), 126);
+		return (err_printf("minishell: %s: Permission denied\n", cmd), 126);
 	else if (errno == ENAMETOOLONG)
-		return (ft_putstr_fd("minishell: File name too long\n", 2), 126);
+		return (err_printf("minishell: %s: File name too long\n", cmd), 126);
 	else if (errno == ENOENT)
-		return (ft_putstr_fd("minishell: No such file or directory\n", 2), 127);
+		return (err_printf("minishell: %s: No such file or directory\n", cmd), 127);
 	else
 	{
 		shell->exit_shell = 1;
@@ -61,25 +46,11 @@ int	check_filepath(char *cmd, t_shell *shell)
 }
 
 
-/*	free_char_dp frees a char double pointer that is null-terminated*/
-void	free_char_dp(char **dp)
-{
-	int	i;
-
-	i = 0;
-	while (dp[i])
-	{
-		free(dp[i]);
-		i++;
-	}
-	free(dp);
-}
-
 /*	has_current_wd returns the position of the colon representing current working directory
 	- if current working directory isn't listed, return -1 */
 int	has_current_wd(char *path)
 {
-	int i;
+	int	i;
 
 	if (path[0] == ':')
 		return (0);
@@ -103,34 +74,24 @@ int	has_current_wd(char *path)
 char *add_current_wd(char *path, int i, t_shell *shell)
 {
 	char *dir;
-	// int	size;
 	char *new_path;
 	int	j;
 	int	k;
 
-  dir = ft_getcwd(shell);
+	dir = ft_getcwd(shell);
 	if (!dir)
-	{
-		shell->exit_shell = 1;	
 		return (free(path), NULL);
-	}
 	if (i == 0)
 	{
 		new_path = ft_strjoin_free(ft_strjoin_free(dir, ft_strdup(":")), path);
 		if (!new_path)
-		{
-			shell->exit_shell = 1;
-			return (err_printf("minishell: malloc creating new_path\n"), NULL);
-		}
+			return (err_printf("minishell: malloc error: new_path\n"), NULL);
 	}
 	else if (i == (int)ft_strlen(path) - 1)
 	{
 		new_path = ft_strjoin_free(ft_strjoin_free(path, ":"), dir);
 		if (!new_path)
-		{
-			shell->exit_shell = 1;
-			return(err_printf("minishell: malloc: new_path\n"), NULL);
-		}
+			return(err_printf("minishell: malloc error: new_path\n"), NULL);
 	}
 	else
 	{
@@ -138,7 +99,6 @@ char *add_current_wd(char *path, int i, t_shell *shell)
 		if (!new_path)
 		{
 			free_num(2, dir, path);
-			shell->exit_shell = 1;
 			return (err_printf("minishell: malloc error: new_path\n"), NULL);
 		}
 		j = 0;
@@ -161,9 +121,8 @@ char *add_current_wd(char *path, int i, t_shell *shell)
 /*	find_cmd finds the command across the PATH directories
 	and checks whether it exists and permissions are granted
 	- it also updates exit_status
-	- PATH may not exist if it has been unset or set to null
-		- return null, exit_status = 127 */
-// work in progress: what about other errors from access
+	- PATH may not exist if it has been unset or set to empty
+		- return error: exit_status = 127 */
 char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 {
 	char	*value;
@@ -174,11 +133,16 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	int	paths_index;
 
 	value = expand_var("PATH", shell->var_list);
-	if (!value)
+	if (value[0] == '\0')
+	{
+		*exit_status = 127;
+		return (err_printf("minishell: %s: No such file or directory\n", cmd), NULL);
+	}
+	else if (!value)
 	{
 		*exit_status = 1;
 		shell->exit_shell = 1;
-		return (ft_putstr_fd("minishell: No such file or directory\n", 2), NULL);
+		return (err_printf("minishell: malloc error: expand_var in find_cmd\n"), NULL);
 	}
 	if (has_current_wd(value) > -1)
 	{
@@ -196,7 +160,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	{
 		*exit_status = 1;
 		shell->exit_shell = 1;
-		return (err_printf("minishell: malloc error splitting PATH\n"), NULL);
+		return (err_printf("minishell: malloc error: ft_split in find_cmd\n"), NULL);
 	}
 	paths_index = 0;
 	while (paths[paths_index])
@@ -205,6 +169,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		if (!path_cmd)
 		{
 			free_char_dp(paths);
+			*exit_status = 1;
 			shell->exit_shell = 1;
 			return (err_printf("minishell: malloc error: path_cmd\n"), NULL);
 		}
@@ -221,6 +186,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 			else if (!S_ISDIR(file_stat.st_mode))
 			{
 				free_char_dp(paths);
+				*exit_status = 0;
 				return (path_cmd);
 			}
 		}
@@ -233,8 +199,8 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	if (denied == 1)
 	{
 		*exit_status = 126;
-		return (ft_putstr_fd("minishell: Permission denied\n", 2), NULL);
+		return (err_printf("minishell: %s: Permission denied\n", cmd), NULL);
 	}
 	*exit_status = 127;
-	return (ft_putstr_fd("minishell: Command not found\n", 2), NULL);
+	return (err_printf("minishell: %s: command not found\n", cmd), NULL);
 }

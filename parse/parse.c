@@ -12,22 +12,18 @@
 
 #include "../minishell.h"
 
-
-/* NOTE: PARSING CODE DOESN'T CATER FOR HEREDOCS*/
-
 /*	parse_tokens
 	- parses tokens linked list into "ast" linked list
 	- parses ast linked list into ast
 	- returns 1 if malloc error creating ast nodes or strdup*/
-t_ast	*parse_tokens(t_token **tokens)
+int	parse_tokens(t_shell *shell)
 {
-	t_ast	*ast_list;
-	t_ast	*root;
-
-	ast_list = ast_list_new(tokens);
-	if (!ast_list)
-		return (NULL);
-	ast_list_print(ast_list);
-	root = ast_tree_new(&ast_list);
-	return (root);
+	shell->ast_list = ast_list_new(&shell->tokens);
+	if (!shell->ast_list)
+		return (1);
+	ast_list_print(shell->ast_list);
+	shell->root = ast_tree_new(&shell->ast_list);
+	if (!shell->root)
+		return (1);
+	return (0);
 }

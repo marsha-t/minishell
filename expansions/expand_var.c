@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/07 16:39:32 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/09 12:11:50 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char  *expand_var(char *var, t_var *env) // changed to single pointers
 	current = env;
 	while (current)
 	{
-		if(ft_strcmp(current->key,var)==0)
+		if (ft_strcmp(current->key,var)==0)
 			return(ft_strdup(current -> value));
 		current = current -> next;
 	}
@@ -88,12 +88,12 @@ char *join_expand(char *temp, char *var, char *str, int i)
 	return(all_str);
 }
 
-char	*split_expand_join(char *str, int i, t_var *list)
+char	*split_expand_join(char *str, int i, t_shell *shell)
 {
 	char	*temp;
 	char	*var;
 	int		start;
-
+	
 	if (i != 0)
 	{
 		temp = strdup_range(&str[0], &str[i - 1]);
@@ -106,14 +106,24 @@ char	*split_expand_join(char *str, int i, t_var *list)
 	i++;
 	if (is_valid_varstart(str[start]) == 0)
 	{
-		while (is_valid_varchar(str[i]) == 0)
+		if (str[start] == '?')
+		{
 			i++;
-		var = strdup_range(&str[start], &str[i - 1]);
-		if (!var)
-			return (err_printf("minishell: malloc error: var\n"), NULL);
-		var = expand_var(var, list);
-		if (!var)
-			return (err_printf("minishell: malloc error: var\n"), NULL);
+			var = ft_itoa(shell->exit_status);
+			if (!var)
+				return (err_printf("minishell: malloc error: ft_itoa\n"), NULL);
+		}
+		else
+		{
+			while (is_valid_varchar(str[i]) == 0)
+				i++;
+			var = strdup_range(&str[start], &str[i - 1]);
+			if (!var)
+				return (err_printf("minishell: malloc error: var\n"), NULL);
+			var = expand_var(var, shell->var_list);
+			if (!var)
+				return (err_printf("minishell: malloc error: expand_var\n"), NULL);
+		}
 	}
 	else
 		var = NULL;
@@ -123,7 +133,7 @@ char	*split_expand_join(char *str, int i, t_var *list)
 	return (str);
 }
 
-char	*expand_str(char *str, t_var *list)
+char	*expand_str(char *str, t_shell *shell)
 {
 	int	i;
 
@@ -144,7 +154,7 @@ char	*expand_str(char *str, t_var *list)
 			{
 				if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
 				{
-					str = split_expand_join(str, i, list);
+					str = split_expand_join(str, i, shell);
 					if (!str)
 						return (NULL);
 					i = -1;
@@ -156,14 +166,14 @@ char	*expand_str(char *str, t_var *list)
 		}
 		else if (str[i] == '$' && is_quote(str[i + 1]) == 0)
 		{
-			str = split_expand_join(str, i, list);
+			str = split_expand_join(str, i, shell);
 			if (!str)
 				return (NULL);
 			i = 0;
 		}
 		else if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
 		{
-			str = split_expand_join(str, i, list);
+			str = split_expand_join(str, i, shell);
 			if (!str)
 				return (NULL);
 			i = 0;
@@ -210,3 +220,70 @@ char	*expand_str(char *str, t_var *list)
 // 	 return(str);
 // }
 
+/*	file_list_check_var calls contain_var and expand_str
+	for each file provided in file linked list
+	*/
+int	file_list_check_var(t_file *file, t_shell *shell)
+{
+	t_file	*curr_file;
+
+	curr_file = file;
+	while (curr_file)
+	{
+		if (contain_var(curr_file->file_name) == 0)
+		{
+			curr_file->file_name = expand_str(curr_file->file_name, shell);
+			if (!curr_file->file_name)
+				return (1);
+		}
+		curr_file = curr_file->next;
+	}
+	return (0);
+}
+
+/*	check_var_expansion checks whether variable expansions are needed
+	- checks strings in cmd, args and files
+	- if needed, expands them
+	- returns 1 if errors with expansion
+	*/
+int	check_var_expansion(t_ast *node, t_shell *shell)
+{
+	t_list	*curr_arg;
+
+	if (contain_var(node->cmd) == 0)
+	{
+		node->cmd = expand_str(node->cmd, shell);
+		if (!node->cmd)
+			return (1);
+	}
+	if (node->n_args > 0)
+	{
+		curr_arg = node->args;
+		while (curr_arg)
+		{
+			if (contain_var(curr_arg->content) == 0)
+			{
+				curr_arg->content = expand_str(curr_arg->content, shell);
+				if (!curr_arg->content)
+					return (1);
+			}
+			curr_arg = curr_arg->next;
+		}
+	}
+	if (node->input_list)
+	{
+		if (file_list_check_var(node->input_list, shell) == 1)
+			return (1);
+	}
+	if (node->heredoc_list)
+	{
+		if (file_list_check_var(node->heredoc_list, shell) == 1)
+			return (1);
+	}
+	if (node->output_list)
+	{
+		if (file_list_check_var(node->output_list, shell) == 1)
+			return (1);
+	}
+	return (0);
+}

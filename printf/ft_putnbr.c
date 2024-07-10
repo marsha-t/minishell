@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	length(int n)
+static int	length(int n)
 {
 	int	i;
 

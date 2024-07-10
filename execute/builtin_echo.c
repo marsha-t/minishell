@@ -31,7 +31,6 @@ int	is_newline_arg(char *arg)
 }
 
 /*	builtin_echo runs the echo command
-	- error can occur from write errors
 	- multiple newline arguments are all considered as newline arguments
 	- invalid options are taken as arguments and printed */
 int	builtin_echo(t_ast *node)

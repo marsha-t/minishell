@@ -6,19 +6,21 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 21:57:29 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/16 21:57:29 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/09 12:39:47 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /*	is_valid_varstart checks whether the char after $ is valid
-	- valid if c is a letter or underscore: returns 0 */
+	- valid if c is a letter, underscore, or question mark: returns 0 */
 int	is_valid_varstart(char c)
 {
 	if (ft_isalpha(c) == 1)
 		return (0);
-	if (c == '_')
+	else if (c == '_')
+		return (0);
+	else if (c == '?')
 		return (0);
 	else
 		return (1);
@@ -56,8 +58,6 @@ int contain_var(char *str)
 {
 	int i;
 
-	if (!str)
-		return (1);
 	i = 0;
 	while (str[i] != '\0')
 	{

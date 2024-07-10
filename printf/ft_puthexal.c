@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	lengthl(unsigned long long n)
+static int	lengthl(unsigned long long n)
 {
 	int	i;
 

@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	lengthhex(unsigned int n)
+static int	lengthhex(unsigned int n)
 {
 	int	i;
 

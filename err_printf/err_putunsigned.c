@@ -12,7 +12,7 @@
 
 #include "err_printf.h"
 
-int	lengthu(unsigned int n)
+static int	lengthu(unsigned int n)
 {
 	int	i;
 
