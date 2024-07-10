@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 10:03:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/10 15:04:31 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
 // work in progress: check that exit_shell works properly  
+// work in progress: update description of function
+
 int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
@@ -42,6 +44,8 @@ int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 		return (exit_shell(shell, 1), 1);
 	return(exit_status);
 }
+
+// work in progress: update description of function
 int	execute_cmd_others(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
@@ -108,8 +112,7 @@ int	check_empty_cmd(t_ast *node)
 	- removes quotes
 	- sets up file descriptors given redirections
 	- executes command with updated input/output fd */
-// work in progress: need to return from check_empty_cmd if empty str was typed
-// work in progress: need to integrate quote removal
+// work in progress: update description of function
 int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int id;
@@ -122,8 +125,8 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		return(1);
 	if (check_var_expansion(node, shell) == 1)
 		return (1);
-	// 	if (check_wc_expansion(node) == 1)
-	// 		return (1);
+	if (check_wc_expansion(node, shell) == 1)
+			return (1);
 	if (cmd_only_quote(node->cmd) == 0)
 		{
 			shell->exit_status = 127;

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 09:54:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/10 14:36:52 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,9 +249,9 @@ int contain_var(char *str);
 // void	free_conts_list(t_dconts *list);
 // void	print_conts_list(t_dconts *list);
 
-// int contain_wc(char *str);
-// int	file_list_check_wc(t_file *file, t_shell *shell);
-// int	check_wc_expansion(t_ast *node, t_shell *shell);
+int contain_wc(char *str);
+int	file_list_check_wc(t_file *file, t_shell *shell);
+int	check_wc_expansion(t_ast *node, t_shell *shell);
 
 // // expand_wc_utils.c
 // char *ft_strrev(char *str);
@@ -349,26 +349,6 @@ void	free_safe(void *pointer);
 char	*ft_strjoin_free(char *s1, char *s2);
 char	*strjoin_num_free(int num, ...);
 int		ft_strcmp(const char *s1, const char *s2);
-
-/*****************************************************************************/
-/*	misc																	 */
-/*****************************************************************************/
-// env_var_utils.c
-// char  *expand_var(char **var, t_var **env);
-int key_len(char *str);
-char *return_key(char *str);
-char  *search_for_key(char *key,char *str);
-int var_length(char *str);
-int ft_strlen_b_$(char *str);
-int contain_var(char *str);
-
-t_dconts *create_conts_list(void);
-char *ft_strrev(char *str);
-int	ft_strcmp1(const char *s1, const char *s2);
-t_dconts *expand_wildcard(char *str, t_dconts *conts_list);
-int list_size(t_dconts *list);
-
-
 
 
 #endif

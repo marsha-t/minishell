@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/26 11:46:45 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/10 15:04:11 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 	- shifts tokens pointer along
 	- returns 1 if malloc error for char **args or strdup
 		- if strdup error, update n_args so that ast_list_free frees the correct number of strings*/
+// work in progress: update description of function
 int	ast_node_append_arg(t_token **tokens, t_ast *current)
 {
 	int	i;

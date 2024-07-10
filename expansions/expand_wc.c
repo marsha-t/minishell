@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/10 05:03:56 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/10 15:12:36 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void create_conts_node(char *str, t_dconts **list)
+/*	create_conts_node creates t_dconts node using str
+	and adds it to list 
+	- returns 1 if malloc error*/
+// work in progress: check malloc protection and error message 
+int create_conts_node(char *str, t_dconts **list)
 {
     t_dconts *curr;
     t_dconts *new;
@@ -20,24 +23,29 @@ void create_conts_node(char *str, t_dconts **list)
     curr = *list;
     new = ft_calloc(1,sizeof(t_dconts));
 	if(!str)
-		return ;
-    if(!new)
+		return (1);
+    if (!new)
 	{
 		err_printf("minishell: malloc error: directory_contents\n");
-        return ;
+        return (1);
 	}
     new->cont_name = ft_strdup(str);
-    new -> next = NULL;
-    if(!curr)
+	if (!new->cont_name)
+		return (err_printf("minishell: malloc error: t_dconts->cont_name\n"), 1);
+    new->next = NULL;
+    if (!curr)
     {
-        curr = new;
-        return ;
+        *list = new;
+        return (0);
     }
-    while(curr->next)
+    while (curr->next)
         curr = curr->next;
     curr->next = new;
+	return (0);
 }
-
+/*	create_conts_list creates list of files in directories 
+	(to be stored in shell) */
+// work in progress: check malloc protection and err msg
 t_dconts *create_conts_list(void)
 {
     struct dirent *content;
@@ -51,7 +59,8 @@ t_dconts *create_conts_list(void)
     content = readdir(dd);
     while (content)
     {
-        create_conts_node(content->d_name, &list);
+        if (create_conts_node(content->d_name, &list) == 1)
+			return (NULL);
         content = readdir(dd);
     }
     return(list);
@@ -152,6 +161,8 @@ t_dconts *create_conts_list(void)
 	- returns 0 if match; 1 otherwise */
 int	match_pattern_str(char *pattern, char *str)
 {
+	if (!str)
+		return (1);
 	while (*pattern)
 	{
 		if (*pattern == *str)
@@ -181,33 +192,99 @@ int	match_pattern_str(char *pattern, char *str)
 		return (1);
 }
 
-/*	match_pattern_list c*/
-int	match_pattern_list(char *pattern, t_dconts *list)
+/*	match_pattern_list iterates through list and checks for matches
+	- matched nodes are duplicated and added to a linked list
+	- start of linked list (containing matched nodes) is returned*/
+t_dconts	*match_pattern_list(char *pattern, t_dconts *list)
 {
-	int	i;
-
-	i = 0;
-	while (pattern[i])
+	t_dconts	*current;
+	t_dconts	*matched_list;
+	int	temp;
+	
+	current = list;
+	matched_list = NULL;
+	while (current)
 	{
-		
-		i++;
+		temp = match_pattern_str(pattern, current->cont_name);
+		if (temp == 0)
+		// if (match_pattern_str(pattern, current->cont_name) == 0)
+		{
+			if (create_conts_node(current->cont_name, &matched_list) == 1)
+				return (err_printf("error?\n"), NULL);
+
+		}
+		current = current->next;
 	}
+	return (matched_list);
 }
 
-char	*expand_wildcard(char *pattern, t_dconts *list)
+int	ast_node_push_arg(t_ast *node, char *str)
 {
+	t_list *new;
+
+	new = malloc(sizeof(t_list));
+	if (!new)
+		return (err_printf("minishell: malloc error: t_ast for ast_node_append_arg\n"), 1);
+	new->content = str;
+	new->next = node->args;
+	node->args = new;
+	return (0);
+}
+
+// work in progress: add error message
+int	expand_wildcard_cmd(t_dconts *matched_list, t_ast *node)
+{
+	t_dconts	*current;
+	t_dconts	*next;
+
+	current = matched_list;
+	next = current->next;
+	free(node->cmd);
+	node->cmd = current->cont_name;
+	free(current);
+	current = next;
+	while (current)
+	{
+		next = current->next;
+		if (ast_node_push_arg(node, current->cont_name) == 1)
+			return (1);
+		free(current);
+		current = next;
+	}
+	return (0);
+}
+
+/*	expand_wildcard 
+	- removes quotes in the pattern
+	- generates linked list of matched nodes
+	- merges strings in matched linked list into ast node 
+		depending on whether node is cmd, arg or file list*/
+int	expand_wildcard(t_ast *node, t_dconts *list, char *pattern)
+{
+	t_dconts	*matched_list;
+	
 	pattern = remove_quote_str(pattern);
 	if (!pattern)
-		return (NULL); // terminate shell
-	if (match_wc_pattern(pattern, list) == 0)
+		return (1); // terminate shell
+	matched_list = match_pattern_list(pattern, list);
+	
+	/* print matched_list */
+	// while (matched_list)
+	// {
+	// 	printf("matched_list node: %s\n", matched_list->cont_name);
+	// 	matched_list = matched_list->next;
+	// }
+	// return (NULL);
+	if (ft_strcmp(pattern, node->cmd) == 0)
 	{
+		printf("22\n");
+		if (expand_wildcard_cmd(matched_list, node) == 1)
+			return (1);
+		printf("33\n");
 
 	}
-	else
-	{
-		
-	}
-	
+	return (0);
+	// ...
 }
 
 void	free_conts_list(t_dconts *list)
@@ -298,11 +375,11 @@ int	check_wc_expansion(t_ast *node, t_shell *shell)
 	t_list	*curr_arg;
 
 	shell->directory_contents= create_conts_list();
+	print_conts_list(shell->directory_contents);
 	if (contain_wc(node->cmd) == 0)
 	{
 		printf("wc\n");
-		// node->cmd = expand_wildcard(node->cmd, shell);
-		if (!node->cmd)
+		if (expand_wildcard(node, shell->directory_contents, node->cmd) == 1)
 			return (free_conts_list(shell->directory_contents), 1);
 	}
 	if (node->n_args > 0)
