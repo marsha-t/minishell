@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 12:14:13 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/09 17:17:58 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,13 +188,13 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	int out_fd;
 	int id;
 	id = fork();
-	LOC = 0;
 	// if (check_var_expansion(node) == 1)
 	// 	return (1);
 	// if (check_wc_expansion(node) == 1)
 	// 	return (1);
 	if (id == 0)
 	{
+		LOC = 0;
 		control_signals();
 		if(get_docs(node) == 1)
 			return(1);

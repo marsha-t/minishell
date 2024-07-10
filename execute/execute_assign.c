@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_assign.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 14:14:41 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/09 14:43:54 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*	valid_varname checks whether a name is valid 
+/*	valid_varname checks whether a name is valid
 	- only contains letters, digits or _
 	- cannot start with a digit
 	- returns 0 if name is valid; 1 otherwise */
@@ -71,7 +71,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 	return (0);
 }
 
-/*	create_node_normal creates a node for a normal variable 
+/*	create_node_normal creates a node for a normal variable
 	and adds it to the end of shell->var_list*/
 int	create_node_normal(t_var **v, char *key, char *value)
 {
@@ -100,7 +100,7 @@ int	create_node_normal(t_var **v, char *key, char *value)
 
 /*	run_assign_str runs the assignment given (either in cmd or arg)
 	- if key name already exists, replace value
-	- else checks if key name is valid 
+	- else checks if key name is valid
 		if yes, new key added to end of linked list
 		if not, error msg */
 int	run_assign_str(char *cmd, t_shell *shell)
@@ -109,7 +109,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 	char	*key;
 	char	*value;
 	t_var	*exist;
-	
+
 	if (create_key_value(cmd, &equal, &key, &value) == 1)
 		return (1);
 	if (valid_varname(key) == 1)
@@ -124,7 +124,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 		exist->value = value;
 		free(key);
 	}
-	else 
+	else
 	{
 		if (create_node_normal(&shell->var_list, key, value) == 1)
 		{
@@ -143,7 +143,7 @@ int	check_assign_varname(t_ast *node)
 	char	*equal;
 	char	*key;
 	t_list	*curr_arg;
-	
+
 	equal = ft_strchr(node->cmd, '=');
 	key = strdup_range(node->cmd, equal - 1);
 	if (!key)
@@ -171,7 +171,7 @@ int	check_assign_varname(t_ast *node)
 			curr_arg = curr_arg->next;
 		}
 	}
-	return (0);	
+	return (0);
 }
 
 /*	run_assign_cmd runs the remaining args in assignment as a simple command
@@ -179,8 +179,8 @@ int	check_assign_varname(t_ast *node)
 	- execute updated cmd node using execute_cmd
 */
 // work in progress since it uses execute_cmd_node() which is incomplete
-// it uses execute_cmd_node because redirections need to be setup; 
-// execute_cmd_node should find nothing to expand 
+// it uses execute_cmd_node because redirections need to be setup;
+// execute_cmd_node should find nothing to expand
 int	run_assign_cmd(t_ast *node, t_shell *shell)
 {
 	free(node->cmd);
@@ -190,7 +190,7 @@ int	run_assign_cmd(t_ast *node, t_shell *shell)
 	return (execute_cmd_node(node, shell));
 }
 
-/*	run_assign runs the assignments in cmd and args (if any) 
+/*	run_assign runs the assignments in cmd and args (if any)
 	- run_assign_str adds variables into shell->var_list
 		- each arg node is freed after each addition into var_list
 	- returns 1 if failure (malloc) */

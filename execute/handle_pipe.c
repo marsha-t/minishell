@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:44:43 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/01 20:48:41 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/09 13:51:46 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int init_pipe( t_shell *shell)
 	printf("nums of pipes %d \n",nums_of_pipes(shell->line));
 	shell -> pipe_data = malloc(sizeof(t_pipe_info));
 	shell ->pipe_data->pipe_count = nums_of_pipes(shell->line);
-	shell->pipe_data->pid = malloc(sizeof(int *)*shell->pipe_data->pipe_count + 1);
+	shell->pipe_data->pid = malloc(sizeof(int )*shell->pipe_data->pipe_count + 1);
 	if (!shell ->pipe_data->pid)
 		return(1);
 	shell->pipe_data->pipes = malloc(sizeof(int *)*shell->pipe_data->pipe_count);
