@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:03:01 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 16:38:50 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/10 05:08:28 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ char	*ft_getcwd(t_shell *shell)
 		if (getcwd(dir, size) != NULL)
 			break ;
 		else if (errno == ERANGE)
+		{
+			free(dir);
 			size *= 2;
+		}
 		else
 		{
 			free(dir);

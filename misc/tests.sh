@@ -34,7 +34,7 @@ ech"o" "a"b"cd'ef" 1> a".txt" #abcd'ef in a.txt
 echo a | wc -l # results in 1
 echo a > a.txt | wc - l # results in 0; a is directed to a.txt
 export abc=1 | echo $abc # blank (i.e., abc was set by export but inside a process)
-export 1 | echo a # output: export error message followed by a (checked using Mac)
+export 1 | echo a # output: a followed by export error message (check with Mac)
 
 #############################################################################
 # REDIRECTION ###############################################################
@@ -527,3 +527,5 @@ $var #blank (0)
 
 '' #error: command not found (127)
 '''' #error: command not found (127)
+
+./zshrc # check what aliases run
