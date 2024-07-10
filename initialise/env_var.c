@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/16 22:18:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:40:28 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,9 @@ int create_node(t_var **v, char *str, int flag)
 	
 	new = (t_var *) malloc(sizeof(t_var));
 	if(!new)
-		return (ft_putstr_fd("Malloc error creating t_var in create_node\n", 2), 1);
-	equal = ft_strchr(str, '=');
-	new->key = strdup_range(str, equal - 1);
-	if (!new->key)
-		return (ft_putstr_fd("Malloc error creating t_var->key in create_node\n", 2), 1);
-	if (str + ft_strlen(str) - 1 == equal)
-		new->value = 0;
-	else
-	{
-		new->value = strdup_range(equal + 1, str + ft_strlen(str) - 1);
-		if (!new->value)
-			return (ft_putstr_fd("Malloc error creating t_var->value in create_node\n", 2), 1);
-	}
+		return (err_printf("minishell: malloc error: t_var in create_node\n"), 1);
+	if (create_key_value(str, &equal, &new->key, &new->value) == 1)
+		return (1);
 	new->flag = flag;
 	new->env = 1;
 	new->next = NULL;

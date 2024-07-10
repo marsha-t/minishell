@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
 /*   Updated: 2024/07/07 12:01:51 by ryagoub          ###   ########.fr       */
@@ -22,9 +22,9 @@
 # include <limits.h>
 # include <errno.h>
 # include <stdarg.h>
-#include <fcntl.h>
+# include <fcntl.h>
 # include <dirent.h>
-#include <sys/stat.h>
+# include <sys/stat.h>
 # include "libft/libft.h"
 # include "printf/ft_printf.h"
 #include <sys/wait.h>
@@ -32,7 +32,7 @@
 #include <string.h>
 # include <signal.h>
 #include "global.h"
-
+# include "err_printf/err_printf.h"
 
 # define TOKEN_TEMP 0
 # define TOKEN_CMD 1
@@ -69,6 +69,7 @@ typedef struct	s_file
 	int 			fd;
 	struct s_file	*next;
 } t_file;
+
 // struct to save the contents of the current directory
 // typedef struct s_dconts
 // {
@@ -124,16 +125,17 @@ typedef struct s_shell
 	t_dconts *directory_contents;
 	char	*line;
 	t_token	*tokens;
+	t_ast	*ast_list;
 	t_ast	*root;
 	t_pipe_info *pipe_data;
 	int	exit_status;
+	int	exit_shell;
 }	t_shell;
 
 /*****************************************************************************/
 /*	initialise																 */
 /*****************************************************************************/
 // shell.c
-void	free_safe(void *pointer);
 t_shell	*init_shell(char **envp);
 void	free_shell(t_shell *shell);
 
@@ -180,7 +182,6 @@ void	free_tokens(t_token *tokens);
 void	print_tokens(t_token *tokens);
 
 // tokenise_misc_utils.c
-int		ft_strcmp(const char *s1, const char *s2);
 char	*strdup_range(char *start, char *end);
 int		is_file_op(int code);
 int		is_cmdorder_op(int code);
@@ -190,7 +191,8 @@ int		check_quote(int quote, char input);
 /*	parse																	 */
 /*****************************************************************************/
 // parse.c
-t_ast	*parse_tokens(t_token **tokens);
+// t_ast	*parse_tokens(t_token **tokens);
+int	parse_tokens(t_shell *shell);
 
 // parse_ast_list.c
 t_ast	*ast_node_init(void);
@@ -216,16 +218,19 @@ void	ast_tree_print(t_ast *node);
 /*	expand																	 */
 /*****************************************************************************/
 // quote_remove.c
-char	*ft_strjoin_free(char *s1, char *s2);
+char	*remove_quote_join(char *str, char *before_quote, int *start, int *i);
 char	*remove_quote_str(char *str);
+int	remove_quote_file(t_file *file);
 int	remove_quote_node(t_ast *node);
 
 // expand_var.c
 char	*ft_strjoin2(char const *s1, char const *s2);
 char  *expand_var(char *var, t_var *env);
 char *join_expand(char *temp, char *var, char *str, int i);
-char	*split_expand_join(char *str, int i, t_var *list);
-char	*expand_str(char *str, t_var *list);
+char	*split_expand_join(char *str, int i, t_shell *shell);
+char	*expand_str(char *str, t_shell *shell);
+int	file_list_check_var(t_file *file, t_shell *shell);
+int	check_var_expansion(t_ast *node, t_shell *shell);
 
 // expand_var_utils.c
 int	is_valid_varstart(char c);
@@ -233,16 +238,38 @@ int	is_valid_varchar(char c);
 int	is_quote(char c);
 int contain_var(char *str);
 
+// expand_wc.c
+// void create_conts_node(char *str, t_dconts **list);
+// t_dconts *create_conts_list(void);
+// char *word_suff(char *str, char *word_e);
+// char *word_pref(char *str, char *word_b);
+// t_dconts *goal_list(t_dconts *conts_list,char *word_b,char *word_e);
+// t_dconts *expand_wildcard(char *str, t_dconts *conts_list);
+void	free_conts_list(t_dconts *list);
+void	print_conts_list(t_dconts *list);
+
+int contain_wc(char *str);
+int	file_list_check_wc(t_file *file, t_shell *shell);
+int	check_wc_expansion(t_ast *node, t_shell *shell);
+
+// expand_wc_utils.c
+char *ft_strrev(char *str);
+int	ft_strcmp1(const char *s1, const char *s2);
+int list_size(t_dconts *list);
+
 /*****************************************************************************/
 /*	execute																	 */
 /*****************************************************************************/
 // execute_ast_tree.c
-int	execute_cmd(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+int	execute_cmd(t_ast *node, t_shell *shell);
 int	cmd_only_quote(char *cmd);
 int	execute_cmd_node(t_ast *node, t_shell *shell);
 int		execute_ast(t_ast *node, t_shell *shell);
-// redirection
+
+// input_files.c
 int		get_infile(t_ast *node);
+
+// output_files.c
 int get_outfile(t_ast *node);
 void close_files(t_ast *node);
 int get_docs(t_ast *node);
@@ -254,74 +281,82 @@ int init_pipe( t_shell *shell);
 void  control_signals(void);
 
 // builtin_cd.c
-int	builtin_cd(t_ast *node, int in_fd, int out_fd);
+int	builtin_cd(t_ast *node, t_shell *shell);
 
 // builtin_echo.c
 int	is_newline_arg(char *arg);
-int	builtin_echo(t_ast *node, int in_fd, int out_fd);
+int	builtin_echo(t_ast *node);
 
 // builtin_env.c
-int	builtin_env(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+void print_envp(t_var *envp);
+int	builtin_env(t_ast *node, t_shell *shell);
 
 // builtin_exit.c
 unsigned long long	ft_atoi_ull(char *str);
 int check_ll_limit(char *str, int sign);
 int	check_exit_arg(char *str);
 int	get_exit_status(char *str);
-void	exit_shell(t_shell *shell);
+void	exit_shell(t_shell *shell, int exit_status);
 int	builtin_exit(t_ast *node, t_shell *shell);
 
 // builtin_export.c
-int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell);
-
-// builtin_export_unset_utils.c
+void print_export(t_var *envp);
 t_var *check_exist(char *word, t_var *list);
-t_var *search_for_node(char *s2, t_var **list);
+int builtin_export(t_ast *node, t_shell *shell);
 
 // builtin_pwd.c
-char	*ft_getcwd(void);
-int	builtin_pwd(t_ast *node, int in_fd, int out_fd);
+char	*ft_getcwd(t_shell *shell);
+int		update_pwd(char *dir, t_shell *shell);
+int		builtin_pwd(t_ast *node, t_shell *shell);
 
 // builtin_unset.c
-int	builtin_unset(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+int	builtin_unset(t_ast *node, t_shell *shell);
 
 // execute_assign.c
 int	valid_varname(char *name);
 int	create_key_value(char *str, char **equal, char **key, char **value);
 int	create_node_normal(t_var **v, char *key, char *value);
 int	run_assign_str(char *cmd, t_shell *shell);
-int	check_assign_varname(t_ast *node);
+int	check_assign_varname(t_ast *node, t_shell *shell);
 int	run_assign_cmd(t_ast *node, t_shell *shell);
 int	run_assign(t_ast *node, t_shell *shell);
 
 // execute_external.c
-int	count_env(t_var *env);
+int		count_env(t_var *env);
 char	**envp_array(t_var *env);
 char	**argv_array(t_ast *node);
-char *get_filepath(char *cmd, int *exit_status, t_shell *shell);
-int	run_external(t_ast *node, int in_fd, int out_fd, t_shell *shell);
+char 	*get_filepath(char *cmd, int *exit_status, t_shell *shell);
+int		run_external(t_ast *node, t_shell *shell);
 
 // execute_external_utils.c
-void	free_num(int num, ...); // move to basic utils?
-char *get_value(t_var *var, char *key);
-int	check_filepath(char *cmd);
-void	free_char_dp(char **dp);
-int	has_current_wd(char *path);
-char *add_current_wd(char *path, int i);
+int		check_filepath(char *cmd, t_shell *shell);
+int		has_current_wd(char *path);
+char	*add_current_wd(char *path, int i, t_shell *shell);
 char	*find_cmd(char *cmd, int *exit_status, t_shell *shell);
+
+/*****************************************************************************/
+/*	misc utils																 */
+/*****************************************************************************/
+// free_utils.c
+void	free_num(int num, ...);
+void	free_char_dp(char **dp);
+void	free_safe(void *pointer);
+
+// str_utils.c
+char	*ft_strjoin_free(char *s1, char *s2);
+char	*strjoin_num_free(int num, ...);
+int		ft_strcmp(const char *s1, const char *s2);
 
 /*****************************************************************************/
 /*	misc																	 */
 /*****************************************************************************/
 // env_var_utils.c
 // char  *expand_var(char **var, t_var **env);
-char *expand_str(char *str, t_var *list);
 int key_len(char *str);
 char *return_key(char *str);
 char  *search_for_key(char *key,char *str);
 int var_length(char *str);
 int ft_strlen_b_$(char *str);
-// char *value(char *str , t_var **envp);
 int contain_var(char *str);
 
 t_dconts *create_conts_list(void);
@@ -330,15 +365,7 @@ int	ft_strcmp1(const char *s1, const char *s2);
 t_dconts *expand_wildcard(char *str, t_dconts *conts_list);
 int list_size(t_dconts *list);
 
-// environment_vars_op.c
-void env_ops(t_var **list, t_token *token);
 
-// var_modif.c
-void print_export(t_var *envp);
-void print_envp(t_var *envp);
-
-void export(char *s1,char *s2, t_var **envp);
-void unset(char *s1,char *s2, t_var **envp);
 
 
 #endif

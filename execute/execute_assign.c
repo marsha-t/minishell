@@ -21,6 +21,8 @@ int	valid_varname(char *name)
 	int	i;
 
 	i = 0;
+	if (name == NULL)
+		return (1);
 	while (name[i])
 	{
 		if (ft_isalnum(name[i]) == 1 || name[i] == '_')
@@ -39,25 +41,33 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 	*equal = ft_strchr(str, '=');
 	if (*equal)
 	{
-		*key = strdup_range(str, *equal - 1);
-		if (!*key)
-			return (ft_putstr_fd("Malloc error creating key", 2), 1);
-		if (*(*equal + 1) == '\0')
+		if (*equal == str)
 		{
-			*value = ft_strdup("");
-			if (!*value)
-			{
-				free(*key);
-				return (ft_putstr_fd("Malloc error creating value", 2), 1);
-			}
+			*key = 0;
+			*value = 0;
 		}
 		else
 		{
-			*value = strdup_range(*equal + 1, str + ft_strlen(str));
-			if (!*value)
+			*key = strdup_range(str, *equal - 1);
+			if (!*key)
+				return (err_printf("minishell: malloc error: key\n"), 1);
+			if (*(*equal + 1) == '\0')
 			{
-				free(*key);
-				return (ft_putstr_fd("Malloc error creating value", 2), 1);
+				*value = ft_strdup("");
+				if (!*value)
+				{
+					free(*key);
+					return (err_printf("minishell: malloc error: value\n"), 1);
+				}
+			}
+			else
+			{
+				*value = strdup_range(*equal + 1, str + ft_strlen(str));
+				if (!*value)
+				{
+					free(*key);
+					return (err_printf("minishell: malloc error: value\n"), 1);
+				}
 			}
 		}
 	}
@@ -65,7 +75,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 	{
 		*key = ft_strdup(str);
 		if (!*key)
-			return (ft_putstr_fd("Malloc error creating key\n", 2), 1);
+			return (err_printf("minishell: malloc error: key\n"), 1);
 		*value = 0;
 	}
 	return (0);
@@ -80,7 +90,7 @@ int	create_node_normal(t_var **v, char *key, char *value)
 
 	new = malloc(sizeof(t_var));
 	if (!new)
-		return (ft_putstr_fd("Malloc error creating t_var\n", 2), 1);
+		return (err_printf("minishell: malloc error: t_var\n"), 1);
 	new->key = key;
 	new->value = value;
 	new->env = 0;
@@ -103,6 +113,7 @@ int	create_node_normal(t_var **v, char *key, char *value)
 	- else checks if key name is valid
 		if yes, new key added to end of linked list
 		if not, error msg */
+// work in progress: is valid_varname checked twice?
 int	run_assign_str(char *cmd, t_shell *shell)
 {
 	char	*equal;
@@ -111,11 +122,14 @@ int	run_assign_str(char *cmd, t_shell *shell)
 	t_var	*exist;
 
 	if (create_key_value(cmd, &equal, &key, &value) == 1)
+	{
+		shell->exit_shell = 1;
 		return (1);
+	}
 	if (valid_varname(key) == 1)
 	{
 		free_num(2, key, value);
-		return (ft_putstr_fd("Invalid variable name\n", 2), 1);
+		return (err_printf("minishell: %s: command not found\n", cmd), 1);
 	}
 	exist = check_exist(key, shell->var_list);
 	if (exist)
@@ -138,7 +152,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 
 /*	check_assign_varname checks that key in assignments is valid
 	- checks cmd and args (only args that have the equal sign) */
-int	check_assign_varname(t_ast *node)
+int	check_assign_varname(t_ast *node, t_shell *shell)
 {
 	char	*equal;
 	char	*key;
@@ -147,9 +161,12 @@ int	check_assign_varname(t_ast *node)
 	equal = ft_strchr(node->cmd, '=');
 	key = strdup_range(node->cmd, equal - 1);
 	if (!key)
-		return (ft_putstr_fd("Malloc error creating key for check_assign_varname\n", 2), 1);
+	{
+		shell->exit_shell = 1;
+		return (err_printf("minishell: malloc error: key for check_assign_varname\n"), 1);
+	}
 	if (valid_varname(key) == 1)
-		return (ft_putstr_fd("Invalid variable name provided", 2), 1);
+		return (err_printf("minishell: %s: command not found\n", node->cmd), 1);
 	free(key);
 	curr_arg = node->args;
 	if (node->n_args > 0)
@@ -161,13 +178,16 @@ int	check_assign_varname(t_ast *node)
 			{
 				key = strdup_range(curr_arg->content, equal - 1);
 				if (!key)
-					return (ft_putstr_fd("Malloc error creating key for check_assign_varname\n", 2), 1);
+				{
+					shell->exit_shell = 1;
+					return (err_printf("minishell: malloc error: key for check_assign_varname\n"), 1);
+				}
 				if (valid_varname(key) == 1)
-					return (ft_putstr_fd("Invalid variable name provided", 2), 1);
+					return (err_printf("minishell: %s: command not found\n", curr_arg->content), 1);
 				free(key);
 			}
 			else
-				break;
+				break ;
 			curr_arg = curr_arg->next;
 		}
 	}
@@ -179,8 +199,10 @@ int	check_assign_varname(t_ast *node)
 	- execute updated cmd node using execute_cmd
 */
 // work in progress since it uses execute_cmd_node() which is incomplete
-// it uses execute_cmd_node because redirections need to be setup;
-// execute_cmd_node should find nothing to expand
+// it uses execute_cmd_node because it needs to do cmd_only_quote check
+// expansions and redirections are not required to 'redo'
+// can consider creating another function instead of execute_cmd_node()
+
 int	run_assign_cmd(t_ast *node, t_shell *shell)
 {
 	free(node->cmd);
@@ -193,13 +215,15 @@ int	run_assign_cmd(t_ast *node, t_shell *shell)
 /*	run_assign runs the assignments in cmd and args (if any)
 	- run_assign_str adds variables into shell->var_list
 		- each arg node is freed after each addition into var_list
-	- returns 1 if failure (malloc) */
-// work in progress: finish run_assign_cmd
+	- returns 1 if failure (malloc) 
+	- if there are remaining args after assignment, ast node is configured 
+		so first arg is a cmd
+	- otherwise, return 0 */
 int	run_assign(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
 
-	if (check_assign_varname(node) == 1)
+	if (check_assign_varname(node, shell) == 1)
 		return (1);
 	if (run_assign_str(node->cmd, shell) == 1)
 		return (1);
@@ -218,7 +242,7 @@ int	run_assign(t_ast *node, t_shell *shell)
 				curr_arg = node->args;
 			}
 			else
-				break;
+				break ;
 		}
 		if (curr_arg)
 		{

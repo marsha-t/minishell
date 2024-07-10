@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/03 17:51:13 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:42:15 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	tokenise_misc(char **input, t_token **tokens)
 	- redirection tokens must be followed by another TOKEN_TEMP
 	- input cannot end with &&, ||, | or ( 
 	- returns 1 if any of the above happens */
+// work in progress: here, incomplete commands (ending with &&, || or |) are errors
 int	check_syntax_tokens(t_token *tokens)
 {
 	t_token	*start;
@@ -99,15 +100,16 @@ int	check_syntax_tokens(t_token *tokens)
 	while (tokens)
 	{
 		if (tokens == start && is_cmdorder_op(tokens->code) == 1)
-			return (ft_putstr_fd("Syntax error: Command starts with &&, || or |\n", 2), 1);
-		else if (is_file_op(tokens->code) && \
-			(!tokens->next || tokens->next->code != TOKEN_TEMP))
-			return (ft_putstr_fd("Syntax error: Redirection not followed by file\n", 2), 1);
+			return (err_printf("minishell: syntax error near unexpected token `%s'\n", tokens->str), 1);
+		else if (is_file_op(tokens->code) && !tokens->next)
+			return (err_printf("minishell: syntax error near unexpected token `newline'\n"), 1);
+		else if (is_file_op(tokens->code) && tokens->next->code != TOKEN_TEMP)
+			return (err_printf("minishell: syntax error near unexpected token `%s'\n", tokens->next->str), 1);
 		else if (is_cmdorder_op(tokens->code) > 0)
 		{
 			start = tokens->next;
 			if (!start)
-				return (ft_putstr_fd("Syntax error: Incomplete command\n", 2), 1);
+				return (err_printf("minishell: syntax error near unexpected token `%s'\n", tokens->str), 1);
 		}
 		tokens = tokens->next;
 	}

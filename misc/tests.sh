@@ -7,6 +7,10 @@
 echo -n abc   # i.e., add 3 spaces after abc; prints abc without new line and spaces
 echo abc    def #output: abc def
 
+    echo abc #isn't recorded in history 
+
+echo       abc #history includes all the spaces
+
 #############################################################################
 # QUOTES ####################################################################
 #############################################################################
@@ -23,11 +27,14 @@ ech"o" "a"b"cd'ef" 1> a".txt" #abcd'ef in a.txt
 "" #error: command not found (127)
 "" echo abc #error: command not found (127)
 '' echo abc #error: command not found (127)
+
 #############################################################################
 # PIPES #####################################################################
 #############################################################################
 echo a | wc -l # results in 1
 echo a > a.txt | wc - l # results in 0; a is directed to a.txt
+export abc=1 | echo $abc # blank (i.e., abc was set by export but inside a process)
+export 1 | echo a # output: a followed by export error message (check with Mac)
 
 #############################################################################
 # REDIRECTION ###############################################################
@@ -201,6 +208,9 @@ echo $"$var$" $"$var$" #123$ 123$
 
 echo $"abc" #abc
 echo $'abc' #abc
+
+var=123 "" #command not found (127)
+
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
 #############################################################################
@@ -239,6 +249,20 @@ ls *".c # counts as incomplete line until another " typed in
 ls *'".c' #prints 'test.".c'
 
 echo e$*e #ee
+
+echo e*x*p* #lists files/directories that match pattern with space between: expansions explore
+ls e*x*p #lists files/directories that match pattern as well as lists files inside the matched directories
+
+./test*exit*sh #runs test_exit.sh i.e., wildcard can be cmd
+
+./a* #if a1.out and a2.out exists, a1.out will be run i.e., similar to ./a1.out ./a2.out
+touch "a b c.c"
+echo a*" "* #output: a b c.c
+
+echo e*p* # if it exists (e.g., expansions and explore), output = expansions explore; otherwise, output = e*p*
+
+
+
 #############################################################################
 # REDIRECTION ORDER #########################################################
 #############################################################################
@@ -256,6 +280,107 @@ VAR=123 echo "Hello $VAR" > a.txt # Hello 123 in a.txt
 #############################################################################
 chmod 0 a.txt
 echo abc > a.txt # error msg: Permission denied
+
+#############################################################################
+# HEREDOC ###################################################################
+#############################################################################
+cat << abc << def
+abc
+text
+def
+# output: text
+# history: all 4 lines
+
+cat << abc << def
+abc 
+def
+#output: nothing 
+#history: all 3 lines
+
+var=abc
+cat << def
+$var
+def
+#output: abc
+#history: cat << def \n $var \n def
+
+var=abc
+cat << abc
+text
+$var
+abc
+#output: ddd \n abc
+#history: all lines but with $var
+
+var=abc
+cat << $var
+text
+abc
+$var
+#output: text \n abc
+
+cat << a b c
+a b c
+a
+#output: error because no such file or directory for b and c
+
+cat << a a.txt b.txt
+text
+a
+#output: text followed by content of a.txt and b.txt
+
+echo abc << a >a.txt
+text
+a
+# output of abc redirected to a.txt
+
+echo abc && cat << a
+fff
+a
+# output: abc \n fff
+
+var=123
+cat << abc
+$var
+"$var"
+'$var'
+abc
+#output: 123\n"123"\n'123'
+
+cat << ab"c"
+$var
+"$var"
+'$var'
+abc
+#output: $var\n"$var"\n'$var'
+
+cat << ab'c'
+$var
+"$var"
+'$var'
+abc
+#output: $var\n"$var"\n'$var'
+
+cat << ab"c"
+ab"c"
+ab'c'
+abc
+#output: ab"c"\nab'c'
+
+cat << ab'c'
+ab"c"
+ab'c'
+abc
+#output: ab"c"\nab'c'
+
+cat << abc"'"
+abc'
+#output: nothing
+
+cat << abc "''"
+abc
+abc''
+#output: abc
 
 #############################################################################
 # ECHO ######################################################################
@@ -322,6 +447,31 @@ export var=123
 export var= #updates var to empty string 
 env #var is listed
 
+
+export abc
+export #declare -x abc
+unset abc
+export abc= 
+export #declare -x abc=""
+
+#############################################################################
+# CD ######################################################################## 
+#############################################################################
+cd #set to $HOME
+
+unset $HOME
+cd #error: cd: HOME not set (exit status = 1)
+
+cd a.out # error: a.out: Not a directory (exit status = 1)
+
+chmod 0 test_dir
+cd test_dir # error: test_dir: Permission denied (exit_status = 1)
+
+cd aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+# error: File name too long (exit = 1)
+
+cd noexist #error: No such file or directory (exit = 1)
+
 #############################################################################
 # UNSET ##################################################################### 
 #############################################################################
@@ -377,3 +527,5 @@ $var #blank (0)
 
 '' #error: command not found (127)
 '''' #error: command not found (127)
+
+./zshrc # check what aliases run

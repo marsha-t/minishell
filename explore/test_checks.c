@@ -81,7 +81,7 @@ int	check_direct(char *line)
 				i++;
 			if (line[i] == '\0')
 				return (0);
-				// return (ft_putstr_fd("syntax error near unexpected token", 2), 0);
+				// return (ft_putstr_fd("minishell: syntax error near unexpected token", 2), 0);
 		}
 		else if ((line[i] == '>' || line[i] == '<' ))
 		{

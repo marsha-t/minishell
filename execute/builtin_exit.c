@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/14 14:16:14 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 15:53:59 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ unsigned long long	ft_atoi_ull(char *str)
 		str++;
 	while (ft_isdigit(*str))
 	{
-		num = num * 10 + (*str - '0') ;
+		num = num * 10 + (*str - '0');
 		str++;
 	}
 	return (num);
@@ -32,7 +32,7 @@ unsigned long long	ft_atoi_ull(char *str)
 	*/
 int check_ll_limit(char *str, int sign)
 {
-	unsigned long long num;
+	unsigned long long	num;
 
 	num = ft_atoi_ull(str);
 	if (sign > 0 && num > LLONG_MAX)
@@ -49,7 +49,7 @@ int	check_exit_arg(char *str)
 {
 	int	i;
 	int	sign;
-	
+
 	i = 0;
 	sign = 1;
 	if (str[i] == '-' || str[i] == '+')
@@ -71,11 +71,11 @@ int	check_exit_arg(char *str)
 
 /*	get_exit_status converts str to long long 
 	and applies modulo of 256 to get exit status
-	- for negative values, need to deduct from 256 to get the same values as bash does */
+	- for negative values, need to deduct from 256 to get same values as bash */
 int	get_exit_status(char *str)
 {
 	long long	num;
-	int	sign;
+	int			sign;
 
 	sign = 1;
 	if (*str == '-')
@@ -91,10 +91,11 @@ int	get_exit_status(char *str)
 	- free shell
 	- clear history */
 // work in progress: error running rl_clear_history on Mac (error: implicit declaration)
-void	exit_shell(t_shell *shell)
+void	exit_shell(t_shell *shell, int exit_status)
 {
 	free_shell(shell);
 	// rl_clear_history();
+	exit(exit_status);
 }
 
 /*	builtin_exit runs the exit command
@@ -105,19 +106,18 @@ void	exit_shell(t_shell *shell)
 	- errors: 
 		- numeric argument required: exit status = 2
 		- too many arguments: exit status = 1 */
-// work in progress: need to find a way to terminate shell after exit_shell()
 int	builtin_exit(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
 
 	if (node->n_args > 0 && check_exit_arg(node->args->content) == 1)
-		return (ft_putstr_fd("exit: numeric argument required\n", 2), 2);
+		return (err_printf("minishell: exit: %s: numeric argument required\n", node->args->content), 2);
 	if (node->n_args > 1)
-		return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
+		return (err_printf("minishell: exit: too many arguments\n"), 1);
 	if (node->n_args == 0)
 		exit_status = 0;
 	else
 		exit_status = get_exit_status(node->args->content);
-	exit_shell(shell);
+	exit_shell(shell, exit_status);
 	return (exit_status);
 }

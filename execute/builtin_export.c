@@ -6,11 +6,53 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/16 22:18:24 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/07 15:54:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*	print_export prints the environment variables 
+	(prompted by export command)*/
+void print_export(t_var *envp)
+{
+	t_var *current;
+
+	current = envp;
+	while (current)
+	{
+		if (current->env == 1)
+		{
+			write(STDOUT_FILENO, "declare -x ", 11);
+			write(STDOUT_FILENO, current->key, ft_strlen(current->key));
+			if (current->value)
+			{
+				write(STDOUT_FILENO, "=\"", 2);
+				write(STDOUT_FILENO, current->value, ft_strlen(current->value));
+				write(STDOUT_FILENO, "\"", 1);
+			}
+			write(STDOUT_FILENO, "\n", 1);
+		}
+		current = current->next;
+	}
+}
+
+/*	check_exist checks whether a variable already exists
+	- returns pointer to variable node if it does
+	- returns NULL if not*/
+t_var *check_exist(char *word, t_var *list)
+{
+	t_var *current;
+
+	current = list;
+	while (current)
+	{
+		if (ft_strcmp(current->key, word) == 0)
+			return (current);
+		current = current -> next;
+	}
+	return (NULL);
+}
 
 /*	builtin_export runs the export command
 	- if no args, prints environment variable list 
@@ -23,21 +65,20 @@
 			- if no equal, change to env (if originally normal); original value is retained
 			- if equal, replace in list
 		- if key doesn't exist, create new node in list 
+			- if no equal, value = NULL
+			- if equal, value = empty string
 	- options are treated as invalid variable names
 */
-// work in progress: check_exist not updated since it is used for expansions too 
-// work in progress: to terminate shell for malloc issues
-// work in progress: update to use in_fd and out_fd
-int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
+int builtin_export(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
 	char	*key;
 	char	*value;
 	char	*equal;
 	t_var	*exist;
+	int		exit_status;
 
-	(void)in_fd;
-	(void)out_fd;
+	exit_status = 0;
 	if (node->n_args == 0)
 		return (print_export(shell->var_list), 0);
 	else
@@ -46,11 +87,17 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 		while (curr_arg)
 		{
 			if (create_key_value(curr_arg->content, &equal, &key, &value) == 1)
-				return (1); // terminate shell
+			{
+				shell->exit_shell = 1;
+				return (1);
+			}
 			if (valid_varname(key) == 1)
 			{
+				err_printf("minishell: export: `%s': not a valid identifier\n", key);
 				free_num(2, key, value);
-				return (ft_putstr_fd("export: invalid environment variable name\n", 2), 1);
+				exit_status = 1;
+				curr_arg = curr_arg->next;
+				continue ;
 			}
 			exist = check_exist(key, shell->var_list);
 			if (exist)
@@ -71,43 +118,22 @@ int builtin_export(t_ast *node, int in_fd, int out_fd, t_shell *shell)
 				if (equal)
 				{
 					if (create_node(&shell->var_list, curr_arg->content, 1) == 1)
-						return (1); // need to terminate shell
+					{
+						shell->exit_shell = 1;
+						return (1);
+					}
 				}
 				else
 				{
 					if (create_node(&shell->var_list, curr_arg->content, 0) == 1)
-						return (1); // need to terminate shell
+					{
+						shell->exit_shell = 1;
+						return (1);
+					}
 				}
 			}
 			curr_arg = curr_arg->next;
 		}
 	}
-	return (0);
+	return (exit_status);
 }
-
-// void export(char *s1,char *s2, t_var **envp)
-// {
-// 	t_var *current;
-// 	// t_var *p;
-// 	t_var *new;
-
-// 	current = *envp;
-// 	new = malloc(sizeof(t_var));
-// 	if(ft_strcmp(s1, "export") == 0 && s2 )
-// 	{
-// 		if(check_exist(s2,*envp))
-// 		{
-// 			new= check_exist(s2, *envp);
-// 			new ->content = s2;
-// 		}
-// 		else
-// 		{
-// 			*envp = new;
-// 			new -> next = current;
-// 			new ->content = s2;
-// 			if(!(ft_strchr(s2,'=')))
-// 				new-> flag = 1;
-// 		}
-// 	}
-// }
-
