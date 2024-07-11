@@ -1,6 +1,10 @@
 #include <stdio.h>
 int main(int argc, char **argv)
 {
-	if (argc > 1)
-		printf("%s\n", argv[1]);
+	int i;
+	
+	i = 1;
+	printf("argc - 1: %d\n", argc - 1);
+	while (--argc)
+		printf("%s\n", argv[i++]);
 }

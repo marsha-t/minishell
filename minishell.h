@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/11 05:50:29 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/11 11:18:56 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,15 +246,15 @@ int contain_wc(char *str);
 int	file_list_check_wc(t_ast *node, t_shell *shell, int code);
 int	check_wc_expansion(t_ast *node, t_shell *shell);
 
-// expand_wc_cmd_arg.c
+// expand_wc.c
 int expand_wildcard_setup(t_dconts **matched_list, char *pattern, t_dconts *list);
 int	expand_wildcard_cmd(t_dconts *list, t_ast *node);
 int	expand_wildcard_arg(t_dconts *list, t_ast *node, char *pattern);
-int	ast_node_add_arg(t_list **arg, char *str);
-
-// expand_wc_file.c
 int	expand_wildcard_file(t_dconts *list, t_ast *node, char *pattern, int code);
-int	ast_node_add_file(t_file **file, char *str);
+
+// expand_wc_utils.c
+int	convert_matched_to_arg(t_dconts *matched, t_list **new_args, t_list **end_args);
+int add_matched_to_arg(t_dconts *matched, t_list **arg, t_ast *node);
 
 // match_wc.c
 int	match_pattern_str(char *pattern, char *str);
@@ -262,6 +262,7 @@ int	match_pattern_list(char *pattern, t_dconts *list, t_dconts **matched_list);
 
 // expand_wc_conts_list.c
 int create_conts_node(char *str, t_dconts **list);
+void    order_conts_list(t_dconts **list);
 t_dconts *create_conts_list(void);
 void	free_conts_list(t_dconts *list);
 void	print_conts_list(t_dconts *list);

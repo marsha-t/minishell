@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:36:10 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/11 05:51:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/11 11:11:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ int contain_wc(char *str)
 	return (1);
 }
 
-/*	file_list_check_wc calls contain_wc and expand_wildcard
-	for each file provided in file linked list
+/*	file_list_check_wc calls contain_wc and expand_wildcard_file
+	for input/heredoc/output lists
+	- return 1 for malloc error (terminate shell)
+		or wc expansion into multiple files (don't terminate shell)
 	*/
 // work in progress: can wildcards work in heredocs?
 int	file_list_check_wc(t_ast *node, t_shell *shell, int code)
@@ -63,19 +65,24 @@ int	file_list_check_wc(t_ast *node, t_shell *shell, int code)
 	return (0);
 }
 
-
 /*	check_wc_expansion checks whether wildcard expansions are needed
 	- loads and eventually frees shell->directory_contents
 	- checks strings in cmd, args and files
 	- if needed, expands them
-	- returns 1 if errors with expansion
+	- returns 1 if malloc error (terminate shell) 
+		or wc expanded into multiple files for redirections (don't terminate shell)
 	*/
 // work in progress: need to cater for ./t*c i.e., to cater for ./
 int	check_wc_expansion(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
-
-	shell->directory_contents= create_conts_list();
+	
+	shell->directory_contents = create_conts_list();
+	if (!shell->directory_contents)
+	{
+		shell->exit_shell = 1;
+		return (1);
+	}
 	if (contain_wc(node->cmd) == 0)
 	{
 		if (expand_wildcard_cmd(shell->directory_contents, node) == 1)
@@ -109,6 +116,5 @@ int	check_wc_expansion(t_ast *node, t_shell *shell)
 		if (file_list_check_wc(node, shell, TOKEN_OUTPUT) == 1)
 			return (free_conts_list(shell->directory_contents), 1);
 	}
-	free_conts_list(shell->directory_contents);
-	return (0);
+	return (free_conts_list(shell->directory_contents), 0);
 }

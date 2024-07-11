@@ -6,39 +6,47 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/11 05:43:00 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/11 11:19:33 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/*	expand_wildcard_setup 
+	- removes quotes from pattern
+	- generate list of matches 
+	- returns number of matches 
+	- returns -1 if error removing quote or generating matches
+		- error handling for match_pattern_list done by 
+			function that calls expand_wildcard_setup */
 int expand_wildcard_setup(t_dconts **matched_list, char *pattern, t_dconts *list)
 {
-	int			match_count;
-	char 		*unquoted;
+	int		match_count;
+	char	*unquoted;
 
 	unquoted = remove_quote_str(ft_strdup(pattern));
 	if (!unquoted)
-		return (-1); // terminate shell; no need err msg
+		return (-1);
 	match_count = match_pattern_list(unquoted, list, matched_list);
 	free(unquoted);
 	return (match_count);
 }
 
 /*	expand_wildcard_cmd 
-	- removes quotes in cmd 
+	- generates list of matched contents 
 	- merges strings in matched linked list into node: 
 		- first match replaces cmd
-		- other matches added to arg in reverse order
-	- returns 1 if malloc error, 0 otherwise (matches or no matches both return 0)
-		*/
-// work in progress: check free with malloc error
+		- other matches added to arg in order
+	- returns 1 if malloc error, 
+		0 otherwise (matches or no matches both return 0) */
 int	expand_wildcard_cmd(t_dconts *list, t_ast *node)
 {
 	t_dconts	*matched_list;
 	t_dconts	*next;
-	int	match_count; 
+	int			match_count;
 
+	if (ft_strchr(node->cmd, '/') != 0)
+	
 	match_count = expand_wildcard_setup(&matched_list, node->cmd, list);
 	if (match_count == -1)
 		return (free_conts_list(matched_list), 1);
@@ -49,33 +57,23 @@ int	expand_wildcard_cmd(t_dconts *list, t_ast *node)
 	node->cmd = matched_list->cont_name;
 	free(matched_list);
 	matched_list = next;
-	while (matched_list)
-	{
-		next = matched_list->next;
-		if (ast_node_add_arg(&node->args, matched_list->cont_name) == 1)
-		{
-			free_conts_list(matched_list);
-			return (err_printf("minishell: malloc error: ast_node_push_arg\n"), 1);
-		}
-		node->n_args++;
-		free(matched_list);
-		matched_list = next;
-	}
+	if (add_matched_to_arg(matched_list, &node->args, node) == 1)
+		return (1);
 	return (0);
 }
 
 /*	expand_wildcard_arg
-	- removes quotes in specific arg (i.e., pattern)
-	- adds expanded matches into node args in reverse order
-	- returns 1 if malloc error, 0 otherwise (matches or no matches both return 0)
+	- generates list of matched contents 
+	- adds expanded matches into args in order
+	- returns 1 if malloc error, 
+		0 otherwise (matches or no matches both return 0)
 	 */
-// work in progress: check free with malloc error
 int	expand_wildcard_arg(t_dconts *list, t_ast *node, char *pattern)
 {
-	int match_count;
-	t_dconts *matched_list;
-	t_list *curr_arg;
-	t_dconts *next_match;
+	int 		match_count;
+	t_dconts	*matched_list;
+	t_list		*curr_arg;
+	t_dconts	*next_match;
 	
 	match_count = expand_wildcard_setup(&matched_list, pattern, list);
 	if (match_count == -1)
@@ -86,10 +84,7 @@ int	expand_wildcard_arg(t_dconts *list, t_ast *node, char *pattern)
 	while (curr_arg)
 	{
 		if (ft_strcmp(curr_arg->content, pattern) == 0)
-		{
-			// free(temp);
 			break;
-		}
 		curr_arg = curr_arg->next;
 	}
 	free(curr_arg->content);
@@ -97,38 +92,47 @@ int	expand_wildcard_arg(t_dconts *list, t_ast *node, char *pattern)
 	next_match = matched_list->next;
 	free(matched_list);
 	matched_list = next_match;
-	while (matched_list)
-	{
-		next_match = matched_list->next;
-		if (ast_node_add_arg(&curr_arg->next, matched_list->cont_name) == 1)
-		{
-			free_conts_list(matched_list);
-			return (err_printf("minishell: malloc error: ast_node_push_arg\n"), 1);
-		}
-		node->n_args++;
-		free(matched_list);
-		matched_list = next_match;
-	}
+	if (add_matched_to_arg(matched_list, &curr_arg, node) == 1)
+		return (1);
 	return (0);
 }
 
-/*	ast_node_add_arg adds a new arg to start of list
-	- uses pointer to str (i.e., doesn't duplicate it)
-	- increment n_args */
-int	ast_node_add_arg(t_list **arg, char *str)
+/*	expand_wildcard_file 
+	- generates list of matched contents
+	- replaces file with matched file
+	- if more than 1 match, return 1 (don't terminate shell)
+	- return 1 if malloc error (terminate shell)
+	*/
+int	expand_wildcard_file(t_dconts *list, t_ast *node, char *pattern, int code)
 {
-	t_list *new;
+	t_dconts	*matched_list;
+	int			match_count;
+	t_file		*curr_file;
 
-	new = malloc(sizeof(t_list));
-	if (!new)
-		return (err_printf("minishell: malloc error: t_ast for ast_node_push_arg\n"), 1);
-	new->content = str;
-	if (!(*arg))
-		*arg = new;
-	else
+	match_count = expand_wildcard_setup(&matched_list, pattern, list);
+	if (match_count == -1)
+		return (1); 
+	else if (match_count == 0)
+		return (free_conts_list(matched_list), 0);
+	else if (match_count > 1)
 	{
-		new->next = *arg;
-		*arg = new;
+		free_conts_list(matched_list);
+		return (err_printf("minishell: %s: ambiguous redirect\n", pattern), 1);
 	}
+	if (code == TOKEN_INPUT)
+		curr_file = node->input_list;
+	else if (code == TOKEN_OUTPUT)
+		curr_file = node->output_list;
+	else if (code == TOKEN_HEREDOC)
+		curr_file = node->heredoc_list;
+	while (curr_file)
+	{
+		if (ft_strcmp(curr_file->file_name, pattern) == 0)
+			break;
+		curr_file = curr_file->next;
+	}
+	free(curr_file->file_name);
+	curr_file->file_name = matched_list->cont_name;
+	free(matched_list);
 	return (0);
 }

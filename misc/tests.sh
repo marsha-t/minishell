@@ -257,9 +257,6 @@ ls e*x*p #lists files/directories that match pattern as well as lists files insi
 
 ./test*exit*sh #runs test_exit.sh i.e., wildcard can be cmd
 
-./a* #if a1.out and a2.out exists, a1.out will be run i.e., similar to ./a1.out ./a2.out
-touch "a b c.c"
-echo a*" "* #output: a b c.c
 
 echo e*p* # if it exists (e.g., expansions and explore), output = expansions explore; otherwise, output = e*p*
 
@@ -267,6 +264,16 @@ touch aab
 touch aac
 echo abc > aa* #error: aa*: ambiguous redirect (exit = 1)
 echo abc > a*c #abc redirected to aac
+
+# test_parogram prints the arguments given to it
+./explore/test_p* #runs test_parogram since it's the first alphabetically and prints the other files that match pattern
+
+touch "a b c.c"
+echo a*" "* #output: a b c.c
+
+./e*p*/test_p* #output: ./explore/test_parogram_mac
+# i.e., ./explore/test_parogram_linux ./explore/test_parogram_mac
+# multiple files for directories are not expanded (no error)
 
 #############################################################################
 # REDIRECTION ORDER #########################################################
