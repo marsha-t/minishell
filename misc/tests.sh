@@ -211,6 +211,8 @@ echo $'abc' #abc
 
 var=123 "" #command not found (127)
 
+var=a.txt
+echo abc > $var #abc redirected to a.txt
 #############################################################################
 # WILDCARD EXPANSIONS #######################################################
 #############################################################################
@@ -261,7 +263,10 @@ echo a*" "* #output: a b c.c
 
 echo e*p* # if it exists (e.g., expansions and explore), output = expansions explore; otherwise, output = e*p*
 
-
+touch aab
+touch aac
+echo abc > aa* #error: aa*: ambiguous redirect (exit = 1)
+echo abc > a*c #abc redirected to aac
 
 #############################################################################
 # REDIRECTION ORDER #########################################################

@@ -117,16 +117,16 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int id;
 	
+	if (check_var_expansion(node, shell) == 1)
+		return (1);
+	if (check_wc_expansion(node, shell) == 1)
+		return (1);
 	if(get_docs(node) == 1)
 		return(1);
 	if (get_infile(node) == 1)
 		return(1);
 	if(get_outfile(node) == 1)
 		return(1);
-	if (check_var_expansion(node, shell) == 1)
-		return (1);
-	if (check_wc_expansion(node, shell) == 1)
-			return (1);
 	if (cmd_only_quote(node->cmd) == 0)
 		{
 			shell->exit_status = 127;

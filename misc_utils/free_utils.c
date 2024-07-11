@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 03:59:22 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 04:02:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/11 05:49:03 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ void	free_char_dp(char **dp)
 	free(dp);
 }
 
-void	free_safe(void *pointer)
+void	free_safe(void **pointer)
 {
-	free(pointer);
-	pointer = NULL;
+	if (pointer != NULL && *pointer != NULL)
+	{
+		free(*pointer);
+		*pointer = NULL;
+	}
 }

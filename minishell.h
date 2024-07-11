@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 14:36:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/11 05:50:29 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,8 @@ typedef struct s_shell
 /*****************************************************************************/
 // shell.c
 t_shell	*init_shell(char **envp);
-void	free_shell(t_shell *shell);
 void	free_after_command(t_shell *shell);
+void	free_shell(t_shell *shell);
 
 // env_var.c
 int create_node(t_var **v, char *str, int flag);
@@ -203,6 +203,7 @@ int	ast_node_append_cmd(t_token **tokens, t_ast *current);
 int		ast_node_append_arg(t_token **tokens, t_ast *current);
 int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current);
 t_ast	*ast_list_new(t_token **tokens);
+void	file_list_print(t_file *file, int type);
 void	ast_list_print(t_ast *node);
 void	ast_list_free(t_ast *node);
 
@@ -224,6 +225,7 @@ char	*remove_quote_str(char *str);
 int	remove_quote_file(t_file *file);
 int	remove_quote_node(t_ast *node);
 
+
 // expand_var.c
 char	*ft_strjoin2(char const *s1, char const *s2);
 char  *expand_var(char *var, t_var *env);
@@ -233,30 +235,36 @@ char	*expand_str(char *str, t_shell *shell);
 int	file_list_check_var(t_file *file, t_shell *shell);
 int	check_var_expansion(t_ast *node, t_shell *shell);
 
-// expand_var_utils.c
+// expand_var_utils2.c
 int	is_valid_varstart(char c);
 int	is_valid_varchar(char c);
 int	is_quote(char c);
 int contain_var(char *str);
 
-// expand_wc.c
-// void create_conts_node(char *str, t_dconts **list);
-// t_dconts *create_conts_list(void);
-// char *word_suff(char *str, char *word_e);
-// char *word_pref(char *str, char *word_b);
-// t_dconts *goal_list(t_dconts *conts_list,char *word_b,char *word_e);
-// t_dconts *expand_wildcard(char *str, t_dconts *conts_list);
-// void	free_conts_list(t_dconts *list);
-// void	print_conts_list(t_dconts *list);
-
+// check_wc.c
 int contain_wc(char *str);
-int	file_list_check_wc(t_file *file, t_shell *shell);
+int	file_list_check_wc(t_ast *node, t_shell *shell, int code);
 int	check_wc_expansion(t_ast *node, t_shell *shell);
 
-// // expand_wc_utils.c
-// char *ft_strrev(char *str);
-// int	ft_strcmp1(const char *s1, const char *s2);
-// int list_size(t_dconts *list);
+// expand_wc_cmd_arg.c
+int expand_wildcard_setup(t_dconts **matched_list, char *pattern, t_dconts *list);
+int	expand_wildcard_cmd(t_dconts *list, t_ast *node);
+int	expand_wildcard_arg(t_dconts *list, t_ast *node, char *pattern);
+int	ast_node_add_arg(t_list **arg, char *str);
+
+// expand_wc_file.c
+int	expand_wildcard_file(t_dconts *list, t_ast *node, char *pattern, int code);
+int	ast_node_add_file(t_file **file, char *str);
+
+// match_wc.c
+int	match_pattern_str(char *pattern, char *str);
+int	match_pattern_list(char *pattern, t_dconts *list, t_dconts **matched_list);
+
+// expand_wc_conts_list.c
+int create_conts_node(char *str, t_dconts **list);
+t_dconts *create_conts_list(void);
+void	free_conts_list(t_dconts *list);
+void	print_conts_list(t_dconts *list);
 
 /*****************************************************************************/
 /*	execute																	 */
@@ -343,7 +351,6 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell);
 // free_utils.c
 void	free_num(int num, ...);
 void	free_char_dp(char **dp);
-void	free_safe(void *pointer);
 
 // str_utils.c
 char	*ft_strjoin_free(char *s1, char *s2);

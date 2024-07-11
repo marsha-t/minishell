@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 09:39:35 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/11 05:50:25 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,13 @@ t_shell	*init_shell(char **envp)
 	shell->root = 0;
 	shell-> exit_status = -1;
 	shell -> pipe_data = 0;
-	// shell->directory_contents= create_conts_list();
+	shell->directory_contents = 0;
 	shell->exit_shell = 0;
 	if (shlvl_increment(shell) == 1)
 		return (free_shell(shell), NULL);
 	return (shell);
 }
+
 void free_pipe(t_pipe_info *pipe)
 {
 	int k;
@@ -68,25 +69,9 @@ void free_pipe(t_pipe_info *pipe)
 	free(pipe->pipes);
 }
 
-/*	free_shell frees the various structures within shell
-	and then frees shell itself */
-void	free_shell(t_shell *shell)
-{
-	if (shell->line)
-		free(shell->line);
-	if (shell->var_list)
-		free_var_list(shell->var_list);
-	if (shell->tokens)
-		free_tokens(shell->tokens);
-	if(shell ->pipe_data)
-		free_pipe(shell->pipe_data);
-	if (shell->ast_list)
-		ast_list_free(shell->ast_list);
-	// if (shell->directory_contents)
-	// 	free_conts_list(shell->directory_contents);
-	free(shell);
-}
 
+/*	free_after_command frees data in shell
+	 that need to be freed after every command */
 void	free_after_command(t_shell *shell)
 {
 	if (shell->line)
@@ -97,4 +82,14 @@ void	free_after_command(t_shell *shell)
 		free_pipe(shell->pipe_data);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
+}
+
+/*	free_shell frees everything in shell
+	and then frees shell itself */
+void	free_shell(t_shell *shell)
+{
+	free_after_command(shell);
+	if (shell->var_list)
+		free_var_list(shell->var_list);
+	free(shell);
 }

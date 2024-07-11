@@ -8,7 +8,7 @@ TOKENISE_CFILES = tokenise.c tokenise_token_utils.c tokenise_misc_utils.c
 PARSE_DIR = parse
 PARSE_CFILES = parse.c parse_ast_list.c parse_ast_tree.c create_redir_lists.c
 EXPANSIONS_DIR = expansions
-EXPANSIONS_CFILES = expand_var.c expand_var_utils.c expand_wc.c quote_remove.c
+EXPANSIONS_CFILES = expand_var.c expand_var_utils.c check_wc.c expand_wc_cmd_arg.c expand_wc_file.c match_wc.c expand_wc_conts_list.c quote_remove.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c  execute_external.c execute_external_utils.c \
 	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_pipe.c handle_signals.c \

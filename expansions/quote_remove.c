@@ -59,6 +59,8 @@ char	*remove_quote_str(char *str)
 	int		start;
 	char	*before_quote;
 
+	if (!str)
+		return (err_printf("minishell: malloc error: ft_strdup\n"), NULL);
 	quote = 0;
 	i = 0;
 	start = 0;
