@@ -93,8 +93,8 @@ void	free_after_command(t_shell *shell)
 		free(shell->line);
 	if (shell->tokens)
 		free_tokens(shell->tokens);
-	if(shell ->pipe_data)
-		free_pipe(shell->pipe_data);
+	// if(shell ->pipe_data)
+	// 	free_pipe(shell->pipe_data);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
 }

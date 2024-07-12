@@ -113,6 +113,7 @@ int	check_empty_cmd(t_ast *node)
 int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int id;
+	
 	if(get_docs(node) == 1)
 		return(1);
 	if (get_infile(node) == 1)
@@ -158,90 +159,6 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	return (LOC = 1,shell -> exit_status);
 }
 
-int execute_pipe(t_ast *node, t_shell *shell)
-{
-	// printf("execute_pipe called\n");
-	int	pipefd[2];
-	pipe(pipefd);
-	pid_t pid_left, pid_right;
-	pid_left = fork();
-	if (pid_left == 0) // child process for left 
-	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-		if (!node->left && !node->right)
-		{
-			// printf("left called execute_cmd_node\n");
-			exit(execute_cmd_node(node, shell));
-		}
-		else if (node->code == TOKEN_AND)
-		{
-			if (execute_ast(node->left, shell) == 0)
-				exit (execute_ast(node->right, shell));
-			else
-				exit (1);	
-		}
-		else if (node->code == TOKEN_OR)
-		{
-			if (execute_ast(node->left, shell) == 0)
-				exit (0);
-			else
-				exit (execute_ast(node->right, shell));
-		}
-	}
-	else // parent
-	{
-		close(pipefd[1]);
-		node = node->pipe;
-		pid_right = fork();
-		if (pid_right == 0) // child process for right
-		{
-			dup2(pipefd[0], STDIN_FILENO);
-			close(pipefd[0]);
-
-			if (!node->left && !node->right)
-			{
-				// printf("right called execute_cmd_node\n");
-
-				exit(execute_cmd_node(node, shell));
-			}
-			else if (node->code == TOKEN_AND)
-			{
-				if (execute_ast(node->left, shell) == 0)
-					exit (execute_ast(node->right, shell));
-				else
-					exit (1);	
-			}
-			else if (node->code == TOKEN_OR)
-			{
-				if (execute_ast(node->left, shell) == 0)
-					exit (0);
-				else
-					exit (execute_ast(node->right, shell));
-			}
-		}
-		else // parent
-		{
-			close(pipefd[0]);
-			close(pipefd[1]);
-			waitpid(pid_left, NULL, 0);
-			waitpid(pid_right, NULL, 0);
-		}
-	}
-	return (0);
-}
-
-int	execute_pipeline(t_ast *node, t_shell *shell)
-{
-	while (node->pipe)
-	{
-		execute_pipe(node, shell);
-		node = node->pipe;
-	}
-	return (0);
-}
-
 /*	execute_ast traverses AST for execution
 	- includes logic for TOKEN_AND and TOKEN_OR (which recursively calls execute_ast)
 	*/
@@ -250,38 +167,28 @@ int	execute_ast(t_ast *node, t_shell *shell)
 {
 	if (!node)
 		return (0);
-	if (node->pipe)
+	if (!node->left && !node->right)
+		return (execute_cmd_node(node, shell));
+	else if (node->code == TOKEN_PIPE)
 	{
-		execute_pipeline(node, shell);
+		if(init_pipe(shell) == 1)
+			return(1);
+		if (handle_pipe(node,shell) == 0)
+			return(0);
 	}
-	else
+	else if (node->code == TOKEN_AND)
 	{
-		if (!node->left && !node->right)
-		{
-			// printf("execute_ast called execute_cmd_node\n");
-			return (execute_cmd_node(node, shell));
-		}
-		else if (node->code == TOKEN_PIPE)
-		{
-			if(init_pipe(shell) == 1)
-				return(1);
-			if (handle_pipe(node,shell) == 0)
-				return(0);
-		}
-		else if (node->code == TOKEN_AND)
-		{
-			if (execute_ast(node->left, shell) == 0)
-				return (execute_ast(node->right, shell));
-			else
-				return (1);
-		}
-		else if (node->code == TOKEN_OR)
-		{
-			if (execute_ast(node->left, shell) == 0)
-				return (0);
-			else
-				return (execute_ast(node->right, shell));
-		}
+		if (execute_ast(node->left, shell) == 0)
+			return (execute_ast(node->right, shell));
+		else
+			return (1);
+	}
+	else if (node->code == TOKEN_OR)
+	{
+		if (execute_ast(node->left, shell) == 0)
+			return (0);
+		else
+			return (execute_ast(node->right, shell));
 	}
 	return (0);
 }

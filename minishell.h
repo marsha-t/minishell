@@ -105,6 +105,7 @@ typedef struct s_ast
 	struct s_ast	*next;
 	struct s_ast	*left;
 	struct s_ast	*right;
+	struct s_ast	*pipe;
 } t_ast;
 
 // environment variables
@@ -213,6 +214,8 @@ int create_output_append_list(int code, t_token *token, t_ast **node);
 
 // parse_ast_tree.c
 t_ast	*ast_tree_new(t_ast **node);
+// t_ast	*ast_tree_new(t_ast *node);
+
 void	ast_tree_print(t_ast *node);
 
 /*****************************************************************************/

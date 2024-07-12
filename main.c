@@ -57,7 +57,7 @@ int main(int ac, char **av, char **envp)
 			// free(shell->line);
 			if (parse_tokens(shell) == 1)
 				return (exit_shell(shell, 1), 1);
-			ast_tree_print(shell->root);
+			// ast_tree_print(shell->root);
 			printf("before execute\n");
 			execute_ast(shell->root, shell);
 			free_after_command(shell);

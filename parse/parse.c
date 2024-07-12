@@ -21,9 +21,26 @@ int	parse_tokens(t_shell *shell)
 	shell->ast_list = ast_list_new(&shell->tokens);
 	if (!shell->ast_list)
 		return (1);
-	ast_list_print(shell->ast_list);
-	shell->root = ast_tree_new(&shell->ast_list);
-	if (!shell->root)
-		return (1);
+	t_ast *dup_list;
+	dup_list = shell->ast_list;
+	// testing code 
+	// ast_list_print(shell->ast_list);
+	// t_ast *last;
+	// last = shell->ast_list;
+	// while (last->next)
+	// {
+	// 	last = last->next;
+	// }
+	// printf("last: %d\n", last->code);
+	// if (last->next == NULL)
+	// 	printf("last->next = NULL\n");
+
+	// shell->root = ast_tree_new(&shell->ast_list);
+	shell->root = ast_tree_new(&dup_list);
+	printf("\n\n printing tree\n");
+	ast_tree_print(shell->root);
+
+	// if (!shell->root)
+	// 	return (1);
 	return (0);
 }

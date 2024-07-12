@@ -34,6 +34,7 @@ t_ast	*ast_node_init(void)
 	new->right = 0;
 	new ->tmp_stdin_fd = 0;
 	new ->tmp_stdout_fd = 0;
+	new->pipe = 0;
 	return (new);
 }
 
@@ -289,25 +290,26 @@ void	ast_list_free(t_ast *node)
 	while (current)
 	{
 		next = current->next;
-		if (node->cmd)
-			free(node->cmd);
-		if (node->args)
+		if (current->cmd)
+			free(current->cmd);
+		if (current->args)
 		{
-			curr_arg = node->args;
+			curr_arg = current->args;
 			while (curr_arg)
 			{
-				node->args = node->args->next;
+				current->args = current->args->next;
 				free(curr_arg->content);
 				free(curr_arg);
-				curr_arg = node->args;
+				curr_arg = current->args;
 			}
 		}
-		if (node->input_list)
-			file_list_free(node->input_list);
-		if (node->heredoc_list)
-			file_list_free(node->heredoc_list);
-		if (node->output_list)
-			file_list_free(node->output_list);
+		if (current->input_list)
+			file_list_free(current->input_list);
+		if (current->heredoc_list)
+			file_list_free(current->heredoc_list);
+		if (current->output_list)
+			file_list_free(current->output_list);
+		free(current);
 		current = next;
 	}
 }
