@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ast_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/06/26 11:46:45 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/13 18:30:16 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_ast	*ast_node_init(void)
 }
 
 /*	add_ast_node:
-	- calls on init_ast_node to malloc space
+	- calls on _node to malloc space
 	- duplicates str in tokens node (to make freeing tokens linked list easier later)
 	- moves tokens pointer along by 1
 	- attaches new node to end of list

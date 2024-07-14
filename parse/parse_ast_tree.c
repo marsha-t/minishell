@@ -79,8 +79,8 @@ t_ast	*ast_tree_new(t_ast **node)
 		root = ast_tree_new(node);
 		if ((*node) && (*node)->code == TOKEN_PIPE)
 		{
-			root->pipe = ast_pipeline_new(node);			
-		}	
+			root->pipe = ast_pipeline_new(node);
+		}
 	}
 	while (*node)
 	{

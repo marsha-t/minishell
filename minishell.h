@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 09:54:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/13 18:29:43 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 	struct s_ast	*pipe;
+
 } t_ast;
 
 // environment variables
@@ -131,6 +132,8 @@ typedef struct s_shell
 	t_pipe_info *pipe_data;
 	int	exit_status;
 	int	exit_shell;
+	int  old_read_fd;
+	int 	old_write_fd;
 }	t_shell;
 
 /*****************************************************************************/

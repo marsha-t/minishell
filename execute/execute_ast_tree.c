@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 10:03:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 13:56:14 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
-// work in progress: check that exit_shell works properly  
+// work in progress: check that exit_shell works properly
 int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
@@ -79,7 +79,7 @@ int	cmd_only_quote(char *cmd)
 		- cmd is not empty
 		- cmd is empty but there are args
 	- returns 1 if cmd is empty and there are no args
-	- if cmd is empty but there are args, first arg becomes cmd 
+	- if cmd is empty but there are args, first arg becomes cmd
 	- for cases like: "" echo abc */
 int	check_empty_cmd(t_ast *node)
 {
@@ -124,52 +124,78 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	// 	if (check_wc_expansion(node) == 1)
 	// 		return (1);
 	if (cmd_only_quote(node->cmd) == 0)
-		{
-			shell->exit_status = 127;
-			return (err_printf("minishell: : command not found\n"), shell->exit_status);
-		}
-		if (check_empty_cmd(node) == 1)
-		{
-			shell->exit_status = 0;
-			return (0);
-		}
+	{
+		shell->exit_status = 127;
+		return (err_printf("minishell: : command not found\n"), shell->exit_status);
+	}
+	if (check_empty_cmd(node) == 1)
+	{
+		shell->exit_status = 0;
+		return (0);
+	}
 	if (remove_quote_node(node) == 1)
 		return (exit_shell(shell, 1), 1);
 	if (ft_strcmp(node->cmd, "echo") == 0 || ft_strcmp(node->cmd, "cd") == 0 || ft_strcmp(node->cmd, "pwd") == 0 || ft_strcmp(node->cmd, "export") == 0 || ft_strcmp(node->cmd, "unset") == 0 || ft_strcmp(node->cmd, "env") == 0 || ft_strcmp(node->cmd, "exit") == 0)
-	{
 		shell -> exit_status = execute_cmd_builtin(node, shell);
-	}
 	else
 	{
 		id = fork();
+		LOC = 0;
 		if (id == 0)
 		{
-			LOC = 0;
 			control_signals();
 			shell -> exit_status = execute_cmd_others(node, shell);
 		}
 		else
-			waitpid(id, &shell -> exit_status, 0);
+			{
+				waitpid(id, &shell -> exit_status, 0);}
 	}
+	// else if (shell->pipe_data != 0)
+	// {
+	// 	LOC = 0;
+	// 	control_signals();
+	// 	shell -> exit_status = execute_cmd_others(node, shell);
+
+	// }
 	if (dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
 		return(1);
 	if (dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
 		return(1);
-	return (LOC = 1,shell -> exit_status);
+	return (shell -> exit_status);
 }
 
-int execute_pipe(t_ast *node, t_shell *shell)
+int execute_pipe(t_ast *node, t_shell *shell, int flag)
 {
 	// printf("execute_pipe called\n");
+
 	int	pipefd[2];
 	pipe(pipefd);
-	pid_t pid_left, pid_right;
+	pid_t pid_left;
 	pid_left = fork();
-	if (pid_left == 0) // child process for left 
+	if (pid_left == 0) // child process for left
 	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
+		if(flag == 0)
+		{
+			dprintf(2," this is suppose to be printed once %d \n", pipefd[0]);
+			close(pipefd[0]);
+			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[1]);
+		}
+		else if(flag == -1)
+		{
+			dprintf(2," this is suppose to be printed once %d \n", shell->old_read_fd);
+			close(pipefd[0]);
+			dup2(shell->old_read_fd, STDIN_FILENO);
+			close(shell->old_read_fd);
+			close(pipefd[1]);
+		}
+		else
+		{
+			close(pipefd[0]);
+			dup2(shell->old_read_fd, STDIN_FILENO);
+			dup2(pipefd[1],STDOUT_FILENO);
+			close (pipefd[1]);
+		}
 		if (!node->left && !node->right)
 		{
 			// printf("left called execute_cmd_node\n");
@@ -178,9 +204,9 @@ int execute_pipe(t_ast *node, t_shell *shell)
 		else if (node->code == TOKEN_AND)
 		{
 			if (execute_ast(node->left, shell) == 0)
-				exit (execute_ast(node->right, shell));
+				return (execute_ast(node->right, shell));
 			else
-				exit (1);	
+				exit (1);
 		}
 		else if (node->code == TOKEN_OR)
 		{
@@ -190,54 +216,38 @@ int execute_pipe(t_ast *node, t_shell *shell)
 				exit (execute_ast(node->right, shell));
 		}
 	}
-	else // parent
+	else
 	{
+		shell ->old_read_fd = pipefd[0];
+		dprintf(2,"node->old_read_fd %d \n",shell->old_read_fd);
+		shell ->old_write_fd = pipefd[1];
 		close(pipefd[1]);
-		node = node->pipe;
-		pid_right = fork();
-		if (pid_right == 0) // child process for right
-		{
-			dup2(pipefd[0], STDIN_FILENO);
-			close(pipefd[0]);
-
-			if (!node->left && !node->right)
-			{
-				// printf("right called execute_cmd_node\n");
-
-				exit(execute_cmd_node(node, shell));
-			}
-			else if (node->code == TOKEN_AND)
-			{
-				if (execute_ast(node->left, shell) == 0)
-					exit (execute_ast(node->right, shell));
-				else
-					exit (1);	
-			}
-			else if (node->code == TOKEN_OR)
-			{
-				if (execute_ast(node->left, shell) == 0)
-					exit (0);
-				else
-					exit (execute_ast(node->right, shell));
-			}
-		}
-		else // parent
-		{
-			close(pipefd[0]);
-			close(pipefd[1]);
-			waitpid(pid_left, NULL, 0);
-			waitpid(pid_right, NULL, 0);
-		}
 	}
 	return (0);
 }
 
 int	execute_pipeline(t_ast *node, t_shell *shell)
 {
+	int flag;
+	int count;
+	count = 0;
+	flag = 0;
 	while (node->pipe)
 	{
-		execute_pipe(node, shell);
+		dprintf(2," this is the cmd in the loop process %s \n", node ->cmd);
+		execute_pipe(node, shell,flag);
 		node = node->pipe;
+		flag++;
+		count ++;
+	}
+	dprintf(2,"this is count %d \n",count);
+	execute_pipe(node, shell,-1);
+	close (shell -> old_write_fd);
+	close (shell -> old_read_fd);
+	while (count)
+	{
+		wait(NULL);
+		count--;
 	}
 	return (0);
 }
@@ -252,6 +262,7 @@ int	execute_ast(t_ast *node, t_shell *shell)
 		return (0);
 	if (node->pipe)
 	{
+		shell->pipe_data = (t_pipe_info*)1;
 		execute_pipeline(node, shell);
 	}
 	else
@@ -285,3 +296,43 @@ int	execute_ast(t_ast *node, t_shell *shell)
 	}
 	return (0);
 }
+
+// else // parent
+	// {
+	// 	dprintf(2," this is the cmd in the right process %s \n", node ->cmd);
+	// 	close(pipefd[1]);
+	// 	node = node->pipe;
+	// 	pid_right = fork();
+	// 	if (pid_right == 0) // child process for right
+	// 	{
+	// 		dup2(pipefd[0], STDIN_FILENO);
+	// 		close(pipefd[0]);
+
+	// 		if (!node->left && !node->right)
+	// 		{
+	// 			// printf("right called execute_cmd_node\n");
+	// 			exit(execute_cmd_node(node, shell));
+	// 		}
+	// 		else if (node->code == TOKEN_AND)
+	// 		{
+	// 			if (execute_ast(node->left, shell) == 0)
+	// 				exit (execute_ast(node->right, shell));
+	// 			else
+	// 				exit (1);
+	// 		}
+	// 		else if (node->code == TOKEN_OR)
+	// 		{
+	// 			if (execute_ast(node->left, shell) == 0)
+	// 				exit (0);
+	// 			else
+	// 				exit (execute_ast(node->right, shell));
+	// 		}
+	// 	}
+	// 	else // parent
+	// 	{
+	// 		close(pipefd[0]);
+	// 		close(pipefd[1]);
+	// 		waitpid(pid_left, NULL, 0);
+	// 		waitpid(pid_right, NULL, 0);
+	// 	}
+	// }

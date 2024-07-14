@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:55:30 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/10 09:06:08 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/14 11:50:17 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,12 @@ void handle_cs_signal(int sig)
 	(void)sig;
 	if (LOC == 0)
 	{
+		LOC = 1;
 		write(1,"Quit\n",5);
 		rl_replace_line("",0);
 		rl_on_new_line();
 		rl_done = 1;
+
 	}
 }
 

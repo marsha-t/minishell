@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_ast_tree.c                                 :+:      :+:    :+:   */
+/*   execute_ast_tree_old.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 10:03:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 11:48:09 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
-// work in progress: check that exit_shell works properly  
+// work in progress: check that exit_shell works properly
 int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
@@ -79,7 +79,7 @@ int	cmd_only_quote(char *cmd)
 		- cmd is not empty
 		- cmd is empty but there are args
 	- returns 1 if cmd is empty and there are no args
-	- if cmd is empty but there are args, first arg becomes cmd 
+	- if cmd is empty but there are args, first arg becomes cmd
 	- for cases like: "" echo abc */
 int	check_empty_cmd(t_ast *node)
 {
@@ -113,7 +113,7 @@ int	check_empty_cmd(t_ast *node)
 int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int id;
-	
+
 	if(get_docs(node) == 1)
 		return(1);
 	if (get_infile(node) == 1)
@@ -143,9 +143,9 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	else
 	{
 		id = fork();
+		LOC = 0;
 		if (id == 0)
 		{
-			LOC = 0;
 			control_signals();
 			shell -> exit_status = execute_cmd_others(node, shell);
 		}
