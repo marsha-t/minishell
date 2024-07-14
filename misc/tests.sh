@@ -281,9 +281,8 @@ cc ./explore/test_program.c -o ./expansions/aaa
 # this case skips expansions directory because nothing in expansions directory that matches t*c
 
 ./global.h/* #error: ./global.h/*: Not a directory (126)
-./global.h/ #error: Not a directory
-./expansions/ #error: Is a directory
-./expansions/check_wc.c/ #error: No such file or directory
+./g*/ # error: ./gnl is a directory (matched to gnl even though global.h exists)
+./gl*/ #error: ./gl*/: no such file or directory (didn't match to global.h)
 
 
 #############################################################################

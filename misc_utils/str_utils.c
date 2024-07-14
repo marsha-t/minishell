@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 04:03:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 04:05:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 17:52:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 /*	strjoin_num_free joins multiple strings 
 	and frees the strings given as arguments
 	- if error allocating for strings, the arguments are not freed
+	- if string given is NULL, other arguments are not freed
 	*/
 char	*strjoin_num_free(int num, ...)
 {
@@ -52,6 +53,15 @@ char	*strjoin_num_free(int num, ...)
 	
 	va_start(strs, num);
 	arg = va_arg(strs, char *);
+	if (!arg)
+	{
+		while (--num)
+		{
+			arg = va_arg(strs, char *);
+			free(arg);
+		}
+		return (err_printf("minishell: malloc error: ft_strdup\n"), NULL);
+	}
 	temp = ft_strdup(arg);
 	if (!temp)
 		return (err_printf("minishell: malloc error: strjoin temp\n"), NULL);
@@ -59,6 +69,15 @@ char	*strjoin_num_free(int num, ...)
 	while (--num)
 	{
 		arg = va_arg(strs, char *);
+		if (!arg)
+		{
+			while (--num)
+			{
+				arg = va_arg(strs, char *);
+				free(arg);
+			}
+			return (err_printf	("minishell: malloc error: ft_strdup\n"), NULL);
+		}
 		temp = ft_strjoin_free(temp, arg);
 		if (!temp)
 			return (err_printf("minishell: malloc error: strjoin temp\n"), NULL);

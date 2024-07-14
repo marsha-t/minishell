@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/14 14:31:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 18:56:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,28 @@ int	expand_wildcard_cmd(t_dconts *list, t_ast *node)
 	t_dconts	*matched_list;
 	t_dconts	*next;
 	int			match_count;
+	char		*slash;
 
-	match_count = expand_wildcard_setup(&matched_list, node->cmd, list);
+	matched_list = NULL;
+	slash = ft_strchr(node->cmd, '/');
+	if (slash)
+	{
+		if (ft_strncmp(node->cmd, "./", 2) == 0)
+		{
+			if (match_directory(node->cmd, slash, &matched_list, ft_strdup(".")) == 1)
+				return (1);
+		}
+		else if (ft_strncmp(node->cmd, "../", 3) == 0)
+		{
+			if (match_directory(node->cmd, slash, &matched_list, ft_strdup("..")) == 1)
+				return (1);
+		}
+		else
+			return (0);
+		match_count = count_matches(matched_list);
+	}
+	else
+		match_count = expand_wildcard_setup(&matched_list, node->cmd, list);
 	if (match_count == -1)
 		return (free_conts_list(matched_list), 1);
 	else if (match_count == 0)
@@ -64,8 +84,7 @@ int	expand_wildcard_cmd(t_dconts *list, t_ast *node)
 	- generates list of matched contents 
 	- adds expanded matches into args in order
 	- returns 1 if malloc error, 
-		0 otherwise (matches or no matches both return 0)
-	 */
+		0 otherwise (matches or no matches both return 0) */
 int	expand_wildcard_arg(t_dconts *list, t_ast *node, char *pattern)
 {
 	int 		match_count;
@@ -101,15 +120,18 @@ int	expand_wildcard_arg(t_dconts *list, t_ast *node, char *pattern)
 	- if more than 1 match, return 1 (don't terminate shell)
 	- return 1 if malloc error (terminate shell)
 	*/
-int	expand_wildcard_file(t_dconts *list, t_ast *node, char *pattern, int code)
+int	expand_wildcard_file(t_shell *shell, t_ast *node, char *pattern, int code)
 {
 	t_dconts	*matched_list;
 	int			match_count;
 	t_file		*curr_file;
 
-	match_count = expand_wildcard_setup(&matched_list, pattern, list);
+	match_count = expand_wildcard_setup(&matched_list, pattern, shell->directory_contents);
 	if (match_count == -1)
-		return (1); 
+	{
+		shell->exit_shell = 1;
+		return (1);
+	}
 	else if (match_count == 0)
 		return (free_conts_list(matched_list), 0);
 	else if (match_count > 1)
@@ -121,8 +143,6 @@ int	expand_wildcard_file(t_dconts *list, t_ast *node, char *pattern, int code)
 		curr_file = node->input_list;
 	else if (code == TOKEN_OUTPUT)
 		curr_file = node->output_list;
-	else if (code == TOKEN_HEREDOC)
-		curr_file = node->heredoc_list;
 	while (curr_file)
 	{
 		if (ft_strcmp(curr_file->file_name, pattern) == 0)

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:41:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 14:25:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 17:45:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ void    order_conts_list(t_dconts **list)
     - sort list in alphabetical order 
     - returns 1 if error calling opendir or readdir 
         or malloc error in create_conts_node*/
-t_dconts *create_conts_list(void)
+t_dconts *create_conts_list(char *directory)
 {
     struct dirent *content;
     DIR *dd;
     t_dconts *list;
 
-    dd= opendir(".");
+    dd= opendir(directory);
     if (!dd)
         return (err_printf("minishell: error calling opendir\n"), NULL);
     list = NULL;

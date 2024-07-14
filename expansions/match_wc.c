@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   match_wc.c.c                                       :+:      :+:    :+:   */
+/*   match_wc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:40:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/11 05:40:31 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 18:59:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,15 @@ int	match_pattern_str(char *pattern, char *str)
 				return (0);
 			while (*str)
 			{
-				if (match_pattern_str(pattern, str) == 0)
+				if (match_pattern_str(pattern, str++) == 0)
 					return (0);
-				str++;
 			}
 			return (1);
 		}
 		else
 			return (1);
 	}
-	if (*str == '\0')
-		return (0);
-	else
-		return (1);
+	return (!(*str == '\0'));
 }
 
 /*	match_pattern_list iterates through list and checks for matches

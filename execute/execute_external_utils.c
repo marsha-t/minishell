@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 04:02:08 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 14:53:15 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	check_filepath(char *cmd, t_shell *shell)
 		return (err_printf("minishell: %s: File name too long\n", cmd), 126);
 	else if (errno == ENOENT)
 		return (err_printf("minishell: %s: No such file or directory\n", cmd), 127);
+	else if (errno = ENOTDIR)
+		return (err_printf("minishell: %s: Not a directory\n", cmd), 126);
 	else
 	{
 		shell->exit_shell = 1;
