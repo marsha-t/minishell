@@ -271,9 +271,20 @@ echo abc > a*c #abc redirected to aac
 touch "a b c.c"
 echo a*" "* #output: a b c.c
 
+# exp* can be expansions or explore
+# within expansions, there is a program called aaa that will print out the arguments that follow it
+cc ./explore/test_program.c -o ./expansions/aaa
+./exp*/* # calls ./expansions/aaa and all the other matched expansions are used as arguments
+
 ./e*p*/test_p* #output: ./explore/test_parogram_mac
 # i.e., ./explore/test_parogram_linux ./explore/test_parogram_mac
-# multiple files for directories are not expanded (no error)
+# this case skips expansions directory because nothing in expansions directory that matches t*c
+
+./global.h/* #error: ./global.h/*: Not a directory (126)
+./global.h/ #error: Not a directory
+./expansions/ #error: Is a directory
+./expansions/check_wc.c/ #error: No such file or directory
+
 
 #############################################################################
 # REDIRECTION ORDER #########################################################

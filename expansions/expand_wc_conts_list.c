@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:41:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/11 11:08:08 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 14:25:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_dconts *create_conts_list(void)
 			return (NULL);
         content = readdir(dd);
     }
-    closedir(dir);
+    closedir(dd);
     if (errno)
         return (err_printf("minishell: error calling readdir\n"), NULL);
     order_conts_list(&list);

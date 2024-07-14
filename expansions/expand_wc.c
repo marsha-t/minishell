@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_wc_cmd_arg.c                                :+:      :+:    :+:   */
+/*   expand_wc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/11 11:19:33 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 14:31:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ int	expand_wildcard_cmd(t_dconts *list, t_ast *node)
 	t_dconts	*next;
 	int			match_count;
 
-	if (ft_strchr(node->cmd, '/') != 0)
-	
 	match_count = expand_wildcard_setup(&matched_list, node->cmd, list);
 	if (match_count == -1)
 		return (free_conts_list(matched_list), 1);
