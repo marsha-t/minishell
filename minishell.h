@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 18:49:45 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:37:57 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_pipe_info
 	int			*pid;
 }t_pipe_info;
 
+
 typedef struct	s_file
 {
 	char			*file_name;
@@ -89,6 +90,12 @@ typedef struct s_dconts
 	char *cont_name;
 	struct s_dconts *next;
 } t_dconts;
+
+typedef struct	s_wc
+{
+	t_dconts	*matched;
+	char		*cmd;
+}	t_wc;
 
 typedef struct s_ast
 {
@@ -249,17 +256,24 @@ int	arg_check_wc(t_ast *node, t_shell *shell);
 int	check_wc_expansion(t_ast *node, t_shell *shell);
 
 // expand_wc.c
-int expand_wildcard_setup(t_dconts **matched_list, char *pattern, t_dconts *list);
-int	expand_wildcard_cmd(t_dconts *list, t_ast *node);
-int	expand_wildcard_arg(t_dconts *list, t_ast *node, char *pattern);
-int	expand_wildcard_file(t_shell *shell, t_ast *node, char *pattern, int code);
+int expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts *list);
+int	expand_wc_cmd(t_dconts *list, t_ast *node);
+int	expand_wc_arg(t_dconts *list, t_ast *node, char *pattern);
+int	expand_wc_file(t_shell *shell, t_ast *node, char *pattern, int code);
 
 // expand_wc_utils.c
 int	check_directory(char *directory);
-int	match_directory(char *cmd, char *slash, t_dconts **matched, char *directory);
+int	match_dir_end(char *dir, t_dconts **matched);
+int	match_dcont(char *dir, char *pattern, t_dconts **dcont);
+int	match_dir_matched(t_wc *wc_info, char *next_slash, char *new_directory);
+int	match_dir_while(char *dir, char *pattern, char *next_slash, t_wc *wc_info);
+int	match_dir(t_wc *wc_info, char *slash, char *dir);
 int	count_matches(t_dconts *matched);
-int	convert_matched_to_arg(t_dconts *matched, t_list **new_args, t_list **end_args);
+t_list	*create_arg(char *arg_str);
+int	matched_to_arg(t_dconts *matched, t_list **new_args, t_list **end_args);
 int add_matched_to_arg(t_dconts *matched, t_list **arg, t_ast *node);
+int	init_wc(t_wc **wc_info, char *cmd);
+void	free_wc_info(t_wc *wc_info);
 
 // match_wc.c
 int	match_pattern_str(char *pattern, char *str);

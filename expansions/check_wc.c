@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:36:10 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 18:55:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:38:34 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 /*	contain_wc checks whether str contains a wildcard expansion 
 	i.e., unquoted asterisk (*) */
-int contain_wc(char *str)
+int	contain_wc(char *str)
 {
 	int		i;
 	char	quote;
-	
+
 	i = 0;
 	quote = 0;
 	while (str[i])
@@ -37,7 +37,7 @@ int contain_wc(char *str)
 	return (1);
 }
 
-/*	file_list_check_wc calls contain_wc and expand_wildcard_file
+/*	file_list_check_wc calls contain_wc and expand_wc_file
 	for input/output lists
 	- return 1 for malloc error (terminate shell)
 		or wc expansion into multiple files (don't terminate shell)
@@ -54,7 +54,7 @@ int	file_list_check_wc(t_ast *node, t_shell *shell, int code)
 	{
 		if (contain_wc(curr_file->file_name) == 0)
 		{
-			if (expand_wildcard_file(shell, node, curr_file->file_name, code))
+			if (expand_wc_file(shell, node, curr_file->file_name, code))
 				return (1);
 		}
 		curr_file = curr_file->next;
@@ -84,13 +84,13 @@ int	redir_check_wc(t_ast *node, t_shell *shell)
 int	arg_check_wc(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
-	
+
 	curr_arg = node->args;
 	while (curr_arg)
 	{
 		if (contain_wc(curr_arg->content) == 0)
 		{
-			if (expand_wildcard_arg(shell->directory_contents, node, curr_arg->content) == 1)
+			if (expand_wc_arg(shell->directory_contents, node, curr_arg->content) == 1)
 				return (1);
 		}
 		curr_arg = curr_arg->next;
@@ -103,7 +103,8 @@ int	arg_check_wc(t_ast *node, t_shell *shell)
 	- checks strings in cmd, args and files
 	- if needed, expands them
 	- returns 1 if malloc error (terminate shell) 
-		or wc expanded into multiple files for redirections (don't terminate shell)
+		or wc expanded into multiple files for redirections 
+			(don't terminate shell)
 	*/
 int	check_wc_expansion(t_ast *node, t_shell *shell)
 {
@@ -115,7 +116,7 @@ int	check_wc_expansion(t_ast *node, t_shell *shell)
 	}
 	if (contain_wc(node->cmd) == 0)
 	{
-		if (expand_wildcard_cmd(shell->directory_contents, node) == 1)
+		if (expand_wc_cmd(shell->directory_contents, node) == 1)
 		{
 			shell->exit_shell = 1;
 			return (free_conts_list(shell->directory_contents), 1);
@@ -130,7 +131,6 @@ int	check_wc_expansion(t_ast *node, t_shell *shell)
 		}
 	}
 	if (redir_check_wc(node, shell) == 1)
-		return (free_conts_list(shell->directory_contents), 1);	
+		return (free_conts_list(shell->directory_contents), 1);
 	return (free_conts_list(shell->directory_contents), 0);
 }
-

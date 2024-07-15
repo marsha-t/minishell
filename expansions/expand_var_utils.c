@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 21:57:29 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 12:39:47 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:45:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	is_quote(char c)
 	- if $ is inside single quotes, it isn't a variable expansion
 	- if there is variable expansion, return (0)
 */
-int contain_var(char *str)
+int	contain_var(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] != '\0')

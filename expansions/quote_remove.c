@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 04:03:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:42:23 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*remove_quote_str(char *str)
 int	remove_quote_file(t_file *file)
 {
 	t_file	*current;
-	
+
 	current = file;
 	while (current)
 	{
@@ -113,8 +113,8 @@ int	remove_quote_file(t_file *file)
 	- removed from cmd, arg, input_file, output_file and heredoc_file*/
 int	remove_quote_node(t_ast *node)
 {
-	int i;
-	
+	int	i;
+
 	node->cmd = remove_quote_str(node->cmd);
 	if (!node->cmd)
 		return (1);

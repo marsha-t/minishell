@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:40:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 18:59:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 05:08:48 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	match_pattern_list(char *pattern, t_dconts *list, t_dconts **matched_list)
 {
 	t_dconts	*current;
 	int			count;
-	
+
 	current = list;
 	count = 0;
 	*matched_list = NULL;
