@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 15:04:31 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:50:18 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,6 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		return (1);
 	if (check_wc_expansion(node, shell) == 1)
 		return (1);
-	if(get_docs(node) == 1)
-		return(1);
-	if (get_infile(node) == 1)
-		return(1);
-	if(get_outfile(node) == 1)
-		return(1);
 	if (cmd_only_quote(node->cmd) == 0)
 		{
 			shell->exit_status = 127;
@@ -139,6 +133,12 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		}
 	if (remove_quote_node(node) == 1)
 		return (exit_shell(shell, 1), 1);
+	if(get_docs(node) == 1)
+		return(1);
+	if (get_infile(node) == 1)
+		return(1);
+	if(get_outfile(node) == 1)
+		return(1);
 	if (ft_strcmp(node->cmd, "echo") == 0 || ft_strcmp(node->cmd, "cd") == 0 || ft_strcmp(node->cmd, "pwd") == 0 || ft_strcmp(node->cmd, "export") == 0 || ft_strcmp(node->cmd, "unset") == 0 || ft_strcmp(node->cmd, "env") == 0 || ft_strcmp(node->cmd, "exit") == 0)
 	{
 		shell -> exit_status = execute_cmd_builtin(node, shell);

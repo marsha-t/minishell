@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:42:23 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:48:59 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,7 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i)
 	*i = ft_strlen(before_quote) + ft_strlen(in_quote) - 1;
 	combined = strjoin_num_free(3, before_quote, in_quote, after_quote);
 	if (!combined)
-	{
-		free_num(3, before_quote, in_quote, after_quote);
-		return (NULL);
-	}
+		return (free_num(3, before_quote, in_quote, after_quote), NULL);
 	*start = *i;
 	return (combined);
 }
