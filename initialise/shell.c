@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/11 05:50:25 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:53:25 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int	shlvl_increment(t_shell *shell)
 {
 	t_var	*shlvl_node;
-	int	new_shlvl;
+	int		new_shlvl;
 
 	shlvl_node = check_exist("SHLVL", shell->var_list);
 	if (!shlvl_node)
@@ -33,7 +33,6 @@ int	shlvl_increment(t_shell *shell)
 /*	init_shell initialises t_shell
 	- creates linked list of environment variables
 	- initialises the rest to 0/NULL */
-// work in progress: to add shlvl_increment and check that error handling makes sense
 t_shell	*init_shell(char **envp)
 {
 	t_shell	*shell;
@@ -48,8 +47,8 @@ t_shell	*init_shell(char **envp)
 	shell->tokens = 0;
 	shell->ast_list = 0;
 	shell->root = 0;
-	shell-> exit_status = -1;
-	shell -> pipe_data = 0;
+	shell->exit_status = -1;
+	shell->pipe_data = 0;
 	shell->directory_contents = 0;
 	shell->exit_shell = 0;
 	if (shlvl_increment(shell) == 1)
@@ -57,9 +56,10 @@ t_shell	*init_shell(char **envp)
 	return (shell);
 }
 
-void free_pipe(t_pipe_info *pipe)
+void	free_pipe(t_pipe_info *pipe)
 {
-	int k;
+	int	k;
+
 	k = 0;
 	while (k < pipe ->pipe_count)
 	{
@@ -69,7 +69,6 @@ void free_pipe(t_pipe_info *pipe)
 	free(pipe->pipes);
 }
 
-
 /*	free_after_command frees data in shell
 	 that need to be freed after every command */
 void	free_after_command(t_shell *shell)
@@ -78,7 +77,7 @@ void	free_after_command(t_shell *shell)
 		free(shell->line);
 	if (shell->tokens)
 		free_tokens(shell->tokens);
-	if(shell ->pipe_data)
+	if (shell->pipe_data)
 		free_pipe(shell->pipe_data);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);

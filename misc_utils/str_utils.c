@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 04:03:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 17:52:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:56:30 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	size_t	tot_len;
 	int		i;
 	int		j;
-	
+
 	if (!s1 || !s2)
 		return (free_num(2, s1, s2), NULL);
 	tot_len = ft_strlen(s1) + ft_strlen(s2) + 1;
@@ -50,7 +50,7 @@ char	*strjoin_num_free(int num, ...)
 	va_list	strs;
 	char	*temp;
 	char	*arg;
-	
+
 	va_start(strs, num);
 	arg = va_arg(strs, char *);
 	if (!arg)
@@ -76,7 +76,7 @@ char	*strjoin_num_free(int num, ...)
 				arg = va_arg(strs, char *);
 				free(arg);
 			}
-			return (err_printf	("minishell: malloc error: ft_strdup\n"), NULL);
+			return (err_printf("minishell: malloc error: ft_strdup\n"), NULL);
 		}
 		temp = ft_strjoin_free(temp, arg);
 		if (!temp)

@@ -6,12 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:53:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 04:05:38 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:54:14 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 /*	strdup_range duplicates str based on start and end pointers */
 char	*strdup_range(char *start, char *end)
