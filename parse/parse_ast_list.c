@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/13 18:30:16 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/14 23:07:04 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_ast	*ast_node_init(void)
 	new->left = 0;
 	new->right = 0;
 	new ->tmp_stdin_fd = 0;
-	new ->tmp_stdout_fd = 0;
+	new ->tmp_stdout_fd = 1;
 	new->pipe = 0;
 	return (new);
 }
@@ -277,6 +277,20 @@ void	file_list_free(t_file *file)
 		current = next;
 	}
 }
+void free_pipes_list(t_ast *node)
+{
+	t_ast	*current;
+	current = node;
+	while(node)
+	{
+		dprintf(2,"this is free pipes\n");
+		current = node->pipe;
+		free(node);
+		node = current;
+	}
+}
+
+
 
 /*	ast_list_free frees nodes in ast linked list, cmd,
 	args and its component strings, input, output, append */
@@ -289,6 +303,7 @@ void	ast_list_free(t_ast *node)
 	current = node;
 	while (current)
 	{
+		dprintf(2,"this is cmd that should be freed %s \n",current->cmd);
 		next = current->next;
 		if (current->cmd)
 			free(current->cmd);

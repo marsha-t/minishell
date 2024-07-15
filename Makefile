@@ -11,7 +11,7 @@ EXPANSIONS_DIR = expansions
 EXPANSIONS_CFILES = expand_var.c expand_var_utils.c  quote_remove.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c  execute_external.c execute_external_utils.c \
-	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_pipe.c handle_signals.c \
+	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_signals.c \
 	execute_assign.c builtin_cd.c builtin_env.c builtin_export.c builtin_unset.c
 MISC_UTILS_DIR = misc_utils
 MISC_UTILS_CFILES = free_utils.c str_utils.c
@@ -23,7 +23,7 @@ CFILES =  main.c  	global.c\
 		$(addprefix $(PARSE_DIR)/, $(PARSE_CFILES)) \
 		$(addprefix $(EXPANSIONS_DIR)/, $(EXPANSIONS_CFILES)) \
 		$(addprefix $(EXECUTE_DIR)/, $(EXECUTE_CFILES)) \
-		$(addprefix $(MISC_UTILS_DIR)/, $(MISC_UTILS_CFILES)) 
+		$(addprefix $(MISC_UTILS_DIR)/, $(MISC_UTILS_CFILES))
 
 OFILES = ${CFILES:.c=.o}
 
@@ -37,8 +37,8 @@ FT_PRINTF_DIR = printf
 
 # yousef addition for readline
 # PREFIX = /Users/$(USER)/.brew/opt/readline
-CFLAGS = -Wall -Wextra -Werror 
-# -g3 -fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror
+# -g3 -fsanitize=address
 #-I$(PREFIX)/include -g3  -Werror -Wextra -Wall
 
 ERR_PRINTF = err_printf.a
