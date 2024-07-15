@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 23:07:04 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/15 15:11:29 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,7 +303,6 @@ void	ast_list_free(t_ast *node)
 	current = node;
 	while (current)
 	{
-		dprintf(2,"this is cmd that should be freed %s \n",current->cmd);
 		next = current->next;
 		if (current->cmd)
 			free(current->cmd);
