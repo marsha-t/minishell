@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 15:04:14 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/15 18:06:46 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,11 +154,11 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		}
 		else
 			waitpid(id, &shell -> exit_status, 0);
-		if (dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
-			return(1);
-		if (dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
-			return(1);
 	}
+	if (node->input_list && dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
+			return(1);
+	if (node->output_list && dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
+		return(1);
 	return (shell -> exit_status);
 }
 
@@ -212,6 +212,7 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 	else
 	{
 		waitpid(pid_left, NULL, 0);
+		shell->pipe_data = 1;
 		if(shell ->old_read_fd != -2)
 			close(shell ->old_read_fd);
 		shell ->old_read_fd = pipefd[0];
@@ -258,6 +259,7 @@ int	execute_ast(t_ast *node, t_shell *shell)
 	}
 	else
 	{
+		shell->pipe_data = 0;
 		if (!node->left && !node->right)
 		{
 			return (execute_cmd_node(node, shell));

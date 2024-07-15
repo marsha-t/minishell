@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 21:48:04 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/15 17:39:00 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,5 @@ void	free_after_command(t_shell *shell)
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
 	shell->pipe_data = 0;
+	shell->old_read_fd = -2;
 }
