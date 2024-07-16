@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:35:36 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 11:35:02 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 17:15:09 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,11 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 	{
 		free(path);
 		return (err_printf("minishell: cd: %s: No such file or directory\n", path), 127);
+	}
+	else if (errno = ENOTDIR)
+	{
+		free(path);
+		return (err_printf("minishell: %s: Not a directory\n", path), 1);
 	}
 	else
 	{

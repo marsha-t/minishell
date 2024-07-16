@@ -6,21 +6,21 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/07 16:40:28 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:52:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /*	create_node returns 1 for malloc error */
-int create_node(t_var **v, char *str, int flag)
+int	create_node(t_var **v, char *str, int flag)
 {
-	t_var *new;
-	t_var *current;
+	t_var	*new;
+	t_var	*current;
 	char	*equal;
-	
-	new = (t_var *) malloc(sizeof(t_var));
-	if(!new)
+
+	new = malloc(sizeof(t_var));
+	if (!new)
 		return (err_printf("minishell: malloc error: t_var in create_node\n"), 1);
 	if (create_key_value(str, &equal, &new->key, &new->value) == 1)
 		return (1);
@@ -39,11 +39,11 @@ int create_node(t_var **v, char *str, int flag)
 	return (0);
 }
 
-t_var *create_list(char **envp)
+t_var	*create_list(char **envp)
 {
-	int i;
-	t_var *v;
-	
+	int		i;
+	t_var	*v;
+
 	v = NULL;
 	i = 0;
 	while (envp[i] != NULL)
@@ -52,7 +52,7 @@ t_var *create_list(char **envp)
 			return (NULL);
 		i++;
 	}
-	return(v);
+	return (v);
 }
 
 /*	free_var_list frees all the nodes in the variable linked list

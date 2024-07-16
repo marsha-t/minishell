@@ -77,6 +77,7 @@ int	ast_node_add(t_token **tokens, t_ast **start, t_ast **current)
 	- shifts tokens pointer along
 	- returns 1 if malloc error for char **args or strdup
 		- if strdup error, update n_args so that ast_list_free frees the correct number of strings*/
+// work in progress: update description of function
 int	ast_node_append_arg(t_token **tokens, t_ast *current)
 {
 	int	i;
@@ -277,6 +278,7 @@ void	file_list_free(t_file *file)
 		current = next;
 	}
 }
+
 void free_pipes_list(t_ast *node)
 {
 	t_ast	*current;
@@ -289,8 +291,6 @@ void free_pipes_list(t_ast *node)
 		node = current;
 	}
 }
-
-
 
 /*	ast_list_free frees nodes in ast linked list, cmd,
 	args and its component strings, input, output, append */

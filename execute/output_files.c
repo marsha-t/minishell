@@ -48,7 +48,6 @@ int get_outfile(t_ast *node)
 		current->fd =	open(current ->file_name, O_APPEND | O_CREAT | O_RDWR, mode);
 	node ->tmp_stdout_fd = dup(STDOUT_FILENO);
 	target_fd = dup2(current -> fd , STDOUT_FILENO);
-	// printf("I am file %s and my fd is %d\n", current->file_name, current->fd);
 	close(current->fd);
 	if(target_fd == -1)
 		return(1);

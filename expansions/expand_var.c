@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/09 12:11:50 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:44:32 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,51 +41,32 @@ char	*ft_strjoin2(char const *s1, char const *s2)
 	- returns duplicate of value if found
 	- returns duplicate of empty string if nothing found
 	- malloc protection in split_expand_join()*/
-char  *expand_var(char *var, t_var *env) // changed to single pointers
+char	*expand_var(char *var, t_var *env)
 {
-	t_var *current;
+	t_var	*current;
 
 	current = env;
 	while (current)
 	{
-		if (ft_strcmp(current->key,var)==0)
-			return(ft_strdup(current -> value));
+		if (ft_strcmp(current->key, var) == 0)
+			return (ft_strdup(current->value));
 		current = current -> next;
 	}
-	// char *n;
-	// n= malloc(sizeof(char));
-	// n = "\0";
-	// return(ft_strdup(n));
 	return (ft_strdup(""));
 }
 
-/*	join_expand*/
-// char *join_expand(int i,char *temp, char *str,char *var)
-// {
-// 	char *all_str;
-
-// 	all_str= ft_strjoin2(temp,var);
-// 	free(temp);
-// 	free(var);
-// 	temp = all_str;
-// 	all_str=ft_strjoin2(temp,str+i);
-// 	free(temp);
-// 	free(str);
-// 	return(all_str);
-// }
-
-char *join_expand(char *temp, char *var, char *str, int i)
+char	*join_expand(char *temp, char *var, char *str, int i)
 {
-	char *all_str;
+	char	*all_str;
 
-	all_str= ft_strjoin2(temp,var);
+	all_str = ft_strjoin2(temp, var);
 	free(temp);
 	free(var);
 	temp = all_str;
-	all_str=ft_strjoin2(temp,str+i);
+	all_str = ft_strjoin2(temp, str + i);
 	free(temp);
 	free(str);
-	return(all_str);
+	return (all_str);
 }
 
 char	*split_expand_join(char *str, int i, t_shell *shell)
@@ -93,7 +74,7 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 	char	*temp;
 	char	*var;
 	int		start;
-	
+
 	if (i != 0)
 	{
 		temp = strdup_range(&str[0], &str[i - 1]);
@@ -183,42 +164,6 @@ char	*expand_str(char *str, t_shell *shell)
 	}
 	return (str);
 }
-
-// char *expand_str(char *str, t_var *list)
-// {
-// 	int i;
-// 	char *start;
-// 	char *temp;
-// 	char *var;
-
-// 	 i=0;
-// 	 start=NULL;
-// 	temp=NULL;
-// 	var=NULL;
-// 	 while(str[i] != '\0')
-// 	 {
-// 		if(i == 0 &&str[i] != '$')
-// 			start = &str[i];
-// 		if (str[i] == '$' && str[i+1] == '\0')
-// 			i++;
-// 		else if(str[i]== '$'&& str[i+1]!= '\"')
-// 		{
-// 			if(&str[i] != start && start)
-// 			{
-// 				temp = strdup_range(start,&str[i]-1);
-// 			}
-// 			start = &str[++i];
-// 			while(ft_strchr("\"\t ()<>$&|",str[i])==NULL)
-// 				i++;
-// 			var = strdup_range(start,&str[i-1]);
-// 			var =expand_var(&var,&list);
-// 			str = join_expand(i,temp,str,var);
-// 			i=-1;
-// 		}
-// 		i++;
-// 	 }
-// 	 return(str);
-// }
 
 /*	file_list_check_var calls contain_var and expand_str
 	for each file provided in file linked list

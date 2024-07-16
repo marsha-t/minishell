@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 04:03:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:48:59 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,7 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i)
 	*i = ft_strlen(before_quote) + ft_strlen(in_quote) - 1;
 	combined = strjoin_num_free(3, before_quote, in_quote, after_quote);
 	if (!combined)
-	{
-		free_num(3, before_quote, in_quote, after_quote);
-		return (NULL);
-	}
+		return (free_num(3, before_quote, in_quote, after_quote), NULL);
 	*start = *i;
 	return (combined);
 }
@@ -59,6 +56,8 @@ char	*remove_quote_str(char *str)
 	int		start;
 	char	*before_quote;
 
+	if (!str)
+		return (err_printf("minishell: malloc error: ft_strdup\n"), NULL);
 	quote = 0;
 	i = 0;
 	start = 0;
@@ -95,7 +94,7 @@ char	*remove_quote_str(char *str)
 int	remove_quote_file(t_file *file)
 {
 	t_file	*current;
-	
+
 	current = file;
 	while (current)
 	{
@@ -111,8 +110,8 @@ int	remove_quote_file(t_file *file)
 	- removed from cmd, arg, input_file, output_file and heredoc_file*/
 int	remove_quote_node(t_ast *node)
 {
-	int i;
-	
+	int	i;
+
 	node->cmd = remove_quote_str(node->cmd);
 	if (!node->cmd)
 		return (1);

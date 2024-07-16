@@ -33,10 +33,12 @@ int	match_pattern_str(char *pattern, char *str)
 
 int main()
 {
-	printf("%d\n", match_pattern_str("e*p*", "expansion")); // 0
-	printf("%d\n", match_pattern_str("e*p*", "ep")); // 0
-	printf("%d\n", match_pattern_str("e*p", "ep")); // 0
-	printf("%d\n", match_pattern_str("e*p*n", "expansion")); // 0
-	printf("%d\n", match_pattern_str("e*p*n*", "expansion")); // 0
-	printf("%d\n", match_pattern_str("e*p", "expansion")); // 1
+	printf("%d\n", match_pattern_str("expansion*", "expansion")); // 0
+	
+	// printf("%d\n", match_pattern_str("e*p*", "expansion")); // 0
+	// printf("%d\n", match_pattern_str("e*p*", "ep")); // 0
+	// printf("%d\n", match_pattern_str("e*p", "ep")); // 0
+	// printf("%d\n", match_pattern_str("e*p*n", "expansion")); // 0
+	// printf("%d\n", match_pattern_str("e*p*n*", "expansion")); // 0
+	// printf("%d\n", match_pattern_str("e*p", "expansion")); // 1
 }

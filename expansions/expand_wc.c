@@ -3,337 +3,156 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/10 05:03:56 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/15 07:38:23 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void create_conts_node(char *str, t_dconts **list)
+/*	expand_wc_setup 
+	- removes quotes from pattern
+	- generate list of matches 
+	- returns number of matches 
+	- returns -1 if error removing quote or generating matches
+		- error handling for match_pattern_list done by 
+			function that calls expand_wc_setup */
+int	expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts *list)
 {
-    t_dconts *curr;
-    t_dconts *new;
+	int		match_count;
+	char	*unquoted;
 
-    curr = *list;
-    new = ft_calloc(1,sizeof(t_dconts));
-	if(!str)
-		return ;
-    if(!new)
-	{
-		err_printf("minishell: malloc error: directory_contents\n");
-        return ;
-	}
-    new->cont_name = ft_strdup(str);
-    new -> next = NULL;
-    if(!curr)
-    {
-        curr = new;
-        return ;
-    }
-    while(curr->next)
-        curr = curr->next;
-    curr->next = new;
+	unquoted = remove_quote_str(ft_strdup(pattern));
+	if (!unquoted)
+		return (-1);
+	match_count = match_pattern_list(unquoted, list, matched_list);
+	free(unquoted);
+	return (match_count);
 }
 
-t_dconts *create_conts_list(void)
+/*	expand_wc_cmd 
+	- generates list of matched contents 
+	- merges strings in matched linked list into node: 
+		- first match replaces cmd
+		- other matches added to arg in order
+	- returns 1 if malloc error, 
+		0 otherwise (matches or no matches both return 0) */
+		// work in progresS: need to free wc_info struct
+int	expand_wc_cmd(t_dconts *list, t_ast *node)
 {
-    struct dirent *content;
-    DIR *dd;
-    t_dconts *list;
-
-    dd= opendir(".");
-    list = ft_calloc(1, sizeof(t_dconts));
-    if(!list)
-     return (err_printf("minishell: malloc error: directory_contents\n", 2), NULL );
-    content = readdir(dd);
-    while (content)
-    {
-        create_conts_node(content->d_name, &list);
-        content = readdir(dd);
-    }
-    return(list);
-}
-
-// char *word_suff(char *str, char *word_e)
-// {
-// 	char *suff;
-// 	int i;
-// 	if(!str|| !word_e)
-// 		return(NULL);
-// 	suff= malloc(sizeof(char) *(ft_strlen(word_e)+1));
-// 	int l1;
-// 	int l2;
-// 	if(!str|| !word_e)
-// 		return(NULL);
-// 	l1 = ft_strlen(str)-1;
-// 	l2 = ft_strlen(word_e)-1;
-// 	i =0;
-// 	while(l1 && l2 >= 0)
-// 	{
-// 		suff[i]= str[l1];
-// 		l1--;
-// 		l2--;
-// 		i++;
-// 	}
-// 	suff[i] = '\0';
-// 	return(ft_strrev(suff));
-// }
-// char *word_pref(char *str, char *word_b)
-// {
-// 	int i;
-// 	char *pref;
-
-// 	i =0;
-// 	if(!str || !word_b)
-// 		return(NULL);
-// 	pref = malloc(sizeof(char)*(ft_strlen(word_b)+ 1));
-// 	while( word_b[i]!= '\0' && str[i] != '\0')
-// 	{
-// 		pref[i] =str[i];
-// 		i++;
-// 	}
-// 	pref[i] = '\0';
-// 	return(pref);
-// }
-// t_dconts *goal_list(t_dconts *conts_list,char *word_b,char *word_e)
-// {
-// 	t_dconts *curr;
-// 	t_dconts *goal_list;
-
-// 	curr = conts_list;
-// 	goal_list = ft_calloc(1,sizeof(t_dconts));
-// 	while(curr)
-// 	{
-// 		if ((ft_strcmp1(word_pref(curr->cont_name,word_b),word_b)== 0)&&(ft_strcmp1(word_suff(curr->cont_name,word_e),word_e)== 0))
-// 		{
-// 			create_conts_node(curr -> cont_name,&goal_list);
-// 		}
-// 		curr = curr->next;
-// 	}
-// 	return(goal_list);
-// }
-// t_dconts *expand_wildcard(char *str, t_dconts *conts_list)
-// {
-//     int i;
-// 	char *start;
-// 	char *word_b;
-// 	char *word_e;
-
-//     i = 0;
-// 	word_b = NULL;
-// 	word_e = NULL;
-// 	start = &str[i];
-//     while (str[i] != '\0')
-//     {
-// 		if(str[i] == '*')
-// 		{
-// 			if(i != 0)
-// 				word_b = strdup_range(start,&str[i -1]);
-// 			i++;
-// 			while(str[i] == '*')
-// 				i++;
-// 			start = &str[i];
-// 			while (ft_strchr("\t \"\0",str[i])==NULL)
-// 				i++;
-// 			if (start != &str[i])
-// 				word_e = strdup_range(start, &str[i-1]);
-// 			return(goal_list(conts_list,word_b,word_e));
-// 		}
-// 		i++;
-//     }
-// 	return(NULL);
-// }
-
-/*	match_pattern_str checks whether str matches pattern
-	- calls itself recursively to check 'remainder' of pattern with 'remainder' of str 
-	- returns 0 if match; 1 otherwise */
-int	match_pattern_str(char *pattern, char *str)
-{
-	while (*pattern)
-	{
-		if (*pattern == *str)
-		{
-			pattern++;
-			str++;
-		}
-		else if (*pattern == '*')
-		{
-			pattern++;
-			if (*pattern == '\0')
-				return (0);
-			while (*str)
-			{
-				if (match_pattern_str(pattern, str) == 0)
-					return (0);
-				str++;
-			}
-			return (1);
-		}
-		else
-			return (1);
-	}
-	if (*str == '\0')
-		return (0);
-	else
-		return (1);
-}
-
-/*	match_pattern_list c*/
-int	match_pattern_list(char *pattern, t_dconts *list)
-{
-	int	i;
-
-	i = 0;
-	while (pattern[i])
-	{
-		
-		i++;
-	}
-}
-
-char	*expand_wildcard(char *pattern, t_dconts *list)
-{
-	pattern = remove_quote_str(pattern);
-	if (!pattern)
-		return (NULL); // terminate shell
-	if (match_wc_pattern(pattern, list) == 0)
-	{
-
-	}
-	else
-	{
-		
-	}
-	
-}
-
-void	free_conts_list(t_dconts *list)
-{
-	t_dconts	*current;
 	t_dconts	*next;
+	int			match_count;
+	char		*slash;
+	t_wc		*wc_info;
 
-	current = list;
-	while (current)
+	if (init_wc(&wc_info, node->cmd) == 1)
+		return (1);
+	slash = ft_strchr(node->cmd, '/');
+	if (slash)
 	{
-		next = current->next;
-		free(current->cont_name);
-		free(current);
-		current = next;
-	}
-}
-
-void	print_conts_list(t_dconts *list)
-{
-	t_dconts	*current;
-
-	current = list;
-	while (current)
-	{
-		ft_printf("file: %s\n", current->cont_name);
-		current = current->next;
-	}
-}
-
-/*	contain_wc checks whether str contains a wildcard expansion 
-	i.e., unquoted asterisk (*) */
-int contain_wc(char *str)
-{
-	int		i;
-	char	quote;
-	
-	i = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if (str[i] == 39 || str[i] == '"')
+		if (ft_strncmp(node->cmd, "./", 2) == 0)
 		{
-			quote = str[i];
-			i++;
-			while (str[i] != '\0' && str[i] != quote)
-				i++;
-		}
-		else if (str[i] == 42)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-/*	file_list_check_wc calls contain_wc and expand_wildcard
-	for each file provided in file linked list
-	*/
-int	file_list_check_wc(t_file *file, t_shell *shell)
-{
-	t_file	*curr_file;
-
-	curr_file = file;
-	while (curr_file)
-	{
-		if (contain_wc(curr_file->file_name) == 0)
-		{
-			printf("wc\n");
-			(void)shell;
-			// curr_file->file_name = expand_wildcard(curr_file->file_name, shell);
-			if (!curr_file->file_name)
+			if (match_dir(wc_info, slash, ft_strdup(".")) == 1)
 				return (1);
 		}
-		curr_file = curr_file->next;
+		else if (ft_strncmp(node->cmd, "../", 3) == 0)
+		{
+			if (match_dir(wc_info, slash, ft_strdup("..")) == 1)
+				return (1);
+		}
+		else
+			return (0);
+		match_count = count_matches(wc_info->matched);
 	}
+	else
+		match_count = expand_wc_setup(&wc_info->matched, node->cmd, list);
+	if (match_count == -1)
+		return (free_wc_info(wc_info), 1);
+	else if (match_count == 0)
+		return (free_wc_info(wc_info), 0);
+	next = wc_info->matched->next;
+	free(node->cmd);
+	node->cmd = wc_info->matched->cont_name;
+	free(wc_info->matched);
+	wc_info->matched = next;
+	if (add_matched_to_arg(wc_info->matched, &node->args, node) == 1)
+		return (free(wc_info), 1);
 	return (0);
 }
 
-/*	check_wc_expansion checks whether wildcard expansions are needed
-	- loads and eventually frees shell->directory_contents
-	- checks strings in cmd, args and files
-	- if needed, expands them
-	- returns 1 if errors with expansion
-	*/
-// work in progress: to check use of create_conts_list and free_conts_list
-// work in progress: change this to adjust for commands overflowing to arguments
-int	check_wc_expansion(t_ast *node, t_shell *shell)
+/*	expand_wc_arg
+	- generates list of matched contents 
+	- adds expanded matches into args in order
+	- returns 1 if malloc error, 
+		0 otherwise (matches or no matches both return 0) */
+int	expand_wc_arg(t_dconts *list, t_ast *node, char *pattern)
 {
-	t_list	*curr_arg;
+	int			match_count;
+	t_dconts	*matched_list;
+	t_list		*curr_arg;
+	t_dconts	*next_match;
 
-	shell->directory_contents= create_conts_list();
-	if (contain_wc(node->cmd) == 0)
+	match_count = expand_wc_setup(&matched_list, pattern, list);
+	if (match_count == -1)
+		return (free_conts_list(matched_list), 1);
+	else if (match_count == 0)
+		return (free_conts_list(matched_list), 0);
+	curr_arg = node->args;
+	while (curr_arg)
 	{
-		printf("wc\n");
-		// node->cmd = expand_wildcard(node->cmd, shell);
-		if (!node->cmd)
-			return (free_conts_list(shell->directory_contents), 1);
+		if (ft_strcmp(curr_arg->content, pattern) == 0)
+			break ;
+		curr_arg = curr_arg->next;
 	}
-	if (node->n_args > 0)
+	free(curr_arg->content);
+	curr_arg->content = matched_list->cont_name;
+	next_match = matched_list->next;
+	free(matched_list);
+	matched_list = next_match;
+	if (add_matched_to_arg(matched_list, &curr_arg, node) == 1)
+		return (1);
+	return (0);
+}
+
+/*	expand_wc_file 
+	- generates list of matched contents
+	- replaces file with matched file
+	- if more than 1 match, return 1 (don't terminate shell)
+	- return 1 if malloc error (terminate shell)
+	*/
+int	expand_wc_file(t_shell *shell, t_ast *node, char *pattern, int code)
+{
+	t_dconts	*matched_list;
+	int			match_count;
+	t_file		*curr_file;
+
+	match_count = expand_wc_setup(&matched_list, pattern, shell->directory_contents);
+	if (match_count == -1)
 	{
-		curr_arg = node->args;
-		while (curr_arg)
-		{
-			if (contain_wc(curr_arg->content) == 0)
-			{
-				printf("wc\n");
-				// curr_arg->content = expand_wildcard(curr_arg->content, shell);
-				if (!curr_arg->content)
-					return (free_conts_list(shell->directory_contents), 1);
-			}
-			curr_arg = curr_arg->next;
-		}
+		shell->exit_shell = 1;
+		return (1);
 	}
-	if (node->input_list)
+	else if (match_count == 0)
+		return (free_conts_list(matched_list), 0);
+	else if (match_count > 1)
 	{
-		if (file_list_check_wc(node->input_list, shell) == 1)
-			return (free_conts_list(shell->directory_contents), 1);
+		free_conts_list(matched_list);
+		return (err_printf("minishell: %s: ambiguous redirect\n", pattern), 1);
 	}
-	if (node->heredoc_list)
+	if (code == TOKEN_INPUT)
+		curr_file = node->input_list;
+	else if (code == TOKEN_OUTPUT)
+		curr_file = node->output_list;
+	while (curr_file)
 	{
-		if (file_list_check_wc(node->heredoc_list, shell) == 1)
-			return (free_conts_list(shell->directory_contents), 1);
+		if (ft_strcmp(curr_file->file_name, pattern) == 0)
+			break ;
+		curr_file = curr_file->next;
 	}
-	if (node->output_list)
-	{
-		if (file_list_check_wc(node->output_list, shell) == 1)
-			return (free_conts_list(shell->directory_contents), 1);
-	}
+	free(curr_file->file_name);
+	curr_file->file_name = matched_list->cont_name;
+	free(matched_list);
 	return (0);
 }

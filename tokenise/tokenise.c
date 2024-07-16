@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 16:42:15 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 07:54:57 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,8 @@ int	check_syntax_tokens(t_token *tokens)
 	note: compound commands refer to those separated by &&, || or |
 		simple commands refer to the commands that are between &&, || or |
 	- if redirection found: next token is a file
-	- if no command tokens identified yet in simple command, first TOKEN_TEMP token is a command token
+	- if no command tokens identified yet in simple command, 
+		first TOKEN_TEMP token is a command token
 	- otherwise, all other tokens are arguments 
 	*/
 void	sort_temp_tokens(t_token *tokens)
