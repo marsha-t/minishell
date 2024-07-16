@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ast_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 07:50:23 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 18:50:52 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,6 @@ t_ast	*ast_list_new(t_token **tokens)
 				return (ast_list_free(start), NULL);
 		}
 	}
-	free_tokens(*tokens);
 	return (start);
 }
 
@@ -327,4 +326,5 @@ void	ast_list_free(t_ast *node)
 		free(current);
 		current = next;
 	}
+	node = NULL;
 }

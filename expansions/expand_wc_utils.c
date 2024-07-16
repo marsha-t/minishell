@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:38:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:34:33 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 19:04:43 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /*	check_directory returns 0 if directory is a directory
-	- returns 1 if not a directory 
+	- returns 1 if not a directory
 	- return -1 if stat fails
 	*/
 int	check_directory(char *directory)
@@ -28,21 +28,21 @@ int	check_directory(char *directory)
 		return (0);
 }
 
-/*	NOTE TO RAGHDA: match_dir is the original function I created 
-	but it is too long. 
-	I've split it into more functions 
-	and included the use of a structure (t_wc) to deal with some norminette issues. 
-	But after the split, it may be harder to understand the logic so I've left the original function here 
+/*	NOTE TO RAGHDA: match_dir is the original function I created
+	but it is too long.
+	I've split it into more functions
+	and included the use of a structure (t_wc) to deal with some norminette issues.
+	But after the split, it may be harder to understand the logic so I've left the original function here
 	We can remove later when dealing with norminette :)
-	
+
 	The new functions are:
 		- match_dir
 			- match_dir_end
 			- match_dir_while
 				- match_dir_contents
 				- match_dir_matched
-		
-	The nested list above shows which functions calls on which function 
+
+	The nested list above shows which functions calls on which function
 	(e.g., match_dir calls on match_dir_end and match_dir_while)
 */
 
@@ -119,11 +119,11 @@ int	check_directory(char *directory)
 // 	return (0);
 // }
 
-/*	match_dir_end caters for cases that end with slashes 
+/*	match_dir_end caters for cases that end with slashes
 	e.g., ./exp*nsions/
-	- checks that dir is really a directory 
+	- checks that dir is really a directory
 		- if so, it is added to matched list (e.g., ./exp*nsions/)
-		- otherwise, it is not (e.g., ./global*h/) 
+		- otherwise, it is not (e.g., ./global*h/)
 	- returns 1 if malloc error or error calling stat (in check_directory)
 	- returns 0 otherwise (even if no matches)
 */
@@ -150,10 +150,10 @@ int	match_dir_end(char *dir, t_dconts **matched)
 /*	match_dcont sets up dcont
 	- checks whether dir is really a directory
 		- if so, create dcont
-	- returns 
+	- returns
 		0 if successfully created dcont
 		-1 if malloc error or error checking dir using stat
-		1 if dir is not a directory 
+		1 if dir is not a directory
 	*/
 int	match_dcont(char *dir, char *pattern, t_dconts **dcont)
 {
@@ -173,7 +173,7 @@ int	match_dcont(char *dir, char *pattern, t_dconts **dcont)
 
 /*	match_dir_matched adds matched files into matched linked list
 	- calls match_dir recursively if there are more directories to parse
-	- if no more directories, add matched file to matched linked list 
+	- if no more directories, add matched file to matched linked list
 	- returns 1 if malloc and stat errors */
 int	match_dir_matched(t_wc *wc_info, char *next_slash, char *new_directory)
 {
@@ -191,7 +191,7 @@ int	match_dir_matched(t_wc *wc_info, char *next_slash, char *new_directory)
 	return (0);
 }
 
-/*	match_dir_while 
+/*	match_dir_while
 	- sets up dcont using match_dcont
 	- matches pattern with dcont
 	- add matched files into matched linked list
@@ -225,9 +225,9 @@ int	match_dir_while(char *dir, char *pattern, char *next_slash, t_wc *wc_info)
 }
 
 /*	match_dir used for cmds with ./ or ../
-	- used recursively (with other match_dir_* functions) 
+	- used recursively (with other match_dir_* functions)
 		to handle arbitrary number of directories
-	- returns 1 if malloc error or stat error 
+	- returns 1 if malloc error or stat error
 	- returns 0 if no such error (even if no matches)*/
 int	match_dir(t_wc *wc_info, char *slash, char *dir)
 {
@@ -255,7 +255,7 @@ int	match_dir(t_wc *wc_info, char *slash, char *dir)
 	return (0);
 }
 
-/*	count_matches counts number of nodes 
+/*	count_matches counts number of nodes
 	in t_dconts linked list */
 int	count_matches(t_dconts *matched)
 {
@@ -286,10 +286,10 @@ t_list	*create_arg(char *arg_str)
 	return (new);
 }
 
-/*	convert_matched_to_arg converts matched list of directory contents 
+/*	convert_matched_to_arg converts matched list of directory contents
 	into linked list of arguments
 	- returns number of new arguments
-	- returns -1 if malloc error 
+	- returns -1 if malloc error
 	- frees matched list  */
 int	matched_to_arg(t_dconts *matched, t_list **new_args, t_list **end_args)
 {
@@ -317,7 +317,7 @@ int	matched_to_arg(t_dconts *matched, t_list **new_args, t_list **end_args)
 }
 
 /*	add_matched_to_arg inserts list of matched directory contents into args
-	- updates node->n_args 
+	- updates node->n_args
 	- returns 1 if matched_to_arg has malloc error */
 int	add_matched_to_arg(t_dconts *matched, t_list **arg, t_ast *node)
 {

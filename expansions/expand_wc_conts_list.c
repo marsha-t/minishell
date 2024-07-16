@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc_conts_list.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:41:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 07:49:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 18:06:03 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /*	create_conts_node creates t_dconts node using ft_strdup(str)
-	and adds it to list 
+	and adds it to list
 	- returns 1 if malloc error*/
 int	create_conts_node(char *str, t_dconts **list)
 {
@@ -70,10 +70,10 @@ void	order_conts_list(t_dconts **list)
 	}
 }
 
-/*	create_conts_list creates list of directory contents 
+/*	create_conts_list creates list of directory contents
 	to be stored in shell
-	- sort list in alphabetical order 
-	- returns 1 if error calling opendir or readdir 
+	- sort list in alphabetical order
+	- returns 1 if error calling opendir or readdir
 		or malloc error in create_conts_node*/
 t_dconts	*create_conts_list(char *directory)
 {
@@ -113,6 +113,7 @@ void	free_conts_list(t_dconts *list)
 		free(current);
 		current = next;
 	}
+	list = NULL;
 }
 
 /*	print_conts_list prints files in list of directory contents*/

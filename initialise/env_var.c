@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_var.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/15 07:52:01 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 18:46:15 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,12 @@ void	free_var_list(t_var *var)
 	{
 		next = current->next;
 		if (current->key)
-			free(current->key);
+		{
+			free(current->key);}
 		if (current->value)
 			free(current->value);
 		free(current);
 		current = next;
 	}
+	var = NULL;
 }

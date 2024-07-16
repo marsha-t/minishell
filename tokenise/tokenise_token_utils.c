@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tokenise_token_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/07 16:41:13 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 15:46:33 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /*	new_token generates a new token
-	- str is an allocated str 
+	- str is an allocated str
 	- returns null pointer if malloc error */
 t_token	*new_token(char *str, int code)
 {
@@ -29,9 +29,9 @@ t_token	*new_token(char *str, int code)
 }
 
 /*	add_token adds a new token to end of list
-	- new token contains str and code 
+	- new token contains str and code
 	- str in token is the address given (i.e., str given is not duplicated)
-	- returns 1 if error creating token and frees str; 
+	- returns 1 if error creating token and frees str;
 	- returns 0 if successful */
 int	add_token(t_token **tokens, char *str, int code)
 {
@@ -58,7 +58,7 @@ int	add_token(t_token **tokens, char *str, int code)
 	return (0);
 }
 
-/*	free_tokens frees nodes in tokens linked list 
+/*	free_tokens frees nodes in tokens linked list
 	and the str inside the nodes */
 void	free_tokens(t_token *tokens)
 {
@@ -72,6 +72,9 @@ void	free_tokens(t_token *tokens)
 		free_num(2, current->str, current);
 		current = next;
 	}
+	tokens=NULL;
+
+
 }
 
 /*	print_token prints info in the token linked list

@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 18:06:46 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:46:19 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*	execute_cmd checks whether command is built in and runs it if so
 	otherwise, it searches for binary file for command */
-// work in progress: check that exit_shell works properly  
+// work in progress: check that exit_shell works properly
 // work in progress: update description of function
 int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 {
@@ -140,7 +140,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		return(1);
 	if (ft_strcmp(node->cmd, "echo") == 0 || ft_strcmp(node->cmd, "cd") == 0 || ft_strcmp(node->cmd, "pwd") == 0 || ft_strcmp(node->cmd, "export") == 0 || ft_strcmp(node->cmd, "unset") == 0 || ft_strcmp(node->cmd, "env") == 0 || ft_strcmp(node->cmd, "exit") == 0)
 		shell -> exit_status = execute_cmd_builtin(node, shell);
-	else if (shell->pipe_data != 0)
+	if (shell->pipe_data != 0)
 	{
 		LOC = 0;
 		control_signals();
@@ -162,7 +162,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 			return(1);
 	if (node->output_list && dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
 		return(1);
-	return (shell -> exit_status);
+	return (LOC=1,shell -> exit_status);
 }
 
 int execute_pipe(t_ast *node, t_shell *shell, int flag)
@@ -227,23 +227,16 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 int	execute_pipeline(t_ast *node, t_shell *shell)
 {
 	int flag;
-	int count;
-	count = 0;
+
 	flag = 0;
 	while (node->pipe)
 	{
 		execute_pipe(node, shell,flag);
 		node = node->pipe;
 		flag++;
-		count ++;
 	}
 	execute_pipe(node, shell,-1);
 	close (shell -> old_read_fd);
-	while (count)
-	{
-		wait(NULL);
-		count--;
-	}
 	return (0);
 }
 

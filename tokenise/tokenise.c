@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenise.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:54:57 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 13:39:11 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	tokenise_misc(char **input, t_token **tokens)
 		simple commands refer to the commands that are between &&, || or |
 	- simple commands cannot start with &&, || or |
 	- redirection tokens must be followed by another TOKEN_TEMP
-	- input cannot end with &&, ||, | or ( 
+	- input cannot end with &&, ||, | or (
 	- returns 1 if any of the above happens */
 // work in progress: here, incomplete commands (ending with &&, || or |) are errors
 int	check_syntax_tokens(t_token *tokens)
@@ -116,13 +116,13 @@ int	check_syntax_tokens(t_token *tokens)
 	return (0);
 }
 
-/*	sort_temp_tokens recategorises TOKEN_TEMP tokens 
+/*	sort_temp_tokens recategorises TOKEN_TEMP tokens
 	note: compound commands refer to those separated by &&, || or |
 		simple commands refer to the commands that are between &&, || or |
 	- if redirection found: next token is a file
-	- if no command tokens identified yet in simple command, 
+	- if no command tokens identified yet in simple command,
 		first TOKEN_TEMP token is a command token
-	- otherwise, all other tokens are arguments 
+	- otherwise, all other tokens are arguments
 	*/
 void	sort_temp_tokens(t_token *tokens)
 {
@@ -153,7 +153,7 @@ void	sort_temp_tokens(t_token *tokens)
 /*	tokenise creates linked list of tokens from input str
 	- separate tokens in input str based on whitespace, pipe or redirect
 	- categorises non-operator tokens into commands, arguments, files
-	- frees entire list and returns 1 if error creating any of the tokens 
+	- frees entire list and returns 1 if error creating any of the tokens
 	- checks syntax of tokens and returns 2 if syntax error*/
 int	tokenise(char *input, t_token **tokens)
 {
@@ -164,16 +164,16 @@ int	tokenise(char *input, t_token **tokens)
 		if (ft_strchr("|<>&()", *input))
 		{
 			if (tokenise_op(&input, tokens) == 1)
-				return (free_tokens(*tokens), 1);
+				return (/*free_tokens(*tokens),*/ 1);
 		}
 		else
 		{
 			if (tokenise_misc(&input, tokens) == 1)
-				return (free_tokens(*tokens), 1);
+				return (/*free_tokens(*tokens),*/ 1);
 		}
 	}
 	if (check_syntax_tokens(*tokens) == 1)
-		return (free_tokens(*tokens), 2);
+		return (/*free_tokens(*tokens),*/ 2);
 	sort_temp_tokens(*tokens);
 	return (0);
 }

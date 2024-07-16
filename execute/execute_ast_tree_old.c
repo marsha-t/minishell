@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 11:48:09 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/16 14:10:30 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,9 +152,9 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		else
 			waitpid(id, &shell -> exit_status, 0);
 	}
-	if (dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
+	if (node->input_list && dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
 		return(1);
-	if (dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
+	if (node->output_list &&dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
 		return(1);
 	return (LOC = 1,shell -> exit_status);
 }

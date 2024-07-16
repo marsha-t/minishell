@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 17:39:00 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/16 19:09:31 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,19 @@ t_shell	*init_shell(char **envp)
 void	free_after_command(t_shell *shell)
 {
 	if (shell->line)
-		free(shell->line);
+	{
+			free(shell->line);
+			shell->line = NULL;
+		}
 	if (shell->tokens)
 		free_tokens(shell->tokens);
 	if (shell->ast_list)
+	{
 		ast_list_free(shell->ast_list);
+		shell->ast_list = NULL;
+	}
+	shell->pipe_data = 0;
+	shell->old_read_fd = -2;
 }
 
 /*	free_shell frees everything in shell
@@ -79,6 +87,7 @@ void	free_shell(t_shell *shell)
 		free_tokens(shell->tokens);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
-	shell->pipe_data = 0;
-	shell->old_read_fd = -2;
+	if(shell->var_list)
+		free_var_list(shell->var_list);
+	free(shell);
 }

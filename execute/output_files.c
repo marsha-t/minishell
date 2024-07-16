@@ -3,21 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   output_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:11:04 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/10 09:52:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 19:34:30 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void  open_files (t_ast *node)
+int  open_files (t_ast *node)
 {
 	t_file *current;
 	mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+	struct stat	f_stat;
 
 	current = node ->output_list;
+	if(stat(current ->file_name,&f_stat)== -1)
+		return(1);
+	if (S_ISDIR(f_stat.st_mode))
+	{
+			// node ->output_list=NULL;
+			return(err_printf("minishel: this is a directory\n"),1);}
 	while (current->next)
 	{
 		if (access(current ->file_name, F_OK) != 0)
@@ -28,6 +35,7 @@ void  open_files (t_ast *node)
 		close(current -> fd);
 		current = current -> next;
 	}
+	return(0);
 }
 
 int get_outfile(t_ast *node)
@@ -39,7 +47,8 @@ int get_outfile(t_ast *node)
 	current = node ->output_list;
 	if(!current)
 		return(0);
-	open_files (node);
+	if(open_files (node)==1)
+		return(1);
 	while (current && current -> next)
 		current = current ->next;
 	if (current ->flag == TOKEN_OUTPUT)

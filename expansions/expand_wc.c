@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/15 07:38:23 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 19:03:30 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*	expand_wc_setup 
+/*	expand_wc_setup
 	- removes quotes from pattern
-	- generate list of matches 
-	- returns number of matches 
+	- generate list of matches
+	- returns number of matches
 	- returns -1 if error removing quote or generating matches
-		- error handling for match_pattern_list done by 
+		- error handling for match_pattern_list done by
 			function that calls expand_wc_setup */
 int	expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts *list)
 {
@@ -32,12 +32,12 @@ int	expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts *list)
 	return (match_count);
 }
 
-/*	expand_wc_cmd 
-	- generates list of matched contents 
-	- merges strings in matched linked list into node: 
+/*	expand_wc_cmd
+	- generates list of matched contents
+	- merges strings in matched linked list into node:
 		- first match replaces cmd
 		- other matches added to arg in order
-	- returns 1 if malloc error, 
+	- returns 1 if malloc error,
 		0 otherwise (matches or no matches both return 0) */
 		// work in progresS: need to free wc_info struct
 int	expand_wc_cmd(t_dconts *list, t_ast *node)
@@ -83,9 +83,9 @@ int	expand_wc_cmd(t_dconts *list, t_ast *node)
 }
 
 /*	expand_wc_arg
-	- generates list of matched contents 
+	- generates list of matched contents
 	- adds expanded matches into args in order
-	- returns 1 if malloc error, 
+	- returns 1 if malloc error,
 		0 otherwise (matches or no matches both return 0) */
 int	expand_wc_arg(t_dconts *list, t_ast *node, char *pattern)
 {
@@ -116,7 +116,7 @@ int	expand_wc_arg(t_dconts *list, t_ast *node, char *pattern)
 	return (0);
 }
 
-/*	expand_wc_file 
+/*	expand_wc_file
 	- generates list of matched contents
 	- replaces file with matched file
 	- if more than 1 match, return 1 (don't terminate shell)
