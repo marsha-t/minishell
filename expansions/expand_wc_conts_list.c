@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:41:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:41:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 07:49:44 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ t_dconts	*create_conts_list(char *directory)
 		return (err_printf("minishell: error calling opendir\n"), NULL);
 	list = NULL;
 	content = readdir(dd);
+	// if (errno)
+	// 	return (err_printf("minishell: error calling readdir\n"), NULL);
 	while (content)
 	{
 		if (create_conts_node(content->d_name, &list) == 1)
@@ -93,8 +95,6 @@ t_dconts	*create_conts_list(char *directory)
 		content = readdir(dd);
 	}
 	closedir(dd);
-	if (errno)
-		return (err_printf("minishell: error calling readdir\n"), NULL);
 	order_conts_list(&list);
 	return (list);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/14 15:25:05 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/16 07:47:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int main(int ac, char **av, char **envp)
 				free(shell->line);
 				continue;
 			}
-			// free(shell->line);
 			if (parse_tokens(shell) == 1)
 				return (exit_shell(shell, 1), 1);
 			// ast_tree_print(shell->root);

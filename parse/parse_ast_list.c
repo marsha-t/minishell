@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ast_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 15:11:29 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/16 07:50:23 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	ast_node_append_arg(t_token **tokens, t_ast *current)
 			c->next = new;
 		}
 		current->n_args++;
-		*tokens = (*tokens)->next;
+	*tokens = (*tokens)->next;
 		i++;
 	}
 	return (0);
@@ -163,6 +163,7 @@ int	ast_node_append_cmd(t_token **tokens, t_ast *current)
 
 /*	ast_list_new generates nodes in the ast
 	- ast nodes are placed in a linked list
+	- frees linked list
 */
 t_ast	*ast_list_new(t_token **tokens)
 {
@@ -196,7 +197,7 @@ t_ast	*ast_list_new(t_token **tokens)
 				return (ast_list_free(start), NULL);
 		}
 	}
-	// free_tokens(*tokens);
+	free_tokens(*tokens);
 	return (start);
 }
 
