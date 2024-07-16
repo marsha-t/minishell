@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 09:41:35 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 19:39:23 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ unsigned long long	ft_atoi_ull(char *str)
 	return (num);
 }
 /*	check_ll_limit converts str to unsigned long long (ft_atoi_ull)
-	and returns 1 if number is outside long long limits 
+	and returns 1 if number is outside long long limits
 	*/
 int check_ll_limit(char *str, int sign)
 {
@@ -43,7 +43,7 @@ int check_ll_limit(char *str, int sign)
 }
 
 /*	check_exit_arg checks whether a numeric argument was provided to exit
-	- returns 1 if empty str, non-numeric characters given (other than starting + or -), 
+	- returns 1 if empty str, non-numeric characters given (other than starting + or -),
 		or number is outside of long long limits*/
 int	check_exit_arg(char *str)
 {
@@ -69,7 +69,7 @@ int	check_exit_arg(char *str)
 	return (check_ll_limit(str, sign));
 }
 
-/*	get_exit_status converts str to long long 
+/*	get_exit_status converts str to long long
 	and applies modulo of 256 to get exit status
 	- for negative values, need to deduct from 256 to get same values as bash */
 int	get_exit_status(char *str)
@@ -95,7 +95,6 @@ void	exit_shell(t_shell *shell, int exit_status)
 {
 	free_shell(shell);
 	// rl_clear_history();
-	printf("there2\n");
 
 	exit(exit_status);
 }
@@ -105,7 +104,7 @@ void	exit_shell(t_shell *shell, int exit_status)
 	- determines value (exit status) to return
 	- frees everything allocated so far
 	- clears history
-	- errors: 
+	- errors:
 		- numeric argument required: exit status = 2
 		- too many arguments: exit status = 1 */
 int	builtin_exit(t_ast *node, t_shell *shell)
@@ -121,7 +120,7 @@ int	builtin_exit(t_ast *node, t_shell *shell)
 	else
 		exit_status = get_exit_status(node->args->content);
 	printf("there\n");
-	
+
 	exit_shell(shell, exit_status);
 	printf("here\n");
 	return (exit_status);
