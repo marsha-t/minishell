@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/10 10:01:41 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 15:25:05 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,11 @@ int main(int ac, char **av, char **envp)
 		shell->line = readline("minishell$");
 		if (shell->line == NULL)
 			return (exit_shell(shell, 1), 1);
-		if (shell->line[0] != ' ' && shell->line[0] != '\t' && shell->line[0] != '\0')
+		int i;
+		i  = 0;
+		while(shell->line[i] == ' ' || shell->line[i] == '\t')
+			i++;
+		if (shell->line[i] != '\0')
 			add_history(shell->line);
 		shell->line = ft_strtrim(shell->line, " \t");
 		if (!shell->line)
@@ -57,7 +61,7 @@ int main(int ac, char **av, char **envp)
 			// free(shell->line);
 			if (parse_tokens(shell) == 1)
 				return (exit_shell(shell, 1), 1);
-			ast_tree_print(shell->root);
+			// ast_tree_print(shell->root);
 			printf("before execute\n");
 			execute_ast(shell->root, shell);
 			free_after_command(shell);

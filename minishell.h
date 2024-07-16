@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 09:54:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/14 17:53:11 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ typedef struct s_ast
 	struct s_ast	*next;
 	struct s_ast	*left;
 	struct s_ast	*right;
+	struct s_ast	*pipe;
+
 } t_ast;
 
 // environment variables
@@ -127,9 +129,10 @@ typedef struct s_shell
 	t_token	*tokens;
 	t_ast	*ast_list;
 	t_ast	*root;
-	t_pipe_info *pipe_data;
+	int		pipe_data;
 	int	exit_status;
 	int	exit_shell;
+	int  old_read_fd;
 }	t_shell;
 
 /*****************************************************************************/
@@ -213,6 +216,8 @@ int create_output_append_list(int code, t_token *token, t_ast **node);
 
 // parse_ast_tree.c
 t_ast	*ast_tree_new(t_ast **node);
+// t_ast	*ast_tree_new(t_ast *node);
+
 void	ast_tree_print(t_ast *node);
 
 /*****************************************************************************/
@@ -277,8 +282,8 @@ int get_outfile(t_ast *node);
 void close_files(t_ast *node);
 int get_docs(t_ast *node);
 // execute_pipes
-int handle_pipe(t_ast *node, t_shell *shell);
-int init_pipe( t_shell *shell);
+// int handle_pipe(t_ast *node, t_shell *shell);
+// int init_pipe( t_shell *shell);
 
 // handling signals
 void  control_signals(void);
