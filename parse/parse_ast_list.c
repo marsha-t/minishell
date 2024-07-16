@@ -162,7 +162,7 @@ int	ast_node_append_cmd(t_token **tokens, t_ast *current)
 
 /*	ast_list_new generates nodes in the ast
 	- ast nodes are placed in a linked list
-	- frees tokens linked list 	*/
+*/
 t_ast	*ast_list_new(t_token **tokens)
 {
 	t_ast	*start;
@@ -195,7 +195,7 @@ t_ast	*ast_list_new(t_token **tokens)
 				return (ast_list_free(start), NULL);
 		}
 	}
-	free_tokens(*tokens);
+	// free_tokens(*tokens);
 	return (start);
 }
 

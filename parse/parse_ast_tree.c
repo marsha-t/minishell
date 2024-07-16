@@ -50,9 +50,7 @@ t_ast	*ast_pipeline_new(t_ast **node)
 			}
 		}
 		else if ((*node)->code == TOKEN_CBRACKET)
-		{
-			*node = (*node)->next;
-		}
+			break;
 		else if (is_logical_op((*node)->code) == 1)
 			break;
 	}
