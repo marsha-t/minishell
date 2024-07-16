@@ -18,12 +18,18 @@
 	- returns 1 if malloc error creating ast nodes or strdup*/
 int	parse_tokens(t_shell *shell)
 {
-	shell->ast_list = ast_list_new(&shell->tokens);
+	t_ast	*dup_list;
+	t_token	*dup_token;
+
+	dup_token = shell->tokens;
+	shell->ast_list = ast_list_new(&dup_token);
 	if (!shell->ast_list)
 		return (1);
-	ast_list_print(shell->ast_list);
-	shell->root = ast_tree_new(&shell->ast_list);
+	dup_list = shell->ast_list;
+	shell->root = ast_tree_new(&dup_list);
 	if (!shell->root)
 		return (1);
+	printf("\n\n printing tree\n");
+	ast_tree_print(shell->root);
 	return (0);
 }

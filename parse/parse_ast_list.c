@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ast_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 15:04:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 15:11:29 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,13 @@ t_ast	*ast_node_init(void)
 	new->left = 0;
 	new->right = 0;
 	new ->tmp_stdin_fd = 0;
-	new ->tmp_stdout_fd = 0;
+	new ->tmp_stdout_fd = 1;
+	new->pipe = 0;
 	return (new);
 }
 
 /*	add_ast_node:
-	- calls on init_ast_node to malloc space
+	- calls on _node to malloc space
 	- duplicates str in tokens node (to make freeing tokens linked list easier later)
 	- moves tokens pointer along by 1
 	- attaches new node to end of list
@@ -162,7 +163,7 @@ int	ast_node_append_cmd(t_token **tokens, t_ast *current)
 
 /*	ast_list_new generates nodes in the ast
 	- ast nodes are placed in a linked list
-	- frees tokens linked list 	*/
+*/
 t_ast	*ast_list_new(t_token **tokens)
 {
 	t_ast	*start;
@@ -195,7 +196,7 @@ t_ast	*ast_list_new(t_token **tokens)
 				return (ast_list_free(start), NULL);
 		}
 	}
-	free_tokens(*tokens);
+	// free_tokens(*tokens);
 	return (start);
 }
 
@@ -278,6 +279,19 @@ void	file_list_free(t_file *file)
 	}
 }
 
+void free_pipes_list(t_ast *node)
+{
+	t_ast	*current;
+	current = node;
+	while(node)
+	{
+		dprintf(2,"this is free pipes\n");
+		current = node->pipe;
+		free(node);
+		node = current;
+	}
+}
+
 /*	ast_list_free frees nodes in ast linked list, cmd,
 	args and its component strings, input, output, append */
 void	ast_list_free(t_ast *node)
@@ -290,25 +304,26 @@ void	ast_list_free(t_ast *node)
 	while (current)
 	{
 		next = current->next;
-		if (node->cmd)
-			free(node->cmd);
-		if (node->args)
+		if (current->cmd)
+			free(current->cmd);
+		if (current->args)
 		{
-			curr_arg = node->args;
+			curr_arg = current->args;
 			while (curr_arg)
 			{
-				node->args = node->args->next;
+				current->args = current->args->next;
 				free(curr_arg->content);
 				free(curr_arg);
-				curr_arg = node->args;
+				curr_arg = current->args;
 			}
 		}
-		if (node->input_list)
-			file_list_free(node->input_list);
-		if (node->heredoc_list)
-			file_list_free(node->heredoc_list);
-		if (node->output_list)
-			file_list_free(node->output_list);
+		if (current->input_list)
+			file_list_free(current->input_list);
+		if (current->heredoc_list)
+			file_list_free(current->heredoc_list);
+		if (current->output_list)
+			file_list_free(current->output_list);
+		free(current);
 		current = next;
 	}
 }

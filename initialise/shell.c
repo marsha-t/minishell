@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:53:25 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/15 17:39:00 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,23 +50,11 @@ t_shell	*init_shell(char **envp)
 	shell->exit_status = -1;
 	shell->pipe_data = 0;
 	shell->directory_contents = 0;
+	shell ->old_read_fd = -2;
 	shell->exit_shell = 0;
 	if (shlvl_increment(shell) == 1)
 		return (free_shell(shell), NULL);
 	return (shell);
-}
-
-void	free_pipe(t_pipe_info *pipe)
-{
-	int	k;
-
-	k = 0;
-	while (k < pipe ->pipe_count)
-	{
-		free(pipe->pipes[k]);
-		k++;
-	}
-	free(pipe->pipes);
 }
 
 /*	free_after_command frees data in shell
@@ -77,8 +65,6 @@ void	free_after_command(t_shell *shell)
 		free(shell->line);
 	if (shell->tokens)
 		free_tokens(shell->tokens);
-	if (shell->pipe_data)
-		free_pipe(shell->pipe_data);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
 }
@@ -87,8 +73,12 @@ void	free_after_command(t_shell *shell)
 	and then frees shell itself */
 void	free_shell(t_shell *shell)
 {
-	free_after_command(shell);
-	if (shell->var_list)
-		free_var_list(shell->var_list);
-	free(shell);
+	if (shell->line)
+		free(shell->line);
+	if (shell->tokens)
+		free_tokens(shell->tokens);
+	if (shell->ast_list)
+		ast_list_free(shell->ast_list);
+	shell->pipe_data = 0;
+	shell->old_read_fd = -2;
 }
