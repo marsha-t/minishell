@@ -3,20 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 17:46:19 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 09:49:49 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
-/*	execute_cmd checks whether command is built in and runs it if so
-	otherwise, it searches for binary file for command */
-// work in progress: check that exit_shell works properly
-// work in progress: update description of function
+/*	check_builtin returns 0 if cmd is a builtin command 
+	- returns 1 otherwise */
+int	check_builtin(char *cmd)
+{
+	if (ft_strcmp(cmd, "echo") == 0)
+		return (0);
+	else if (ft_strcmp(cmd, "cd") == 0)
+		return (0);
+	else if (ft_strcmp(cmd, "pwd") == 0)
+		return (0);
+	else if (ft_strcmp(cmd, "export") == 0)
+		return (0);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		return (0);
+	else if (ft_strcmp(cmd, "env") == 0)
+		return (0);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		return (0);
+	else
+		return (1);
+}
+/*execute_cmd_builtin runs builtins and assignments
+	-  calls exit_shell if builtin or assignment has exit_shell error 
+	*/
 int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 {
 	int	exit_status;
@@ -35,10 +54,11 @@ int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 		exit_status = builtin_env(node, shell);
 	else if (ft_strcmp(node->cmd, "exit") == 0)
 		exit_status = builtin_exit(node, shell);
-	// else if (ft_strchr(node->cmd, '=') != NULL)
-	// 	exit_status = run_assign(node, shell);
-	// else
-	// 	exit_status = run_external(node, shell);
+	else if (ft_strchr(node->cmd, '=') != NULL)
+	{
+		printf("assign\n");
+		exit_status = run_assign(node, shell);
+	}
 	if (shell->exit_shell == 1)
 		return (exit_shell(shell, 1), 1);
 	return(exit_status);
@@ -50,9 +70,9 @@ int	execute_cmd_others(t_ast *node, t_shell *shell)
 	int	exit_status;
 
 	exit_status = run_external(node, shell);
-	if (shell->exit_shell == 1)
-		return (exit_shell(shell, 1), 1);
-	return(exit_status);
+	// if (shell->exit_shell == 1)
+	// 	return (exit_shell(shell, 1), 1);
+	return (exit_status);
 }
 /*	cmd_only_quote checks whether a commmand contains only consecutive empty quoted strings
 	- return 0 if so */
@@ -115,15 +135,16 @@ int	check_empty_cmd(t_ast *node)
 int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int id;
-
-  if (check_var_expansion(node, shell) == 1)
+	int	status;
+	
+  	if (check_var_expansion(node, shell) == 1)
 		return (1);
 	if (check_wc_expansion(node, shell) == 1)
 		return (1);
 	if (cmd_only_quote(node->cmd) == 0)
 	{
 		shell->exit_status = 127;
-		return (err_printf("minishell: : command not found\n"), shell->exit_status);
+		return (err_printf(": command not found\n"), shell->exit_status);
 	}
 	if (check_empty_cmd(node) == 1)
 	{
@@ -138,13 +159,16 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		return(1);
 	if(get_outfile(node) == 1)
 		return(1);
-	if (ft_strcmp(node->cmd, "echo") == 0 || ft_strcmp(node->cmd, "cd") == 0 || ft_strcmp(node->cmd, "pwd") == 0 || ft_strcmp(node->cmd, "export") == 0 || ft_strcmp(node->cmd, "unset") == 0 || ft_strcmp(node->cmd, "env") == 0 || ft_strcmp(node->cmd, "exit") == 0)
-		shell -> exit_status = execute_cmd_builtin(node, shell);
-	if (shell->pipe_data != 0)
+	// if (ft_strcmp(node->cmd, "echo") == 0 || ft_strcmp(node->cmd, "cd") == 0 || ft_strcmp(node->cmd, "pwd") == 0 || ft_strcmp(node->cmd, "export") == 0 || ft_strcmp(node->cmd, "unset") == 0 || ft_strcmp(node->cmd, "env") == 0 || ft_strcmp(node->cmd, "exit") == 0)
+	if (check_builtin(node->cmd) == 0 || ft_strchr(node->cmd, '=') != NULL)
+	{
+		shell->exit_status = execute_cmd_builtin(node, shell);
+	}
+	else if (shell->pipe_data != 0)
 	{
 		LOC = 0;
 		control_signals();
-		shell -> exit_status = execute_cmd_others(node, shell);
+		shell->exit_status = execute_cmd_others(node, shell);
 	}
 	else
 	{
@@ -153,21 +177,28 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		if (id == 0)
 		{
 			control_signals();
-			shell -> exit_status = execute_cmd_others(node, shell);
+			shell->exit_status = execute_cmd_others(node, shell);
 		}
 		else
-			waitpid(id, &shell -> exit_status, 0);
+		{
+			// waitpid(id, &shell -> exit_status, 0);
+			waitpid(id, &status, 0);
+			if (WIFEXITED(status))
+				shell->exit_status = WEXITSTATUS(status);
+		}
 	}
 	if (node->input_list && dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
-			return(1);
+		return(1);
 	if (node->output_list && dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
 		return(1);
-	return (LOC=1,shell -> exit_status);
+	return (LOC = 1, shell->exit_status);
 }
 
 int execute_pipe(t_ast *node, t_shell *shell, int flag)
 {
 	int	pipefd[2];
+	int	status;
+
 	pipe(pipefd);
 	pid_t pid_left;
 	pid_left = fork();
@@ -214,20 +245,22 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 	}
 	else
 	{
-		waitpid(pid_left, NULL, 0);
+		waitpid(pid_left, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
 		shell->pipe_data = 1;
-		if(shell ->old_read_fd != -2)
-			close(shell ->old_read_fd);
-		shell ->old_read_fd = pipefd[0];
+		if(shell->old_read_fd != -2)
+			close(shell->old_read_fd);
+		shell->old_read_fd = pipefd[0];
 		close(pipefd[1]);
 	}
-	return (0);
+	return (shell->exit_status);
 }
 
 int	execute_pipeline(t_ast *node, t_shell *shell)
 {
 	int flag;
-
+	
 	flag = 0;
 	while (node->pipe)
 	{
@@ -236,8 +269,8 @@ int	execute_pipeline(t_ast *node, t_shell *shell)
 		flag++;
 	}
 	execute_pipe(node, shell,-1);
-	close (shell -> old_read_fd);
-	return (0);
+	close(shell->old_read_fd);
+	return (shell->exit_status);
 }
 
 /*	execute_ast traverses AST for execution

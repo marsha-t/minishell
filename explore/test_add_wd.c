@@ -84,7 +84,7 @@ char *add_current_wd(char *path, int i)
 	{
 		dir = malloc(sizeof(char) *size);
 		if (!dir)
-			return (err_printf("minishell: malloc error creating dir\n"), NULL);
+			return (err_printf("malloc error creating dir\n"), NULL);
 		if (getcwd(dir, size) != NULL)
 			break;
 		else if (errno == ERANGE)
@@ -92,7 +92,7 @@ char *add_current_wd(char *path, int i)
 		else
 		{
 			free(dir);
-			return(err_printf("minishell: error calling getcwd\n"), NULL); // terminate shell
+			return(err_printf("error calling getcwd\n"), NULL); // terminate shell
 		}
 	}
 	if (i == 0)

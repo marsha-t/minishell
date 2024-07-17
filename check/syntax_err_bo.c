@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 14:25:58 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/07 15:37:19 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 06:02:16 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ int	check_and(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '&' && line[1] == '&')
-			return (err_printf("minishell: syntax error near unexpected token `&&'\n"), 1);
+			return (err_printf("syntax error near unexpected token `&&'\n"), 1);
 		j = i;
 		while (line[i] == 32 || line[i] == 9)
 		{
 			i++;
 			if (line[i] == '&' && line[i + 1] == '&' && j == 0)
-				return (err_printf("minishell: syntax error near unexpected token `&&'\n"), 1);
+				return (err_printf("syntax error near unexpected token `&&'\n"), 1);
 		}
 		if (line[i] == '&' && line[i + 1] == '&')
 		{
@@ -56,13 +56,13 @@ int	check_or(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '|' && line[1] == '|')
-			return (err_printf("minishell: syntax error near unexpected token `||'\n"), 1);
+			return (err_printf("syntax error near unexpected token `||'\n"), 1);
 		j = i;
 		while (line[i] == 32 || line[i] == 9)
 		{
 			i++;
 			if (line[i] == '|' && line[i + 1] == '|' && j == 0)
-				return (err_printf("minishell: syntax error near unexpected token `||'\n"), 1);
+				return (err_printf("syntax error near unexpected token `||'\n"), 1);
 		}
 		if (line[i] == '|' && line[i + 1] == '|')
 		{
@@ -75,29 +75,31 @@ int	check_or(char *line)
 }
 
 /*	check_op_para returns 1 if open parenthesis is not closed
-	in this case, there is a prompt for more input */
+	and returns error */
+// work in progress: what if: echo "((a)("
 int	check_op_para(char *line)
 {
 	int		i;
 	int		op_count;
 
 	i = 0;
-	op_count = 1;
+	op_count = 0;
 	while (line[i] != '\0')
 	{
 		if (line[i] == '(')
 		{
 			i++;
-			while (line[i++] == '(')
-				op_count++;
-			while (line[i] != '\0' && op_count != 0)
+			op_count++;
+			while (op_count != 0)
 			{
-				i++;
-				if (line[i] == ')')
+				if (line[i] == '(')
+					op_count++;
+				else if (line[i] == ')')
 					op_count--;
+				else if (line[i] == '\0')
+					return (err_printf("syntax error near unexpected token `('\n"), 1);
+				i++;
 			}
-			if (line[i] == '\0')
-				return (write(1, ">\n", 2), 1);
 		}
 		else
 			i++;
@@ -125,7 +127,7 @@ int	check_close_para(char *line)
 	}
 	if (close_p > open_p)
 	{
-		err_printf("minishell: syntax error near unexpected token `)'\n");
+		err_printf("syntax error near unexpected token `)'\n");
 		return (1);
 	}
 	return (0);

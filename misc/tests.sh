@@ -550,4 +550,6 @@ $var #blank (0)
 '' #error: command not found (127)
 '''' #error: command not found (127)
 
+echo ((a)() 
+
 ./zshrc # check what aliases run

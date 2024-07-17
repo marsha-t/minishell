@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_assign.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/09 14:43:54 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 09:55:22 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 		{
 			*key = strdup_range(str, *equal - 1);
 			if (!*key)
-				return (err_printf("minishell: malloc error: key\n"), 1);
+				return (err_printf("malloc error: key\n"), 1);
 			if (*(*equal + 1) == '\0')
 			{
 				*value = ft_strdup("");
 				if (!*value)
 				{
 					free(*key);
-					return (err_printf("minishell: malloc error: value\n"), 1);
+					return (err_printf("malloc error: value\n"), 1);
 				}
 			}
 			else
@@ -66,7 +66,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 				if (!*value)
 				{
 					free(*key);
-					return (err_printf("minishell: malloc error: value\n"), 1);
+					return (err_printf("malloc error: value\n"), 1);
 				}
 			}
 		}
@@ -75,7 +75,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 	{
 		*key = ft_strdup(str);
 		if (!*key)
-			return (err_printf("minishell: malloc error: key\n"), 1);
+			return (err_printf("malloc error: key\n"), 1);
 		*value = 0;
 	}
 	return (0);
@@ -90,7 +90,7 @@ int	create_node_normal(t_var **v, char *key, char *value)
 
 	new = malloc(sizeof(t_var));
 	if (!new)
-		return (err_printf("minishell: malloc error: t_var\n"), 1);
+		return (err_printf("malloc error: t_var\n"), 1);
 	new->key = key;
 	new->value = value;
 	new->env = 0;
@@ -129,7 +129,7 @@ int	run_assign_str(char *cmd, t_shell *shell)
 	if (valid_varname(key) == 1)
 	{
 		free_num(2, key, value);
-		return (err_printf("minishell: %s: command not found\n", cmd), 1);
+		return (err_printf("%s: command not found\n", cmd), 1);
 	}
 	exist = check_exist(key, shell->var_list);
 	if (exist)
@@ -163,10 +163,10 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 	if (!key)
 	{
 		shell->exit_shell = 1;
-		return (err_printf("minishell: malloc error: key for check_assign_varname\n"), 1);
+		return (err_printf("malloc error: key for check_assign_varname\n"), 1);
 	}
 	if (valid_varname(key) == 1)
-		return (err_printf("minishell: %s: command not found\n", node->cmd), 1);
+		return (err_printf("%s: command not found\n", node->cmd), 1);
 	free(key);
 	curr_arg = node->args;
 	if (node->n_args > 0)
@@ -180,10 +180,10 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 				if (!key)
 				{
 					shell->exit_shell = 1;
-					return (err_printf("minishell: malloc error: key for check_assign_varname\n"), 1);
+					return (err_printf("malloc error: key for check_assign_varname\n"), 1);
 				}
 				if (valid_varname(key) == 1)
-					return (err_printf("minishell: %s: command not found\n", curr_arg->content), 1);
+					return (err_printf("%s: command not found\n", curr_arg->content), 1);
 				free(key);
 			}
 			else
@@ -223,10 +223,16 @@ int	run_assign(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
 
+	printf("BEFORE PRINTF VARLIST\n");
+	print_var_list(shell->var_list);
 	if (check_assign_varname(node, shell) == 1)
 		return (1);
 	if (run_assign_str(node->cmd, shell) == 1)
 		return (1);
+	printf("AFTER PRINTF VARLIST\n");
+	print_var_list(shell->var_list);
+
+	printf("finish assignment\n");
 	if (node->n_args > 0)
 	{
 		curr_arg = node->args;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenise.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 06:47:40 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 13:39:11 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 06:05:54 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,16 @@ int	check_syntax_tokens(t_token *tokens)
 	while (tokens)
 	{
 		if (tokens == start && is_cmdorder_op(tokens->code) == 1)
-			return (err_printf("minishell: syntax error near unexpected token `%s'\n", tokens->str), 1);
+			return (err_printf("syntax error near unexpected token `%s'\n", tokens->str), 1);
 		else if (is_file_op(tokens->code) && !tokens->next)
-			return (err_printf("minishell: syntax error near unexpected token `newline'\n"), 1);
+			return (err_printf("syntax error near unexpected token `newline'\n"), 1);
 		else if (is_file_op(tokens->code) && tokens->next->code != TOKEN_TEMP)
-			return (err_printf("minishell: syntax error near unexpected token `%s'\n", tokens->next->str), 1);
+			return (err_printf("syntax error near unexpected token `%s'\n", tokens->next->str), 1);
 		else if (is_cmdorder_op(tokens->code) > 0)
 		{
 			start = tokens->next;
 			if (!start)
-				return (err_printf("minishell: syntax error near unexpected token `%s'\n", tokens->str), 1);
+				return (err_printf("syntax error near unexpected token `%s'\n", tokens->str), 1);
 		}
 		tokens = tokens->next;
 	}
@@ -153,7 +153,7 @@ void	sort_temp_tokens(t_token *tokens)
 /*	tokenise creates linked list of tokens from input str
 	- separate tokens in input str based on whitespace, pipe or redirect
 	- categorises non-operator tokens into commands, arguments, files
-	- frees entire list and returns 1 if error creating any of the tokens
+	- returns 1 if error creating any of the tokens (tokens freed by main function)
 	- checks syntax of tokens and returns 2 if syntax error*/
 int	tokenise(char *input, t_token **tokens)
 {
@@ -164,16 +164,16 @@ int	tokenise(char *input, t_token **tokens)
 		if (ft_strchr("|<>&()", *input))
 		{
 			if (tokenise_op(&input, tokens) == 1)
-				return (/*free_tokens(*tokens),*/ 1);
+				return (1);
 		}
 		else
 		{
 			if (tokenise_misc(&input, tokens) == 1)
-				return (/*free_tokens(*tokens),*/ 1);
+				return (1);
 		}
 	}
 	if (check_syntax_tokens(*tokens) == 1)
-		return (/*free_tokens(*tokens),*/ 2);
+		return (2);
 	sort_temp_tokens(*tokens);
 	return (0);
 }

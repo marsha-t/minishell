@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:38:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 19:04:43 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 06:08:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_directory(char *directory)
 	struct stat	file_stat;
 
 	if (stat(directory, &file_stat) == -1)
-		return (err_printf("minishell: %s: error calling stat\n"), -1);
+		return (err_printf("%s: error calling stat\n"), -1);
 	if (!S_ISDIR(file_stat.st_mode))
 		return (1);
 	else
@@ -82,7 +82,7 @@ int	check_directory(char *directory)
 // 	else
 // 		pattern = strdup_range(slash, &cmd[ft_strlen(cmd) - 1]);
 // 	if (!pattern)
-// 		return (free(directory), err_printf("minishell: malloc error: strdup_range\n"), 1);
+// 		return (free(directory), err_printf("malloc error: strdup_range\n"), 1);
 // 	if (check_directory(directory) == 0)
 // 	{
 // 		dir_contents = create_conts_list(directory);
@@ -248,7 +248,7 @@ int	match_dir(t_wc *wc_info, char *slash, char *dir)
 	if (!pattern)
 	{
 		free(dir);
-		return (err_printf("minishell: malloc error: strdup_range\n"), 1);
+		return (err_printf("malloc error: strdup_range\n"), 1);
 	}
 	if (match_dir_while(dir, pattern, next_slash, wc_info) == 1)
 		return (1);
@@ -278,7 +278,7 @@ t_list	*create_arg(char *arg_str)
 	new = malloc(sizeof(t_list));
 	if (!new)
 	{
-		err_printf("minishell: malloc error: t_list for matched_to_arg\n");
+		err_printf("malloc error: t_list for matched_to_arg\n");
 		return (NULL);
 	}
 	new->content = arg_str;
@@ -346,7 +346,7 @@ int	init_wc(t_wc **wc_info, char *cmd)
 {
 	*wc_info = malloc(sizeof(t_wc));
 	if (!*wc_info)
-		return (err_printf("minishell: malloc error: wc_info\n"), 1);
+		return (err_printf("malloc error: wc_info\n"), 1);
 	(*wc_info)->matched = NULL;
 	(*wc_info)->cmd = cmd;
 	return (0);

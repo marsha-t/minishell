@@ -6,13 +6,14 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:57:08 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/10 09:52:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 06:07:44 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // since execv only deal with the standard input and standard output get_infile try to lkie make the given input file
 // temporary standard input and after executing the command we should return everything back
 #include "../minishell.h"
+
 int	get_infile(t_ast *node)
 {
 	int 	fd;
@@ -26,14 +27,14 @@ int	get_infile(t_ast *node)
 	{
 		if (access(current->file_name, F_OK) != 0)
 		{
-			err_printf("minishell: %s: No such file or directory\n", current->file_name);
+			err_printf("%s: No such file or directory\n", current->file_name);
 			exit (1);
 		}
 		current = current ->next;
 	}
 	if(access(current->file_name, F_OK) != 0)
 	{
-		err_printf("minishell: %s: No such file or directory", current->file_name);
+		err_printf("%s: No such file or directory", current->file_name);
 		exit (1);
 	}
 	fd = open(current ->file_name, O_RDONLY);

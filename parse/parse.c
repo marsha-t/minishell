@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:06:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 15:44:27 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:48:50 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ int	parse_tokens(t_shell *shell)
 	t_token *dup_tokens;
 
 	dup_tokens = shell->tokens;
-
 	shell->ast_list = ast_list_new(&shell->tokens);
-	free_tokens(dup_tokens);
+	free_tokens_null(&dup_tokens);
 	if (!shell->ast_list)
 		return (1);
 	dup_list = shell->ast_list;

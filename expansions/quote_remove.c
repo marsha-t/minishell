@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:48:59 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 06:08:13 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i)
 	else
 		in_quote = strdup_range(&str[*start], &str[*i - 1]);
 	if (!in_quote)
-		return (err_printf("minishell: malloc error: in_quote\n"), NULL);
+		return (err_printf("malloc error: in_quote\n"), NULL);
 	if (*i == (int)ft_strlen(str) - 1)
 		after_quote = ft_strdup("");
 	else
@@ -34,7 +34,7 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i)
 	if (!after_quote)
 	{
 		free(in_quote);
-		return (err_printf("minishell: malloc error: after_quote\n"), NULL);
+		return (err_printf("malloc error: after_quote\n"), NULL);
 	}
 	free(str);
 	*i = ft_strlen(before_quote) + ft_strlen(in_quote) - 1;
@@ -57,7 +57,7 @@ char	*remove_quote_str(char *str)
 	char	*before_quote;
 
 	if (!str)
-		return (err_printf("minishell: malloc error: ft_strdup\n"), NULL);
+		return (err_printf("malloc error: ft_strdup\n"), NULL);
 	quote = 0;
 	i = 0;
 	start = 0;
@@ -73,7 +73,7 @@ char	*remove_quote_str(char *str)
 				else
 					before_quote = strdup_range(&str[0], &str[i - 1]);
 				if (!before_quote)
-					return (err_printf("minishell: malloc error: before_quote\n"), NULL);
+					return (err_printf("malloc error: before_quote\n"), NULL);
 				start = i + 1;
 			}
 			else if (quote == str[i])

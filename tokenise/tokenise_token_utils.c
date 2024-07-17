@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenise_token_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 15:46:33 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 06:09:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ int	add_token(t_token **tokens, char *str, int code)
 	t_token	*new;
 
 	if (!str)
-		return (err_printf("minishell: malloc error: token->str\n"), 1);
+		return (err_printf("malloc error: token->str\n"), 1);
 	new = new_token(str, code);
 	if (!new)
 	{
 		free(str);
-		return (err_printf("minishell: malloc error: token\n"), 1);
+		return (err_printf("malloc error: token\n"), 1);
 	}
 	if (!*tokens)
 		*tokens = new;
@@ -60,21 +60,38 @@ int	add_token(t_token **tokens, char *str, int code)
 
 /*	free_tokens frees nodes in tokens linked list
 	and the str inside the nodes */
-void	free_tokens(t_token *tokens)
+// void	free_tokens(t_token *tokens)
+// {
+// 	t_token	*current;
+// 	t_token	*next;
+
+// 	current = tokens;
+// 	while (current)
+// 	{
+// 		next = current->next;
+// 		free_num(2, current->str, current);
+// 		current = next;
+// 	}
+// 	// tokens=NULL;
+// }
+
+/*	free_tokens frees nodes in tokens linked list
+	and the str inside the nodes 
+	- and sets pointer to NULL (hence double pointer) */
+void	free_tokens_null(t_token **tokens)
 {
 	t_token	*current;
 	t_token	*next;
 
-	current = tokens;
+	current = *tokens;
 	while (current)
 	{
 		next = current->next;
 		free_num(2, current->str, current);
 		current = next;
 	}
-	tokens=NULL;
-
-
+	// tokens=NULL;
+	*tokens = NULL;
 }
 
 /*	print_token prints info in the token linked list

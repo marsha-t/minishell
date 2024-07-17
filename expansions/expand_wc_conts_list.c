@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc_conts_list.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:41:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 18:06:03 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 06:07:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ int	create_conts_node(char *str, t_dconts **list)
 	curr = *list;
 	new = ft_calloc(1, sizeof(t_dconts));
 	if (!new)
-		return (err_printf("minishell: malloc error: directory_contents\n"), 1);
+		return (err_printf("malloc error: directory_contents\n"), 1);
 	new->cont_name = ft_strdup(str);
 	if (!new->cont_name)
-		return (err_printf("minishell: malloc error: t_dconts->cont_name\n"), 1);
+		return (err_printf("malloc error: t_dconts->cont_name\n"), 1);
 	new->next = NULL;
 	if (!curr)
 	{
@@ -83,11 +83,11 @@ t_dconts	*create_conts_list(char *directory)
 
 	dd = opendir(directory);
 	if (!dd)
-		return (err_printf("minishell: error calling opendir\n"), NULL);
+		return (err_printf("error calling opendir\n"), NULL);
 	list = NULL;
 	content = readdir(dd);
-	// if (errno)
-	// 	return (err_printf("minishell: error calling readdir\n"), NULL);
+	if (errno)
+		return (err_printf("error calling readdir\n"), NULL);
 	while (content)
 	{
 		if (create_conts_node(content->d_name, &list) == 1)

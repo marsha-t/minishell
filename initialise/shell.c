@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 19:09:31 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 06:08:43 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	shlvl_increment(t_shell *shell)
 	free(shlvl_node->value);
 	shlvl_node->value = ft_itoa(new_shlvl);
 	if (!shlvl_node->value)
-		return (err_printf("minishell: malloc error: ft_itoa\n"), 1);
+		return (err_printf("malloc error: ft_itoa\n"), 1);
 	return (0);
 }
 
@@ -39,7 +39,7 @@ t_shell	*init_shell(char **envp)
 
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
-		return (err_printf("minishell: malloc error for shell structure\n"), NULL);
+		return (err_printf("malloc error for shell structure\n"), NULL);
 	shell->var_list = create_list(envp);
 	if (!shell->var_list)
 		return (free_shell(shell), NULL);
@@ -62,12 +62,9 @@ t_shell	*init_shell(char **envp)
 void	free_after_command(t_shell *shell)
 {
 	if (shell->line)
-	{
-			free(shell->line);
-			shell->line = NULL;
-		}
+		free_safe((void **)&shell->line);
 	if (shell->tokens)
-		free_tokens(shell->tokens);
+		free_tokens_null(&shell->tokens);
 	if (shell->ast_list)
 	{
 		ast_list_free(shell->ast_list);
@@ -82,9 +79,9 @@ void	free_after_command(t_shell *shell)
 void	free_shell(t_shell *shell)
 {
 	if (shell->line)
-		free(shell->line);
+		free_safe((void **)&shell->line);
 	if (shell->tokens)
-		free_tokens(shell->tokens);
+		free_tokens_null(&shell->tokens);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
 	if(shell->var_list)

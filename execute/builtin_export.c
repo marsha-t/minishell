@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/07 15:54:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 06:06:45 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int builtin_export(t_ast *node, t_shell *shell)
 			}
 			if (valid_varname(key) == 1)
 			{
-				err_printf("minishell: export: `%s': not a valid identifier\n", key);
+				err_printf("export: `%s': not a valid identifier\n", key);
 				free_num(2, key, value);
 				exit_status = 1;
 				curr_arg = curr_arg->next;

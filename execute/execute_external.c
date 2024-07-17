@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/10 09:28:45 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 08:16:26 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	**envp_array(t_var *env)
 
 	envp = malloc(sizeof(char *) * (count_env(env) + 1));
 	if (!envp)
-		return (err_printf("minishell: malloc error: envp for envp_array\n"), NULL);
+		return (err_printf("malloc error: envp for envp_array\n"), NULL);
 	i = 0;
 	current = env;
 	while (current)
@@ -52,7 +52,7 @@ char	**envp_array(t_var *env)
 				while (i--)
 					free(envp[i]);
 				free(envp);
-				return (err_printf("minishell: malloc error: envp[i] for envp_array\n"), NULL);
+				return (err_printf("malloc error: envp[i] for envp_array\n"), NULL);
 			}
 			i++;
 		}
@@ -72,12 +72,12 @@ char **argv_array(t_ast *node)
 	current = node->args;
 	argv = malloc(sizeof(char *) * (ft_lstsize(current) + 2));
 	if (!argv)
-		return (err_printf("minishell: malloc error: argv for argv_array\n"), NULL);
+		return (err_printf("malloc error: argv for argv_array\n"), NULL);
 	argv[0] = ft_strdup(node->cmd);
 	if (!argv[0])
 	{
 		free(argv);
-		return (err_printf("minishell: malloc error: argv[i] for argv_array\n"), NULL);
+		return (err_printf("malloc error: argv[i] for argv_array\n"), NULL);
 	}
 	i = 1;
 	current = node->args;
@@ -89,7 +89,7 @@ char **argv_array(t_ast *node)
 			while (i--)
 				free(argv[i]);
 			free(argv);
-			return (err_printf("minishell: malloc error: argv[i] for argv_array\n"), NULL);
+			return (err_printf("malloc error: argv[i] for argv_array\n"), NULL);
 		}
 		i++;
 		current = current->next;
@@ -117,14 +117,18 @@ char	*get_filepath(char *cmd, int *exit_status, t_shell *shell)
 			{
 				*exit_status = 1;
 				shell->exit_shell = 1;
-				return (err_printf("minishell: malloc error: filepath in get_filepath\n"), NULL);
+				return (err_printf("malloc error: filepath in get_filepath\n"), NULL);
 			}
 		}
 		else
 			filepath = 0;
 	}
 	else
-		filepath = find_cmd(cmd, exit_status, shell);
+	{
+	// printf("%s\n", cmd);
+		printf("%d\n", *exit_status);
+		// filepath = find_cmd(cmd, exit_status, shell);
+	}
 	return (filepath);
 }
 
@@ -152,9 +156,9 @@ int	run_external(t_ast *node, t_shell *shell)
 		shell->exit_shell = 1;
 		return (1);
 	}
-	for (int i = 0; argv[i] != NULL; i++) {
-		dprintf(2, "argv[%d]: %s\n", i, argv[i]);
-	}
+	// for (int i = 0; argv[i] != NULL; i++) {
+	// 	dprintf(2, "argv[%d]: %s\n", i, argv[i]);
+	// }
 
 	// if (close(3) == -1)
 	// 	dprintf(2, "I couldn't close\n");

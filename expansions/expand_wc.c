@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/16 19:03:30 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 06:08:09 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	expand_wc_file(t_shell *shell, t_ast *node, char *pattern, int code)
 	else if (match_count > 1)
 	{
 		free_conts_list(matched_list);
-		return (err_printf("minishell: %s: ambiguous redirect\n", pattern), 1);
+		return (err_printf("%s: ambiguous redirect\n", pattern), 1);
 	}
 	if (code == TOKEN_INPUT)
 		curr_file = node->input_list;

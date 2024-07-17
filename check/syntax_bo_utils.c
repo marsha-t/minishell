@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:55:21 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/06/02 17:28:41 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/16 17:15:27 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int	pipe_mid(int i, char *line)
 	i++;
 	while (line[i] == 32 || line[i] == 9)
 		i++;
-	if (line[i] == '\0')
-		return (write(1, ">\n", 2), 1); // work in progress: how to read another line
+	// if (line[i] == '\0')
+	// 	return (write(1, ">\n", 2), 1); // work in progress: how to read another line
 	return (0);
 }
 
@@ -34,8 +34,8 @@ int	and_mid(int i, char *line)
 	i = i + 2;
 	while (line[i] == 32 || line[i] == 9)
 		i++;
-	if (line[i] == '\0')
-		return (write(1, ">\n", 2), 1);
+	// if (line[i] == '\0')
+	// 	return (write(1, ">\n", 2), 1);
 	return (0);
 }
 
@@ -48,7 +48,7 @@ int	or_mid(int i, char *line)
 	i = i + 2;
 	while (line[i] == 32 || line[i] == 9)
 		i++;
-	if (line[i] == '\0')
-		return (write(1, ">\n", 2), 1);
+	// if (line[i] == '\0')
+	// 	return (write(1, ">\n", 2), 1);
 	return (0);
 }

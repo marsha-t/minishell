@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/07 16:40:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 06:08:18 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ char	*split_expand_join(char *str, int i, t_var *list)
 	{
 		temp = strdup_range(&str[0], &str[i - 1]);
 		if (!temp)
-			return (err_printf("minishell: malloc error: temp\n"), NULL);
+			return (err_printf("malloc error: temp\n"), NULL);
 	}
 	else
 		temp = NULL;
@@ -141,16 +141,16 @@ char	*split_expand_join(char *str, int i, t_var *list)
 			i++;
 		var = strdup_range(&str[start], &str[i - 1]);
 		if (!var)
-			return (err_printf("minishell: malloc error: var\n"), NULL);
+			return (err_printf("malloc error: var\n"), NULL);
 		var = expand_var(var, list);
 		if (!var)
-			return (err_printf("minishell: malloc error: var\n"), NULL);
+			return (err_printf("malloc error: var\n"), NULL);
 	}
 	else
 		var = NULL;
 	str = join_expand(temp, var, str, i);
 	if (!str)
-		return (err_printf("minishell: malloc error joining expanded var\n"), NULL);
+		return (err_printf("malloc error joining expanded var\n"), NULL);
 	return (str);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:35:36 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/14 17:15:09 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 06:06:36 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,23 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 	{
 		path = expand_var("HOME", shell->var_list);
 		if (path[0] == '\0')
-			return (err_printf("minishell: cd: HOME not set"), 1);
+			return (err_printf("cd: HOME not set"), 1);
 		else if (!path)
 		{
 			shell->exit_shell = 1;
-			err_printf("minishell: malloc error: expand_var in builtin_cd\n");
+			err_printf("malloc error: expand_var in builtin_cd\n");
 			return (1);
 		}
 	}
 	else if (node->n_args > 1)
-		return (err_printf("minishell: cd: too many arguments\n"), 1);
+		return (err_printf("cd: too many arguments\n"), 1);
 	else
 	{
 		path = ft_strdup(node->args->content);
 		if (!path)
 		{
 			shell->exit_shell = 1;
-			err_printf("minishell: malloc error: path in builtin_cd\n");
+			err_printf("malloc error: path in builtin_cd\n");
 			return (1);
 		}
 	}
@@ -59,12 +59,12 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 		{
 			shell->exit_shell = 1;
 			free(path);
-			return (err_printf("minishell: cd: error calling stat\n"), 1);
+			return (err_printf("cd: error calling stat\n"), 1);
 		}
 		if (!S_ISDIR(file_stat.st_mode))
 		{
 			free(path);
-			err_printf("minishell: cd: %s: Not a directory\n", path);
+			err_printf("cd: %s: Not a directory\n", path);
 			return (1);
 		}
 		else
@@ -75,35 +75,35 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 			{
 				shell->exit_shell = 1;
 				free(path);
-				return (err_printf("minishell: cd: error calling chdir\n"), 1);			
+				return (err_printf("cd: error calling chdir\n"), 1);			
 			}
 		}
 	}
 	else if (errno == EACCES)
 	{
 		free(path);
-		return (err_printf("minishell: %s: Permission denied\n", path), 126);
+		return (err_printf("%s: Permission denied\n", path), 126);
 	}
 	else if (errno == ENAMETOOLONG)
 	{
 		free(path);
-		return (err_printf("minishell: cd: %s: File name too long\n", path), 126);
+		return (err_printf("cd: %s: File name too long\n", path), 126);
 	}
 	else if (errno == ENOENT)
 	{
 		free(path);
-		return (err_printf("minishell: cd: %s: No such file or directory\n", path), 127);
+		return (err_printf("cd: %s: No such file or directory\n", path), 127);
 	}
 	else if (errno = ENOTDIR)
 	{
 		free(path);
-		return (err_printf("minishell: %s: Not a directory\n", path), 1);
+		return (err_printf("%s: Not a directory\n", path), 1);
 	}
 	else
 	{
 		free(path);
 		shell->exit_shell = 1;
-		return (err_printf("minishell: cd: error calling access\n"), 1);
+		return (err_printf("cd: error calling access\n"), 1);
 	}
 	return (0);
 }

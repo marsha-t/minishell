@@ -13,24 +13,24 @@ int	check_filepath(char *cmd)
 	{
 		if (stat(cmd, &file_stat) == -1)
 		{
-			return (printf("minishell: error calling stat\n"), 1);
+			return (printf("error calling stat\n"), 1);
 		}
 		else if (S_ISDIR(file_stat.st_mode))
-			return (printf("minishell: %s: Is a directory\n", cmd), 126);
+			return (printf("%s: Is a directory\n", cmd), 126);
 		else
 			return (0);
 	}
 	else if (errno == EACCES)
-		return (printf("minishell: %s: Permission denied\n", cmd), 126);
+		return (printf("%s: Permission denied\n", cmd), 126);
 	else if (errno == ENAMETOOLONG)
-		return (printf("minishell: %s: File name too long\n", cmd), 126);
+		return (printf("%s: File name too long\n", cmd), 126);
 	else if (errno == ENOENT)
-		return (printf("minishell: %s: No such file or directory\n", cmd), 127);
+		return (printf("%s: No such file or directory\n", cmd), 127);
 	else if (errno = ENOTDIR)
-		return (printf("minishell: %s: Not a directory\n", cmd), 126);
+		return (printf("%s: Not a directory\n", cmd), 126);
 	else
 	{
-		return (printf("minishell: error calling access\n"), 1);
+		return (printf("error calling access\n"), 1);
 	}
 }
 

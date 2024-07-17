@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 19:39:23 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/17 06:06:49 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,9 @@ int	builtin_exit(t_ast *node, t_shell *shell)
 	int	exit_status;
 
 	if (node->n_args > 0 && check_exit_arg(node->args->content) == 1)
-		return (err_printf("minishell: exit: %s: numeric argument required\n", node->args->content), 2);
+		return (err_printf("exit: %s: numeric argument required\n", node->args->content), 2);
 	if (node->n_args > 1)
-		return (err_printf("minishell: exit: too many arguments\n"), 1);
+		return (err_printf("exit: too many arguments\n"), 1);
 	if (node->n_args == 0)
 		exit_status = 0;
 	else

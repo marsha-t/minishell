@@ -46,13 +46,13 @@ int	check_pipes(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '|' && line [1] != '|')
-			return (write(2, "minishell: syntax error near unexpected token `|'\n", 46), 0);
+			return (write(2, "syntax error near unexpected token `|'\n", 46), 0);
 		j = i;
 		while ((line[i] == 32 || line[i] == 9))
 		{
 			i++;
 			if (line[i] == '|' && line [i + 1] != '|' && j == 0)
-				return (write(2, "minishell: syntax error near unexpected token `|'\n", 46), 0);
+				return (write(2, "syntax error near unexpected token `|'\n", 46), 0);
 		}
 		if (line[i] == '|' && line [i + 1] != '|' && line[i - 1] != '|')
 		{
@@ -73,7 +73,7 @@ int	check_direct(char *line)
 	{
 		if ((line[i] == '>' && line[i + 1] == '<') || (line[i] == '<' && line[i + 1] == '>'))
 			return (0);
-			// return (("minishell: syntax error near unexpected token\n", 2), 0);
+			// return (("syntax error near unexpected token\n", 2), 0);
 		else if (((line[i] == '>' && line[i + 1] == '>') || (line[i] == '<' && line[i + 1] == '<')))
 		{
 			i = i + 2;
@@ -81,7 +81,7 @@ int	check_direct(char *line)
 				i++;
 			if (line[i] == '\0')
 				return (0);
-				// return (ft_putstr_fd("minishell: syntax error near unexpected token", 2), 0);
+				// return (ft_putstr_fd("syntax error near unexpected token", 2), 0);
 		}
 		else if ((line[i] == '>' || line[i] == '<' ))
 		{

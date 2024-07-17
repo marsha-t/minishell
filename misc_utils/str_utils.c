@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 04:03:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:56:30 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 06:08:47 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ char	*strjoin_num_free(int num, ...)
 			arg = va_arg(strs, char *);
 			free(arg);
 		}
-		return (err_printf("minishell: malloc error: ft_strdup\n"), NULL);
+		return (err_printf("malloc error: ft_strdup\n"), NULL);
 	}
 	temp = ft_strdup(arg);
 	if (!temp)
-		return (err_printf("minishell: malloc error: strjoin temp\n"), NULL);
+		return (err_printf("malloc error: strjoin temp\n"), NULL);
 	free(arg);
 	while (--num)
 	{
@@ -76,11 +76,11 @@ char	*strjoin_num_free(int num, ...)
 				arg = va_arg(strs, char *);
 				free(arg);
 			}
-			return (err_printf("minishell: malloc error: ft_strdup\n"), NULL);
+			return (err_printf("malloc error: ft_strdup\n"), NULL);
 		}
 		temp = ft_strjoin_free(temp, arg);
 		if (!temp)
-			return (err_printf("minishell: malloc error: strjoin temp\n"), NULL);
+			return (err_printf("malloc error: strjoin temp\n"), NULL);
 	}
 	va_end(strs);
 	return (temp);

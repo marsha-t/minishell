@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 13:55:34 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:50:18 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ void	free_shell(t_shell *shell);
 int create_node(t_var **v, char *str, int flag);
 t_var *create_list(char **envp);
 void	free_var_list(t_var *var);
+void	print_var_list(t_var *var);
 
 /*****************************************************************************/
 /*	check																	 */
@@ -189,7 +190,9 @@ int	tokenise(char *input, t_token **tokens);
 // tokenise_token_utils.c
 t_token	*new_token(char *str, int code);
 int		add_token(t_token **tokens, char *str, int code);
-void	free_tokens(t_token *tokens);
+// void	free_tokens(t_token *tokens);
+void	free_tokens_null(t_token **tokens);
+
 void	print_tokens(t_token *tokens);
 
 // tokenise_misc_utils.c
@@ -376,6 +379,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell);
 // free_utils.c
 void	free_num(int num, ...);
 void	free_char_dp(char **dp);
+void	free_safe(void **pointer);
 
 // str_utils.c
 char	*ft_strjoin_free(char *s1, char *s2);

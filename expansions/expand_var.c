@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/15 07:44:32 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 06:07:33 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 	{
 		temp = strdup_range(&str[0], &str[i - 1]);
 		if (!temp)
-			return (err_printf("minishell: malloc error: temp\n"), NULL);
+			return (err_printf("malloc error: temp\n"), NULL);
 	}
 	else
 		temp = NULL;
@@ -92,7 +92,7 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 			i++;
 			var = ft_itoa(shell->exit_status);
 			if (!var)
-				return (err_printf("minishell: malloc error: ft_itoa\n"), NULL);
+				return (err_printf("malloc error: ft_itoa\n"), NULL);
 		}
 		else
 		{
@@ -100,17 +100,17 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 				i++;
 			var = strdup_range(&str[start], &str[i - 1]);
 			if (!var)
-				return (err_printf("minishell: malloc error: var\n"), NULL);
+				return (err_printf("malloc error: var\n"), NULL);
 			var = expand_var(var, shell->var_list);
 			if (!var)
-				return (err_printf("minishell: malloc error: expand_var\n"), NULL);
+				return (err_printf("malloc error: expand_var\n"), NULL);
 		}
 	}
 	else
 		var = NULL;
 	str = join_expand(temp, var, str, i);
 	if (!str)
-		return (err_printf("minishell: malloc error: str\n"), NULL);
+		return (err_printf("malloc error: str\n"), NULL);
 	return (str);
 }
 
