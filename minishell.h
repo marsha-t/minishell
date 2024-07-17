@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 17:50:18 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:13:28 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ void	free_shell(t_shell *shell);
 int create_node(t_var **v, char *str, int flag);
 t_var *create_list(char **envp);
 void	free_var_list(t_var *var);
-void	print_var_list(t_var *var);
 
 /*****************************************************************************/
 /*	check																	 */
@@ -193,7 +192,6 @@ int		add_token(t_token **tokens, char *str, int code);
 // void	free_tokens(t_token *tokens);
 void	free_tokens_null(t_token **tokens);
 
-void	print_tokens(t_token *tokens);
 
 // tokenise_misc_utils.c
 char	*strdup_range(char *start, char *end);
@@ -216,8 +214,7 @@ int	ast_node_append_cmd(t_token **tokens, t_ast *current);
 int		ast_node_append_arg(t_token **tokens, t_ast *current);
 int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current);
 t_ast	*ast_list_new(t_token **tokens);
-void	file_list_print(t_file *file, int type);
-void	ast_list_print(t_ast *node);
+void	file_list_free(t_file *file);
 void	ast_list_free(t_ast *node);
 
 // create_redir_lists.c
@@ -226,10 +223,9 @@ int create_heredoc_list(t_token *token, t_ast **node);
 int create_output_append_list(int code, t_token *token, t_ast **node);
 
 // parse_ast_tree.c
+int	is_logical_op(int code);
+t_ast	*ast_pipeline_new(t_ast **node);
 t_ast	*ast_tree_new(t_ast **node);
-// t_ast	*ast_tree_new(t_ast *node);
-
-void	ast_tree_print(t_ast *node);
 
 /*****************************************************************************/
 /*	expand																	 */
@@ -292,7 +288,6 @@ int create_conts_node(char *str, t_dconts **list);
 void    order_conts_list(t_dconts **list);
 t_dconts *create_conts_list(char *directory);
 void	free_conts_list(t_dconts *list);
-void	print_conts_list(t_dconts *list);
 
 /*****************************************************************************/
 /*	execute																	 */
@@ -386,5 +381,15 @@ char	*ft_strjoin_free(char *s1, char *s2);
 char	*strjoin_num_free(int num, ...);
 int		ft_strcmp(const char *s1, const char *s2);
 
+// print_utils.c
+void	print_var_list(t_var *var);
+void	print_tokens(t_token *tokens);
+void	file_list_print(t_file *file, int type);
+void	ast_list_print(t_ast *node);
+
+// print_utils2.c
+void	ast_pipeline_print(t_ast *node);
+void	ast_tree_print(t_ast *node);
+void	print_conts_list(t_dconts *list);
 
 #endif

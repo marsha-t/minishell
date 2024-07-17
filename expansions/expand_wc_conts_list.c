@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:41:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:07:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:12:44 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,17 +114,4 @@ void	free_conts_list(t_dconts *list)
 		current = next;
 	}
 	list = NULL;
-}
-
-/*	print_conts_list prints files in list of directory contents*/
-void	print_conts_list(t_dconts *list)
-{
-	t_dconts	*current;
-
-	current = list;
-	while (current)
-	{
-		ft_printf("file: %s\n", current->cont_name);
-		current = current->next;
-	}
 }

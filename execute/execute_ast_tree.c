@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 09:49:49 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/17 16:14:59 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,10 @@ int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 	else if (ft_strcmp(node->cmd, "exit") == 0)
 		exit_status = builtin_exit(node, shell);
 	else if (ft_strchr(node->cmd, '=') != NULL)
-	{
-		printf("assign\n");
 		exit_status = run_assign(node, shell);
-	}
 	if (shell->exit_shell == 1)
 		return (exit_shell(shell, 1), 1);
-	return(exit_status);
+	return (exit_status);
 }
 
 // work in progress: update description of function
@@ -138,9 +135,12 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	int	status;
 	
   	if (check_var_expansion(node, shell) == 1)
-		return (1);
-	if (check_wc_expansion(node, shell) == 1)
-		return (1);
+	{
+		shell->exit_shell = 1;
+		return (exit_shell(shell, 1), 1);
+	} 
+	if (check_wc_expansion(node, shell) == 1 && shell->exit_shell == 1)
+		return (exit_shell(shell, 1), 1);
 	if (cmd_only_quote(node->cmd) == 0)
 	{
 		shell->exit_status = 127;
@@ -159,11 +159,8 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		return(1);
 	if(get_outfile(node) == 1)
 		return(1);
-	// if (ft_strcmp(node->cmd, "echo") == 0 || ft_strcmp(node->cmd, "cd") == 0 || ft_strcmp(node->cmd, "pwd") == 0 || ft_strcmp(node->cmd, "export") == 0 || ft_strcmp(node->cmd, "unset") == 0 || ft_strcmp(node->cmd, "env") == 0 || ft_strcmp(node->cmd, "exit") == 0)
 	if (check_builtin(node->cmd) == 0 || ft_strchr(node->cmd, '=') != NULL)
-	{
 		shell->exit_status = execute_cmd_builtin(node, shell);
-	}
 	else if (shell->pipe_data != 0)
 	{
 		LOC = 0;

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:06:49 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:06:22 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,6 @@ int	builtin_exit(t_ast *node, t_shell *shell)
 		exit_status = 0;
 	else
 		exit_status = get_exit_status(node->args->content);
-	printf("there\n");
-
 	exit_shell(shell, exit_status);
-	printf("here\n");
 	return (exit_status);
 }

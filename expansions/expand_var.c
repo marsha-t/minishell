@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/17 06:07:33 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 17:53:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 	char	*temp;
 	char	*var;
 	int		start;
+	char	*expanded;
 
 	if (i != 0)
 	{
@@ -92,7 +93,7 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 			i++;
 			var = ft_itoa(shell->exit_status);
 			if (!var)
-				return (err_printf("malloc error: ft_itoa\n"), NULL);
+				return (free(temp), err_printf("malloc error: ft_itoa\n"), NULL);
 		}
 		else
 		{
@@ -100,10 +101,13 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 				i++;
 			var = strdup_range(&str[start], &str[i - 1]);
 			if (!var)
-				return (err_printf("malloc error: var\n"), NULL);
-			var = expand_var(var, shell->var_list);
-			if (!var)
-				return (err_printf("malloc error: expand_var\n"), NULL);
+				return (free(temp), err_printf("malloc error: var\n"), NULL);
+			expanded = expand_var(var, shell->var_list);
+			printf("expanded: %s\n", expanded);
+			free(var);
+			var = expanded;
+			if (!expanded)
+				return (free(temp), err_printf("malloc error: expand_var\n"), NULL);
 		}
 	}
 	else
@@ -135,7 +139,9 @@ char	*expand_str(char *str, t_shell *shell)
 			{
 				if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
 				{
+					printf("aa\n");
 					str = split_expand_join(str, i, shell);
+					printf("bb: %s\n", str);
 					if (!str)
 						return (NULL);
 					i = -1;
@@ -143,6 +149,7 @@ char	*expand_str(char *str, t_shell *shell)
 				else
 					i++;
 			}
+			printf("i:%d\n", i);
 			i++;
 		}
 		else if (str[i] == '$' && is_quote(str[i + 1]) == 0)
@@ -189,7 +196,7 @@ int	file_list_check_var(t_file *file, t_shell *shell)
 /*	check_var_expansion checks whether variable expansions are needed
 	- checks strings in cmd, args and files
 	- if needed, expands them
-	- returns 1 if errors with expansion
+	- returns 1 if errors with expansion (terminate shell)
 	*/
 int	check_var_expansion(t_ast *node, t_shell *shell)
 {
@@ -208,7 +215,10 @@ int	check_var_expansion(t_ast *node, t_shell *shell)
 		{
 			if (contain_var(curr_arg->content) == 0)
 			{
+				printf("a\n");
 				curr_arg->content = expand_str(curr_arg->content, shell);
+				printf("b\n");
+
 				if (!curr_arg->content)
 					return (1);
 			}

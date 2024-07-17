@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/10 09:53:05 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:07:17 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int open_file(t_file *current, int flag)
 		current -> fd = open(current ->file_name, O_CREAT | O_RDWR, 0777);
 	line = readline(">");
 	if (LOC == 1)
-		return(printf("im here in -12\n"),-1);
+		return(ft_printf("im here in -12\n"),-1);
 	while(ft_strcmp(current->file_name,line)&& LOC != 1)
 	{
 		if (flag ==1)
@@ -29,7 +29,7 @@ int open_file(t_file *current, int flag)
 			line = readline(">");
 	}
 	if (LOC == 1)
-		return(/*printf("im here in -1\n"),*/-1);
+		return(/*ft_printf("im here in -1\n"),*/-1);
 	// if(flag ==  0)
 	// {
 	// 	close(current -> fd);
@@ -62,7 +62,7 @@ int get_docs(t_ast *node)
 		return(1);
 	}
 	node -> tmp_stdin_fd = dup(STDIN_FILENO);
-	printf ("%d \n",current ->fd );
+	ft_printf ("%d \n",current ->fd );
 	current ->fd=open(current->file_name,O_RDONLY,0777);
 	target_fd = dup2(current ->fd , STDIN_FILENO);
 	close(current -> fd);

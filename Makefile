@@ -14,7 +14,7 @@ EXECUTE_CFILES = execute_ast_tree.c  execute_external.c execute_external_utils.c
 	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_signals.c \
 	execute_assign.c builtin_cd.c builtin_env.c builtin_export.c builtin_unset.c
 MISC_UTILS_DIR = misc_utils
-MISC_UTILS_CFILES = free_utils.c str_utils.c
+MISC_UTILS_CFILES = free_utils.c str_utils.c print_utils.c print_utils2.c
 
 CFILES =  main.c  	global.c\
 		$(addprefix $(INITIALISE_DIR)/, $(INITIALISE_CFILES)) \

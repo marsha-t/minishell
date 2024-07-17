@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/17 06:08:09 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 14:04:32 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int	expand_wc_file(t_shell *shell, t_ast *node, char *pattern, int code)
 		free_conts_list(matched_list);
 		return (err_printf("%s: ambiguous redirect\n", pattern), 1);
 	}
+	curr_file = NULL;
 	if (code == TOKEN_INPUT)
 		curr_file = node->input_list;
 	else if (code == TOKEN_OUTPUT)

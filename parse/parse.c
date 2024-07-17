@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:06:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/16 17:48:50 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:08:52 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	parse_tokens(t_shell *shell)
 	shell->root = ast_tree_new(&dup_list);
 	if (!shell->root)
 		return (1);
-	printf("\n\n printing tree\n");
+	ft_printf("\n\n printing tree\n");
 	ast_tree_print(shell->root);
 	return (0);
 }

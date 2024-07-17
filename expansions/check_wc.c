@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:36:10 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:38:34 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:14:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	file_list_check_wc(t_ast *node, t_shell *shell, int code)
 {
 	t_file	*curr_file;
 
+	curr_file = NULL;
 	if (code == TOKEN_INPUT)
 		curr_file = node->input_list;
 	else if (code == TOKEN_OUTPUT)

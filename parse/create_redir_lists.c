@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 14:56:37 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/17 06:08:53 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:08:14 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int create_in_list(t_token *token, t_ast **node)
 
     new = malloc(sizeof(t_file));
     if(!new)
-        return(err_printf("malloc error: t_file for in_list\n"), 1);
+        return (err_printf("malloc error: t_file for in_list\n"), 1);
     new->flag = TOKEN_INPUT;
     new->file_name= ft_strdup(token->str);
     if (!new->file_name)
@@ -48,7 +48,7 @@ int create_heredoc_list(t_token *token, t_ast **node)
 
     new = malloc(sizeof(t_file));
     if(!new)
-        return(err_printf("malloc error: t_file for heredoc_list\n"), 1);
+        return (err_printf("malloc error: t_file for heredoc_list\n"), 1);
     new -> flag = TOKEN_HEREDOC;
     new->file_name= ft_strdup(token->str);
     if (!new->file_name)

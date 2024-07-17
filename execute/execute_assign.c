@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_assign.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:33:35 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 09:55:22 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/17 14:25:02 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	create_key_value(char *str, char **equal, char **key, char **value)
 }
 
 /*	create_node_normal creates a node for a normal variable
+	(i.e., env = 0)
 	and adds it to the end of shell->var_list*/
 int	create_node_normal(t_var **v, char *key, char *value)
 {
@@ -145,7 +146,6 @@ int	run_assign_str(char *cmd, t_shell *shell)
 			free_num(2, key, value);
 			return (1);
 		}
-		free(key);
 	}
 	return (0);
 }
@@ -205,9 +205,13 @@ int	check_assign_varname(t_ast *node, t_shell *shell)
 
 int	run_assign_cmd(t_ast *node, t_shell *shell)
 {
+	t_list	*arg;
+
 	free(node->cmd);
 	node->cmd = node->args->content;
+	arg = node->args;
 	node->args = node->args->next;
+	free(arg);
 	node->n_args = ft_lstsize(node->args);
 	return (execute_cmd_node(node, shell));
 }
@@ -223,16 +227,10 @@ int	run_assign(t_ast *node, t_shell *shell)
 {
 	t_list	*curr_arg;
 
-	printf("BEFORE PRINTF VARLIST\n");
-	print_var_list(shell->var_list);
 	if (check_assign_varname(node, shell) == 1)
 		return (1);
 	if (run_assign_str(node->cmd, shell) == 1)
 		return (1);
-	printf("AFTER PRINTF VARLIST\n");
-	print_var_list(shell->var_list);
-
-	printf("finish assignment\n");
 	if (node->n_args > 0)
 	{
 		curr_arg = node->args;

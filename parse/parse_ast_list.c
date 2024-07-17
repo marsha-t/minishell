@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:08:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:12:13 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,68 +200,6 @@ t_ast	*ast_list_new(t_token **tokens)
 	return (start);
 }
 
-/*	file_list_print prints a file linked list
-	Depending on the type and file->flag, it will display "input/heredoc/output/append"
-	*/
-void	file_list_print(t_file *file, int type)
-{
-	t_file	*current;
-	int		i;
-
-	current = file;
-	i = 1;
-	while (current)
-	{
-		if (type == 1)
-			ft_printf("input file ");
-		else if (type == 2)
-			ft_printf("heredoc delim ");
-		else if (type == 3 && current->flag == TOKEN_OUTPUT)
-			ft_printf("output file ");
-		else if (type == 3 && current->flag == TOKEN_APPEND)
-			ft_printf("append file ");
-		ft_printf("%d: %s\n", i, current->file_name);
-		current = current->next;
-		i++;
-	}
-}
-
-/*	ast_list_print prints the ast nodes that are connected in a list
-	- prints other components in cmd node depending on whether it is filled */
-void	ast_list_print(t_ast *node)
-{
-	t_list *c;
-
-	ft_printf("\nprinting ast_list\n");
-	while (node)
-	{
-		if (node->code == TOKEN_CMD)
-		{
-			ft_printf("NODE: cmd: %s\nn_args: %d, args: ", node->cmd, node->n_args);
-			if (node->args)
-			{
-				c = node->args;
-				while (c)
-				{
-					ft_printf("%s, ", c->content);
-					c = c->next;
-				}
-			}
-			ft_printf("\n");
-			if (node->input_list)
-				file_list_print(node->input_list, 1);
-			if (node->heredoc_list)
-				file_list_print(node->heredoc_list, 2);
-			if (node->output_list)
-				file_list_print(node->output_list, 3);
-			ft_printf("\n");
-		}
-		else
-			ft_printf("NODE: %s: %d\n\n", node->cmd, node->code);
-		node = node->next;
-	}
-}
-
 /*	file_list_free frees nodes in the files linked list
 	and the file names stored in each node */
 void	file_list_free(t_file *file)
@@ -276,19 +214,6 @@ void	file_list_free(t_file *file)
 		free(current->file_name);
 		free(current);
 		current = next;
-	}
-}
-
-void free_pipes_list(t_ast *node)
-{
-	t_ast	*current;
-	current = node;
-	while(node)
-	{
-		dprintf(2,"this is free pipes\n");
-		current = node->pipe;
-		free(node);
-		node = current;
 	}
 }
 

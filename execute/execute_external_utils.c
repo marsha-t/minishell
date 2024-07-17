@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:07:23 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:06:37 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	check_filepath(char *cmd, t_shell *shell)
 		return (err_printf("%s: File name too long\n", cmd), 126);
 	else if (errno == ENOENT)
 		return (err_printf("%s: No such file or directory\n", cmd), 127);
-	else if (errno = ENOTDIR)
+	else if (errno == ENOTDIR)
 		return (err_printf("%s: Not a directory\n", cmd), 126);
 	else
 	{
@@ -93,7 +93,7 @@ char *add_current_wd(char *path, int i, t_shell *shell)
 	{
 		new_path = ft_strjoin_free(ft_strjoin_free(path, ":"), dir);
 		if (!new_path)
-			return(err_printf("malloc error: new_path\n"), NULL);
+			return (err_printf("malloc error: new_path\n"), NULL);
 	}
 	else
 	{

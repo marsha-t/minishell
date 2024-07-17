@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:57:08 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/17 06:07:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:07:23 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int	get_infile(t_ast *node)
 	close(fd);
 	if (target_fd == -1)
 		return (1);
-	printf("file_name = %s\n fd = %i\n", current ->file_name, fd);
+	ft_printf("file_name = %s\n fd = %i\n", current ->file_name, fd);
 	return (0);
 }

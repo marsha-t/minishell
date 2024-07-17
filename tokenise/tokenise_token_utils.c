@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:09:01 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:11:36 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,4 @@ void	free_tokens_null(t_token **tokens)
 	}
 	// tokens=NULL;
 	*tokens = NULL;
-}
-
-/*	print_token prints info in the token linked list
-	- used for debugging */
-void	print_tokens(t_token *tokens)
-{
-	ft_printf("printing tokens: \n");
-	if (!tokens)
-		ft_printf("empty\n");
-	while (tokens)
-	{
-		ft_printf("str: %s, code: %d\n", tokens->str, tokens->code);
-		tokens = tokens->next;
-	}
 }

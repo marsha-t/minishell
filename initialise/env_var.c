@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_var.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/17 09:57:24 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/17 16:11:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,4 @@ void	free_var_list(t_var *var)
 		current = next;
 	}
 	var = NULL;
-}
-
-void	print_var_list(t_var *var)
-{
-	t_var	*curr;
-
-	curr = var;
-	while (curr && curr->env == 0)
-	{
-		ft_printf("%s: %s\n", curr->key, curr->value);
-		curr = curr->next;
-	}
 }

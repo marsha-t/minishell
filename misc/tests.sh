@@ -7,15 +7,15 @@
 echo -n abc   # i.e., add 3 spaces after abc; prints abc without new line and spaces
 echo abc    def #output: abc def
 
-    echo abc #isn't recorded in history 
+    echo abc #recorded in history 
 
 echo       abc #history includes all the spaces
 
 #############################################################################
 # QUOTES ####################################################################
 #############################################################################
-echo 'Hello $USER' #output: Hello $User
-echo "Hello $USER" #output: Hello <username>
+echo 'Hello $PATH' #output: Hello $PATH
+echo "Hello $PATH" #output: Hello <PATH>
 ech"o" "ab""bc""$SHLVL"'$SHLVL' #abbc1$SHLVL
 ech"o abc" #error detecting command
 echo '"'  # "
