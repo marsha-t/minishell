@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/17 14:04:32 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:55:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ int	expand_wc_cmd(t_dconts *list, t_ast *node)
 		if (ft_strncmp(node->cmd, "./", 2) == 0)
 		{
 			if (match_dir(wc_info, slash, ft_strdup(".")) == 1)
-				return (1);
+				return (free_wc_info(wc_info),1);
 		}
 		else if (ft_strncmp(node->cmd, "../", 3) == 0)
 		{
 			if (match_dir(wc_info, slash, ft_strdup("..")) == 1)
-				return (1);
+				return (free_wc_info(wc_info), 1);
 		}
 		else
 			return (0);
@@ -79,7 +79,7 @@ int	expand_wc_cmd(t_dconts *list, t_ast *node)
 	wc_info->matched = next;
 	if (add_matched_to_arg(wc_info->matched, &node->args, node) == 1)
 		return (free(wc_info), 1);
-	return (0);
+	return (free(wc_info), 0);
 }
 
 /*	expand_wc_arg

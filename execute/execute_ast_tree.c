@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:14:59 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 06:07:42 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,32 @@ int	check_empty_cmd(t_ast *node)
 		return (0);
 }
 
+int	cmd_setup(t_ast *node, t_shell *shell)
+{
+	if (get_docs(node) == 1)
+	{
+		if (shell->exit_status == 1)
+			exit_shell(shell, 1);
+		shell->exit_status = 1;
+		return (1);
+	}
+	if (get_infile(node) == 1)
+	{
+		if (shell->exit_status == 1)
+			exit_shell(shell, 1);
+		shell->exit_status = 1;
+		return (1);
+	}
+	if (get_outfile(node, shell) == 1)
+	{
+		if (shell->exit_status == 1)
+			exit_shell(shell, 1);
+		shell->exit_status = 1;
+		return (1);
+	}
+	return (0);
+}
+
 /*	execute_cmd_node
 	- checks for empty cmd before - expands normal and environment variables
 	- removes quotes
@@ -139,8 +165,13 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		shell->exit_shell = 1;
 		return (exit_shell(shell, 1), 1);
 	} 
-	if (check_wc_expansion(node, shell) == 1 && shell->exit_shell == 1)
-		return (exit_shell(shell, 1), 1);
+	if (check_wc_expansion(node, shell) == 1)
+	{
+		if (shell->exit_shell == 1)
+			return (exit_shell(shell, 1), 1);
+		else
+			return (1);
+	} 
 	if (cmd_only_quote(node->cmd) == 0)
 	{
 		shell->exit_status = 127;
@@ -153,12 +184,13 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	}
 	if (remove_quote_node(node) == 1)
 		return (exit_shell(shell, 1), 1);
-	if(get_docs(node) == 1)
-		return(1);
-	if (get_infile(node) == 1)
-		return(1);
-	if(get_outfile(node) == 1)
-		return(1);
+	if (cmd_setup(node, shell) == 1)
+	{
+		if (shell->exit_shell == 1)
+			return (exit_shell(shell, 1), 1);
+		else
+			return (1);
+	}
 	if (check_builtin(node->cmd) == 0 || ft_strchr(node->cmd, '=') != NULL)
 		shell->exit_status = execute_cmd_builtin(node, shell);
 	else if (shell->pipe_data != 0)
@@ -184,9 +216,9 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 				shell->exit_status = WEXITSTATUS(status);
 		}
 	}
-	if (node->input_list && dup2(node ->tmp_stdin_fd , STDIN_FILENO)== -1)
+	if (node->input_list && dup2(node ->tmp_stdin_fd, STDIN_FILENO)== -1)
 		return(1);
-	if (node->output_list && dup2(node ->tmp_stdout_fd , STDOUT_FILENO)== -1)
+	if (node->output_list && dup2(node ->tmp_stdout_fd, STDOUT_FILENO)== -1)
 		return(1);
 	return (LOC = 1, shell->exit_status);
 }

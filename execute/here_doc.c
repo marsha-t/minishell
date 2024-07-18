@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/17 16:07:17 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 05:58:54 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int open_file(t_file *current, int flag)
+int open_hd_file(t_file *current, int flag)
 {
 	char	*line;
 	if (flag ==1)
@@ -50,11 +50,11 @@ int get_docs(t_ast *node)
 	// line = readline(">");
 	while (current && current -> next)
 	{
-		if(open_file(current, 0)==-1)
+		if(open_hd_file(current, 0)==-1)
 			return(1);
 		current = current -> next;
 	}
-	if(open_file(current, 1)==-1)
+	if(open_hd_file(current, 1)==-1)
 	{
 		/*dprintf(2, "this is my global variable in the child %d\n", LOC);*/
 		close(current ->fd);

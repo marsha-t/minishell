@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/17 17:53:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:24:41 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 			if (!var)
 				return (free(temp), err_printf("malloc error: var\n"), NULL);
 			expanded = expand_var(var, shell->var_list);
-			printf("expanded: %s\n", expanded);
 			free(var);
 			var = expanded;
 			if (!expanded)
@@ -144,12 +143,10 @@ char	*expand_str(char *str, t_shell *shell)
 					printf("bb: %s\n", str);
 					if (!str)
 						return (NULL);
-					i = -1;
 				}
 				else
 					i++;
 			}
-			printf("i:%d\n", i);
 			i++;
 		}
 		else if (str[i] == '$' && is_quote(str[i + 1]) == 0)
@@ -215,10 +212,7 @@ int	check_var_expansion(t_ast *node, t_shell *shell)
 		{
 			if (contain_var(curr_arg->content) == 0)
 			{
-				printf("a\n");
 				curr_arg->content = expand_str(curr_arg->content, shell);
-				printf("b\n");
-
 				if (!curr_arg->content)
 					return (1);
 			}

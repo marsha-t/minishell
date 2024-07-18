@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:13:28 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 06:22:28 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,12 +304,13 @@ int		execute_ast(t_ast *node, t_shell *shell);
 int		get_infile(t_ast *node);
 
 // output_files.c
-int get_outfile(t_ast *node);
-void close_files(t_ast *node);
+int  open_files (t_ast *node, t_shell *shell);
+int get_outfile(t_ast *node, t_shell *shell);
+// void close_files(t_ast *node);
+
+// here_doc.c
+int open_hd_file(t_file *current, int flag);
 int get_docs(t_ast *node);
-// execute_pipes
-// int handle_pipe(t_ast *node, t_shell *shell);
-// int init_pipe( t_shell *shell);
 
 // handling signals
 void  control_signals(void);
@@ -391,5 +392,7 @@ void	ast_list_print(t_ast *node);
 void	ast_pipeline_print(t_ast *node);
 void	ast_tree_print(t_ast *node);
 void	print_conts_list(t_dconts *list);
+
+// error_utils.c
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:06:37 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:39:29 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		return (err_printf("malloc error: ft_split in find_cmd\n"), NULL);
 	}
 	paths_index = 0;
+	denied = 0;
 	while (paths[paths_index])
 	{
 		path_cmd = ft_strjoin_free(ft_strjoin_free(ft_strdup(paths[paths_index]), ft_strdup("/")), ft_strdup(cmd));

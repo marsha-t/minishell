@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:38:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:08:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:59:11 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,23 +201,25 @@ int	match_dir_while(char *dir, char *pattern, char *next_slash, t_wc *wc_info)
 	t_dconts	*dcont;
 	char		*new_directory;
 	int			dcont_return;
+	t_dconts	*curr;
 
 	dcont_return = match_dcont(dir, pattern, &dcont);
 	if (dcont_return == -1)
 		return (1);
 	else if (dcont_return == 1)
 		return (0);
-	while (dcont)
+	curr = dcont;
+	while (curr)
 	{
-		if (match_pattern_str(pattern, dcont->cont_name) == 0)
+		if (match_pattern_str(pattern, curr->cont_name) == 0)
 		{
-			new_directory = strjoin_num_free(3, ft_strdup(dir), ft_strdup("/"), ft_strdup(dcont->cont_name));
+			new_directory = strjoin_num_free(3, ft_strdup(dir), ft_strdup("/"), ft_strdup(curr->cont_name));
 			if (!new_directory)
 				return (free_num(2, dir, pattern), free_conts_list(dcont), 1);
 			if (match_dir_matched(wc_info, next_slash, new_directory) == 1)
 				return (free_num(2, dir, pattern), free_conts_list(dcont), 1);
 		}
-		dcont = dcont->next;
+		curr = curr->next;
 	}
 	free_num(2, dir, pattern);
 	free_conts_list(dcont);
@@ -356,5 +358,9 @@ int	init_wc(t_wc **wc_info, char *cmd)
 void	free_wc_info(t_wc *wc_info)
 {
 	free_conts_list(wc_info->matched);
+	if (wc_info->matched)
+		printf("not null\n");
+	else
+		printf("null\n");
 	free(wc_info);
 }

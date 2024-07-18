@@ -45,6 +45,13 @@ export 1 | echo a # output: a followed by export error message (check with Mac)
 > a.txt echo abc # abc is directed into a.txt
 > a.txt echo >b.txt abc # a.txt and b.txt created; abc directed to b.txt
 
+echo a > expansions #error: expansions is a directory (exit status = 1)
+echo a > expansions > a.txt #error: expansions is a directory and a.txt isn't created
+echo a > a.txt > expansions #error: expansions is a directory and a.txt is created
+echo a >> expansions #error: expansions is a directory (exit status = 1)
+echo a >> expansions > a.txt #error: expansions is a directory and a.txt isn't created
+echo a > a.txt >> expansions #error: expansions is a directory and a.txt is created
+
 # IO NUMBER OUTPUT
 echo 1 > exists.txt # 1 in exists.txt
 echo 1 > noexists.txt # noexists.txt created and 1 in noexists.txt
@@ -61,9 +68,6 @@ echo abc a>a.txt>b.txt # a.txt and b.txt are created; a.txt is empty; abc in b.t
 echo abc 1>input.txt >extra.txt #nothing in input.txt; abc in extra.txt
 echo abc 1>b.txt1>a.txt #abc directed to a.txt but b.txt1 created
 echo abc > a.txt abc # file called a.txt and inside: abc abc
-
-var=
-echo abc > $var #error: $var: ambiguous redirect
 
 
 # IO NUMBER INPUT 
@@ -91,6 +95,9 @@ echo abc >">" a.txt #file called > and output inside is abc a.txt
 echo "1"">"a.txt # output: 1>a.txt
 echo "1">"a.txt" # output of 1 in a.txt
 echo "1"1>a.txt # output of 11 in a.txt
+
+var=
+echo abc > $var #error: $var: ambiguous redirect
 
 #############################################################################
 # COMBINED OPERATORS ########################################################
