@@ -37,13 +37,20 @@ int	check_op_para(char *line)
 {
 	int		i;
 	int		op_count;
+	char	quote;
 
 	i = 0;
 	op_count = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == '')
-		if (line[i] == '(')
+		if (line[i] == '\'' || line[i] == '\"')
+		{
+			quote = line[i];
+			while (line[i] != quote && line[i] != '\0')
+				i++;
+			i++;
+		}
+		else if (line[i] == '(')
 		{
 			i++;
 			op_count++;
@@ -65,15 +72,15 @@ int	check_op_para(char *line)
 }
 int main()
 {
-	printf("check op para: %d\n", check_op_para("()(")); // 1
-	printf("check op para: %d\n", check_op_para("()()")); // 0
+	// printf("check op para: %d\n", check_op_para("()(")); // 1
+	// printf("check op para: %d\n", check_op_para("()()")); // 0
 
-	printf("check op para: %d\n", check_op_para("((())()")); // 1
-	printf("check op para: %d\n", check_op_para("((())())")); // 0
+	// printf("check op para: %d\n", check_op_para("((())()")); // 1
+	// printf("check op para: %d\n", check_op_para("((())())")); // 0
 
-	printf("check op para: %d\n", check_op_para("(()()")); // 1
-	printf("check op para: %d\n", check_op_para("(()())")); // 0
+	// printf("check op para: %d\n", check_op_para("(()()")); // 1
+	// printf("check op para: %d\n", check_op_para("(()())")); // 0
 
-
+	printf("check op para: %d\n", check_op_para("\"(\"())")); // 0
 	
 }

@@ -6,11 +6,42 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 16:28:19 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/17 06:03:36 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 16:56:35 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*	check_and returns 1 if
+	- line starts with && (with or without whitespace)
+	- prompts for more input if || ends line (with or without whitespace)*/
+int	check_and(char *line)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (line[i] != '\0')
+	{
+		if (line[0] == '&' && line[1] == '&')
+			return (err_syntax("&&", 1));
+		j = i;
+		while (line[i] == 32 || line[i] == 9)
+		{
+			i++;
+			if (line[i] == '&' && line[i + 1] == '&' && j == 0)
+				return (err_syntax("&&", 1));
+		}
+		if (line[i] == '&' && line[i + 1] == '&')
+		{
+			if (and_mid(i, line) == 1)
+				return (err_syntax("&&", 1));
+		}
+		i++;
+	}
+	return (0);
+}
 
 /*	check_direct returns 1 if
 	-> followed by < and vice versa
@@ -22,25 +53,21 @@ int	check_direct(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == '>' && line[i + 1] == '<') 
-			return (err_printf("syntax error near unexpected token `<'\n"), 1);
-		else if  (line[i] == '<' && line[i + 1] == '>')
-			return (err_printf("syntax error near unexpected token `newline'\n"), 1);
-		else if (((line[i] == '>' && line[i + 1] == '>') || (line[i] == '<' && line[i + 1] == '<')))
+		if (line[i] == '>' && line[i + 1] == '<')
+			return (err_syntax("<", 1));
+		else if (line[i] == '<' && line[i + 1] == '>')
+			return (err_syntax("newline", 1));
+		else if (is_direct_double(line[i], line[i + 1]) == 0)
 		{
 			i = i + 2;
-			while (line [i] == ' ' || line[i] == '\t')
-				i++;
-			if (line[i] == '\0')
-				return (err_printf("syntax error near unexpected token `newline'\n"), 1);
+			if (only_whitespace_left(line, i) == 0)
+				return (err_syntax("newline", 1));
 		}
 		else if ((line[i] == '>' || line[i] == '<' ))
 		{
 			i++;
-			while (line [i] == ' ' || line[i] == '\t')
-				i++;
-			if (line[i] == '\0')
-				return (err_printf("syntax error near unexpected token `newline'\n"), 1);
+			if (only_whitespace_left(line, i) == 0)
+				return (err_syntax("newline", 1));
 		}
 		i++;
 	}
@@ -63,7 +90,7 @@ int	check_quotes(char *line)
 			while (line[i] != '\0' && line[i] != quote_t)
 				i++;
 			if (line[i] == '\0')
-				return (err_printf("syntax error near mismatched quotes\n"), 1);
+				return (err_syntax("\"", 1));
 			else
 				i++;
 		}
@@ -86,18 +113,18 @@ int	check_pipes(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[0] == '|' && line [1] != '|')
-			return (err_printf("syntax error near unexpected token `|'\n"), 1);
+			return (err_syntax("|", 1));
 		j = i;
 		while ((line[i] == 32 || line[i] == 9))
 		{
 			i++;
 			if (line[i] == '|' && line [i + 1] != '|' && j == 0)
-				return (err_printf("syntax error near unexpected token `|'\n"), 1);
+				return (err_syntax("|", 1));
 		}
 		if (line[i] == '|' && line [i + 1] != '|' && line[i - 1] != '|')
 		{
 			if (pipe_mid(i, line) == 1)
-				return (1);
+				return (err_syntax("|", 1));
 		}
 		i++;
 	}
@@ -110,7 +137,7 @@ int	check_all(char *line)
 	if (check_quotes(line) == 0 && check_pipes(line) == 0
 		&& check_direct(line) == 0 && check_and(line) == 0
 		&& check_or(line) == 0 && check_op_para(line) == 0
-		&& check_close_para(line) == 0)
+		&& check_close_para(line) == 0 && check_empty_para(line) == 0)
 		return (0);
 	else
 		return (1);

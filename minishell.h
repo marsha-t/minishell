@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 10:56:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 16:59:31 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,22 +158,30 @@ void	free_var_list(t_var *var);
 /*****************************************************************************/
 /*	check																	 */
 /*****************************************************************************/
-// syntax_err.c
+// syntax_err1.c
+int check_and(char *line);
 int	check_direct(char *line);
 int check_quotes(char *line);
 int check_pipes(char *line);
 int check_all(char *line);
 
-// syntax_err_bo.c
-int check_and(char *line);
+// syntax_err2.c
 int check_or(char *line);
+
 int check_op_para(char *line);
 int check_close_para(char *line);
+int	check_empty_para(char *line);
 
-// syntax_bo_utils.c
+// syntax_err_utils1.c
+int	is_direct_double(char a, char b);
+int	only_whitespace_left(char *line, int i);
 int	pipe_mid(int i, char *line);
 int	and_mid(int i, char *line);
 int	or_mid(int i, char *line);
+
+/*syntax_err_utils2.c*/
+void	skip_quoted(char *line, int *i);
+int	check_op_para_count(char *line, int *i, int *op_count);
 
 /*****************************************************************************/
 /*	tokenise																 */
@@ -191,7 +199,6 @@ t_token	*new_token(char *str, int code);
 int		add_token(t_token **tokens, char *str, int code);
 // void	free_tokens(t_token *tokens);
 void	free_tokens_null(t_token **tokens);
-
 
 // tokenise_misc_utils.c
 char	*strdup_range(char *start, char *end);
@@ -235,7 +242,6 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i);
 char	*remove_quote_str(char *str);
 int	remove_quote_file(t_file *file);
 int	remove_quote_node(t_ast *node);
-
 
 // expand_var.c
 char	*ft_strjoin2(char const *s1, char const *s2);
@@ -309,7 +315,7 @@ int get_outfile(t_ast *node, t_shell *shell);
 // void close_files(t_ast *node);
 
 // here_doc.c
-int open_hd_file(t_file *current, int flag, t_shell *shell);
+int open_hd_file(t_file *current, char *uniq_file, t_shell *shell);
 int get_docs(t_ast *node, t_shell *shell);
 
 // handling signals
@@ -395,5 +401,6 @@ void	print_conts_list(t_dconts *list);
 
 // error_utils.c
 int    err_syscall(t_shell *shell, char *cmd);
+int err_syntax(char *token, int n);
 
 #endif

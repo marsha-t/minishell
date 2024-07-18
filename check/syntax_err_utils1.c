@@ -6,49 +6,64 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 21:55:21 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/16 17:15:27 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 16:41:15 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/*	is_direct_double returns 0 if >> or << */
+int	is_direct_double(char a, char b)
+{
+	if ((a == '>' && b == '>') || (a == '<' && b == '<'))
+		return (0);
+	return (1);
+}
+
+/*	only_whitespace_left checks whether 
+	there is only whitespace left in line (returns 0 if so) */
+int	only_whitespace_left(char *line, int i)
+{
+	while (line[i] == ' ' || line[i] == '\t')
+		i++;
+	if (line[i] == '\0')
+		return (0);
+	return (1);
+}
+
 /*	pipe_mid returns 0 if line[i] (a pipe) is in the middle of a line
-	- if pipe is at end of line, it prompts for more input and returns 1 */
-// work in progress: incomplete line
+	- if pipe is at end of line, returns 1 */
 int	pipe_mid(int i, char *line)
 {
 	i++;
 	while (line[i] == 32 || line[i] == 9)
 		i++;
-	// if (line[i] == '\0')
-	// 	return (write(1, ">\n", 2), 1); // work in progress: how to read another line
+	if (line[i] == '\0')
+		return (1);
 	return (0);
 }
 
-/*	and_mid returns 0 if only whitespace follow line[i]
-	i.e., && ends the line (with or without whitespace)
-	- before returning 1, it prompts for more input*/
-// work in progress: incomplete line
+/*	and_mid returns 1 if only whitespace follow line[i]
+	i.e., && ends the line (with or without whitespace) */
 int	and_mid(int i, char *line)
 {
 	i = i + 2;
 	while (line[i] == 32 || line[i] == 9)
 		i++;
-	// if (line[i] == '\0')
-	// 	return (write(1, ">\n", 2), 1);
+	if (line[i] == '\0')
+		return (1);
 	return (0);
 }
 
-/*	or_mid returns 0 if only whitespace follow line[i]
+/*	or_mid returns 1 if only whitespace follow line[i]
 	i.e., || ends the line (with or without whitespace)
-	- before returning 1, it prompts for more input*/
-// work in progress: incomplete line
+	*/
 int	or_mid(int i, char *line)
 {
 	i = i + 2;
 	while (line[i] == 32 || line[i] == 9)
 		i++;
-	// if (line[i] == '\0')
-	// 	return (write(1, ">\n", 2), 1);
+	if (line[i] == '\0')
+		return (1);
 	return (0);
 }

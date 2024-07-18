@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 12:01:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 13:32:02 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int	check_empty_cmd(t_ast *node)
 		{
 			curr_arg = node->args;
 			node->args = node->args->next;
+			free(node->cmd);
 			node->cmd = curr_arg->content;
 			free(curr_arg);
 			node->n_args--;
