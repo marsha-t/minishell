@@ -425,6 +425,7 @@ echo -invalid -n abc  #output: -invalid -n abc with new line
 echo # new line printed 
 echo -n #no new line printed
 echo -n -n abc # output: abc without new line 
+
 #############################################################################
 # PWD #######################################################################
 #############################################################################

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:11:04 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/18 06:28:43 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 10:37:21 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,15 @@ int	open_files(t_ast *node, t_shell *shell)
 		else if (current->flag == TOKEN_OUTPUT && access(current ->file_name, F_OK) == 0)
 		{
 			if (stat(current->file_name, &f_stat) == -1)
-			{
-				shell->exit_shell = 1;
-				return (err_printf("error calling stat\n"), 1);
-			}
+				return (err_syscall(shell, "stat"));
 			if (S_ISDIR(f_stat.st_mode))
 				return (err_printf("%s: this is a directory\n", current->file_name),1);
 			current->fd = open(current->file_name, O_TRUNC,mode);
 		}
 		if (current->fd == -1)
-		{
-			shell->exit_shell = 1;
-			return (err_printf("error calling open\n"), 1);
-		}
+			return (err_syscall(shell, "open"));
 		if (close(current->fd) == -1)
-		{
-			shell->exit_shell = 1;
-			return (err_printf("error calling close\n"), 1);
-		}
+			return (err_syscall(shell, "close"));
 		current = current -> next;
 	}
 	return (0);
@@ -75,10 +66,7 @@ int	get_outfile(t_ast *node, t_shell *shell)
 	else if (access(current ->file_name, F_OK) == 0)
 	{
 		if (stat(current->file_name, &f_stat) == -1)
-		{
-			shell->exit_shell = 1;
-			return (err_printf("error calling stat\n"), 1);
-		}
+			return (err_syscall(shell, "stat"));
 		if (S_ISDIR(f_stat.st_mode))
 			return (err_printf("%s: Is a directory\n", current->file_name), 1);
 		if (current->flag == TOKEN_OUTPUT)
@@ -87,27 +75,15 @@ int	get_outfile(t_ast *node, t_shell *shell)
 			current->fd = open(current ->file_name, O_APPEND | O_RDWR, mode);
 	}
 	if (current->fd == -1)
-	{
-		shell->exit_shell = 1;
-		return (err_printf("error calling open\n"), 1);
-	}
+		return (err_syscall(shell, "open"));
 	node->tmp_stdout_fd = dup(STDOUT_FILENO);
 	if (node->tmp_stdout_fd == -1)
-	{
-		shell->exit_shell = 1;
-		return (err_printf("error calling dup\n"), 1);
-	}
+		return (err_syscall(shell, "dup2"));
 	target_fd = dup2(current->fd, STDOUT_FILENO);
+	if (close(current->fd) == -1)
+		return (err_syscall(shell, "close"));
 	if (target_fd == -1)
-	{
-		shell->exit_shell = 1;
-		return (err_printf("error calling dup2\n"), 1);
-	}
-	if close(current->fd) == -1)
-	{
-		shell->exit_shell = 1;
-		return (err_printf("error calling close\n"), 1);
-	}
+		return (err_syscall(shell, "dup2"));
 	return (0);
 }
 

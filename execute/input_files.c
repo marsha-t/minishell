@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   input_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:57:08 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/18 06:14:47 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 10:57:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// since execv only deal with the standard input and standard output get_infile try to lkie make the given input file
-// temporary standard input and after executing the command we should return everything back
 #include "../minishell.h"
 
-// work in progress: sort out what needs to terminate and what doesn't; make sure all system calls are protecte
-int	get_infile(t_ast *node)
+int	get_infile(t_ast *node, t_shell *shell)
 {
 	int 	fd;
 	int 	target_fd;
@@ -40,13 +37,14 @@ int	get_infile(t_ast *node)
 	}
 	fd = open(current ->file_name, O_RDONLY);
 	if (fd == -1)
-		return (1);
-	node ->tmp_stdin_fd = dup(STDIN_FILENO);
-	if (node ->tmp_stdin_fd == -1)
-		return (1);
+		return (err_syscall(shell, "open"));
+	node->tmp_stdin_fd = dup(STDIN_FILENO);
+	if (node->tmp_stdin_fd == -1)
+		return (err_syscall(shell, "dup"));
 	target_fd = dup2(fd, STDIN_FILENO);
-	close(fd);
+	if (close(fd) == -1)
+		return (err_syscall(shell, "close"));
 	if (target_fd == -1)
-		return (1);
+		return (err_syscall(shell, "dup2"));
 	return (0);
 }

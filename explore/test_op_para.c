@@ -42,6 +42,7 @@ int	check_op_para(char *line)
 	op_count = 0;
 	while (line[i] != '\0')
 	{
+		if (line[i] == '')
 		if (line[i] == '(')
 		{
 			i++;

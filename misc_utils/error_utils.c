@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 06:22:29 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/18 06:30:05 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 10:49:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,4 +15,6 @@
 int    err_syscall(t_shell *shell, char *cmd)
 {
     shell->exit_shell = 1;
+    err_printf("error calling %s\n", cmd);
+    return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 06:22:28 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 10:56:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell);
 int		execute_ast(t_ast *node, t_shell *shell);
 
 // input_files.c
-int		get_infile(t_ast *node);
+int		get_infile(t_ast *node, t_shell *shell);
 
 // output_files.c
 int  open_files (t_ast *node, t_shell *shell);
@@ -309,8 +309,8 @@ int get_outfile(t_ast *node, t_shell *shell);
 // void close_files(t_ast *node);
 
 // here_doc.c
-int open_hd_file(t_file *current, int flag);
-int get_docs(t_ast *node);
+int open_hd_file(t_file *current, int flag, t_shell *shell);
+int get_docs(t_ast *node, t_shell *shell);
 
 // handling signals
 void  control_signals(void);
@@ -394,5 +394,6 @@ void	ast_tree_print(t_ast *node);
 void	print_conts_list(t_dconts *list);
 
 // error_utils.c
+int    err_syscall(t_shell *shell, char *cmd);
 
 #endif
