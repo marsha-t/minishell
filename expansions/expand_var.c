@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/18 11:46:02 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 17:47:20 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char	*expand_var(char *var, t_var *env)
 	return (ft_strdup(""));
 }
 
+/*	join_expand joins the expanded var together to reform the str */
 char	*join_expand(char *temp, char *var, char *str, int i)
 {
 	char	*all_str;
@@ -69,45 +70,72 @@ char	*join_expand(char *temp, char *var, char *str, int i)
 	return (all_str);
 }
 
+/*	split_expand_join_temp is a helper function to split_expand_join
+	- generates temp
+	- returns 0 if successful */
+int	split_expand_join_temp(char *str, int i, char **temp)
+{
+	if (i != 0)
+	{
+		*temp = strdup_range(&str[0], &str[i - 1]);
+		if (!*temp)
+			return (err_printf("malloc error: temp\n"), 1);
+	}
+	else
+		*temp = NULL;
+	return (0);
+}
+
+/*	split_expand_join_var is a helper function to split_expand_join
+	- returns var */
+char	*split_expand_join_var(char *str, int start, int *i, t_shell *shell)
+{
+	char	*expanded;
+	char	*var;
+
+	if (str[start] == '?')
+	{
+		(*i)++;
+		var = ft_itoa(shell->exit_status);
+		if (!var)
+			return (err_printf("malloc error: ft_itoa\n"), NULL);
+	}
+	else
+	{
+		while (is_valid_varchar(str[*i]) == 0)
+			(*i)++;
+		var = strdup_range(&str[start], &str[*i - 1]);
+		if (!var)
+			return (err_printf("malloc error: var\n"), NULL);
+		expanded = expand_var(var, shell->var_list);
+		free(var);
+		var = expanded;
+		if (!expanded)
+			return (err_printf("malloc error: expand_var\n"), NULL);
+	}
+	return (var);
+}
+
+/*	split_expand_join 
+	- splits the str into temp (before $), var and the rest
+	- expands var
+	- joins everything back together 
+*/
 char	*split_expand_join(char *str, int i, t_shell *shell)
 {
 	char	*temp;
 	char	*var;
 	int		start;
-	char	*expanded;
 
-	if (i != 0)
-	{
-		temp = strdup_range(&str[0], &str[i - 1]);
-		if (!temp)
-			return (err_printf("malloc error: temp\n"), NULL);
-	}
-	else
-		temp = NULL;
+	if (split_expand_join_temp(str, i, &temp) == 1)
+		return (NULL);
 	start = i + 1;
 	i++;
 	if (is_valid_varstart(str[start]) == 0)
 	{
-		if (str[start] == '?')
-		{
-			i++;
-			var = ft_itoa(shell->exit_status);
-			if (!var)
-				return (free(temp), err_printf("malloc error: ft_itoa\n"), NULL);
-		}
-		else
-		{
-			while (is_valid_varchar(str[i]) == 0)
-				i++;
-			var = strdup_range(&str[start], &str[i - 1]);
-			if (!var)
-				return (free(temp), err_printf("malloc error: var\n"), NULL);
-			expanded = expand_var(var, shell->var_list);
-			free(var);
-			var = expanded;
-			if (!expanded)
-				return (free(temp), err_printf("malloc error: expand_var\n"), NULL);
-		}
+		var = split_expand_join_var(str, start, &i, shell);
+		if (!var)
+			return (free(temp), NULL);
 	}
 	else
 		var = NULL;
@@ -117,6 +145,9 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 	return (str);
 }
 
+/*	expand_str expands $
+	- returns 1 if error 
+	- restarts at i = 0 after expanding to cater for nested expansions */
 char	*expand_str(char *str, t_shell *shell)
 {
 	int	i;
@@ -138,9 +169,7 @@ char	*expand_str(char *str, t_shell *shell)
 			{
 				if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
 				{
-					printf("aa\n");
 					str = split_expand_join(str, i, shell);
-					printf("bb: %s\n", str);
 					if (!str)
 						return (NULL);
 				}
@@ -190,6 +219,26 @@ int	file_list_check_var(t_file *file, t_shell *shell)
 	return (0);
 }
 
+/*	check_var_expand_arg checks for var expansion in args 
+	- returns 1 if error */
+int	check_var_expand_arg(t_ast *node, t_shell *shell)
+{
+	t_list	*curr_arg;
+
+	curr_arg = node->args;
+	while (curr_arg)
+	{
+		if (contain_var(curr_arg->content) == 0)
+		{
+			curr_arg->content = expand_str(curr_arg->content, shell);
+			if (!curr_arg->content)
+				return (1);
+		}
+		curr_arg = curr_arg->next;
+	}
+	return (0);
+}
+
 /*	check_var_expansion checks whether variable expansions are needed
 	- checks strings in cmd, args and files
 	- if needed, expands them
@@ -197,8 +246,6 @@ int	file_list_check_var(t_file *file, t_shell *shell)
 	*/
 int	check_var_expansion(t_ast *node, t_shell *shell)
 {
-	t_list	*curr_arg;
-
 	if (contain_var(node->cmd) == 0)
 	{
 		node->cmd = expand_str(node->cmd, shell);
@@ -206,33 +253,16 @@ int	check_var_expansion(t_ast *node, t_shell *shell)
 			return (1);
 	}
 	if (node->n_args > 0)
-	{
-		curr_arg = node->args;
-		while (curr_arg)
-		{
-			if (contain_var(curr_arg->content) == 0)
-			{
-				curr_arg->content = expand_str(curr_arg->content, shell);
-				if (!curr_arg->content)
-					return (1);
-			}
-			curr_arg = curr_arg->next;
-		}
-	}
+		if (check_var_expand_arg(node, shell) == 1)
+			return (1);
 	if (node->input_list)
-	{
 		if (file_list_check_var(node->input_list, shell) == 1)
 			return (1);
-	}
 	if (node->heredoc_list)
-	{
 		if (file_list_check_var(node->heredoc_list, shell) == 1)
 			return (1);
-	}
 	if (node->output_list)
-	{
 		if (file_list_check_var(node->output_list, shell) == 1)
 			return (1);
-	}
 	return (0);
 }

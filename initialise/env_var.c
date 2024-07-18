@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:01 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/17 16:11:12 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 17:11:52 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ void	free_var_list(t_var *var)
 	{
 		next = current->next;
 		if (current->key)
-		{
-			free(current->key);}
+			free(current->key);
 		if (current->value)
 			free(current->value);
 		free(current);

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:08:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 17:12:04 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	free_shell(t_shell *shell)
 		free_tokens_null(&shell->tokens);
 	if (shell->ast_list)
 		ast_list_free(shell->ast_list);
-	if(shell->var_list)
+	if (shell->var_list)
 		free_var_list(shell->var_list);
 	free(shell);
 }
