@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 13:32:02 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/19 02:57:09 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*	check_builtin returns 0 if cmd is a builtin command 
+/*	check_builtin returns 0 if cmd is a builtin command
 	- returns 1 otherwise */
 int	check_builtin(char *cmd)
 {
@@ -34,7 +34,7 @@ int	check_builtin(char *cmd)
 		return (1);
 }
 /*execute_cmd_builtin runs builtins and assignments
-	-  calls exit_shell if builtin or assignment has exit_shell error 
+	-  calls exit_shell if builtin or assignment has exit_shell error
 	*/
 int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 {
@@ -72,7 +72,7 @@ int	execute_cmd_others(t_ast *node, t_shell *shell)
 	return (exit_status);
 }
 /*	cmd_only_quote checks whether a commmand contains only consecutive empty quoted strings
-	- return 0 if so 
+	- return 0 if so
 	- for cases like: "" echo abc */
 int	cmd_only_quote(char *cmd)
 {
@@ -132,8 +132,8 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 {
 	if (check_var_expansion(node, shell) == 1)
 		return (1);
-	if (check_wc_expansion(node, shell) == 1)
-		return (1);
+	// if (check_wc_expansion(node, shell) == 1)
+	// 	return (1);
 	if (cmd_only_quote(node->cmd) == 0)
 	{
 		shell->exit_status = 127;
@@ -164,7 +164,7 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int id;
-	int	status;
+	// int	status;
 	int	setup_return;
   	// if (check_var_expansion(node, shell) == 1)
 	// {
@@ -177,7 +177,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	// 		return (exit_shell(shell, 1), 1);
 	// 	else
 	// 		return (1);
-	// } 
+	// }
 	// if (cmd_only_quote(node->cmd) == 0)
 	// {
 	// 	shell->exit_status = 127;
@@ -222,9 +222,9 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		}
 		else
 		{
-			waitpid(id, &status, 0);
-			if (WIFEXITED(status))
-				shell->exit_status = WEXITSTATUS(status);
+			waitpid(id, &shell->exit_status, 0);
+			// if (WIFEXITED(status))
+			// 	shell->exit_status = WEXITSTATUS(status);
 		}
 	}
 	if (node->input_list && dup2(node->tmp_stdin_fd, STDIN_FILENO)== -1)
@@ -239,7 +239,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 int execute_pipe(t_ast *node, t_shell *shell, int flag)
 {
 	int	pipefd[2];
-	int	status;
+	// int	status;
 
 	pipe(pipefd);
 	pid_t pid_left;
@@ -287,9 +287,9 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 	}
 	else
 	{
-		waitpid(pid_left, &status, 0);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
+		// if (WIFEXITED(status))
+		// 	shell->exit_status = WEXITSTATUS(status);
+		waitpid(pid_left, &shell->exit_status, 0);
 		shell->pipe_data = 1;
 		if(shell->old_read_fd != -2)
 			close(shell->old_read_fd);
@@ -302,7 +302,7 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 int	execute_pipeline(t_ast *node, t_shell *shell)
 {
 	int flag;
-	
+
 	flag = 0;
 	while (node->pipe)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 06:21:15 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 23:27:52 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int check_ll_limit(char *str, int sign)
 }
 
 /*	check_exit_arg checks whether a numeric argument was provided to exit
-	- returns 1 if empty str, non-numeric characters given 
+	- returns 1 if empty str, non-numeric characters given
 		(other than starting + or -),
 		or number is outside of long long limits */
 int	check_exit_arg(char *str)
@@ -85,7 +85,7 @@ int	get_exit_status(char *str)
 	num = (long long) ft_atoi_ull(str) * sign;
 	num = num % 256;
 	if (num < 0)
-		num = 256 - num;
+		num = 256 - (-1 * num);
 	return ((int) num);
 }
 

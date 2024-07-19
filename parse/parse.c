@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:06:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:08:52 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 23:43:27 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	parse_tokens(t_shell *shell)
 	shell->root = ast_tree_new(&dup_list);
 	if (!shell->root)
 		return (1);
-	ft_printf("\n\n printing tree\n");
-	ast_tree_print(shell->root);
+	// ft_printf("\n\n printing tree\n");
+	// ast_tree_print(shell->root);
 	return (0);
 }

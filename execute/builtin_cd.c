@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:35:36 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:06:36 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/19 00:30:49 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 /*	builtin_cd runs the cd command
 	- if no arg, sets to $HOME
-	- error that do not terminate shell: 
-		- no arg given but HOME is unset 
+	- error that do not terminate shell:
+		- no arg given but HOME is unset
 		- more than 1 argument
 		- file given instead of directory
 		- no permission given for directory
@@ -75,7 +75,7 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 			{
 				shell->exit_shell = 1;
 				free(path);
-				return (err_printf("cd: error calling chdir\n"), 1);			
+				return (err_printf("cd: error calling chdir\n"), 1);
 			}
 		}
 	}
@@ -92,9 +92,9 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 	else if (errno == ENOENT)
 	{
 		free(path);
-		return (err_printf("cd: %s: No such file or directory\n", path), 127);
+		return (err_printf(" No such file or directory\n"), 1);
 	}
-	else if (errno = ENOTDIR)
+	else if (errno == ENOTDIR)
 	{
 		free(path);
 		return (err_printf("%s: Not a directory\n", path), 1);

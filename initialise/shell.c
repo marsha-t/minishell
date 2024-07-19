@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 17:12:04 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/18 23:45:34 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_shell	*init_shell(char **envp)
 	shell->tokens = 0;
 	shell->ast_list = 0;
 	shell->root = 0;
-	shell->exit_status = -1;
+	shell->exit_status = 0;
 	shell->pipe_data = 0;
 	shell->directory_contents = 0;
 	shell ->old_read_fd = -2;
