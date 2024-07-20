@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/19 20:43:46 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/20 15:33:47 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,10 @@ int	cmd_only_quote(char *cmd)
 int	check_empty_cmd(t_ast *node)
 {
 	t_list	*curr_arg;
-
+	
 	if (node->cmd[0] == '\0')
 	{
-		if (node->n_args == 0)
-			return (1);
-		else
+		if (node->n_args > 0)
 		{
 			curr_arg = node->args;
 			node->args = node->args->next;
@@ -123,6 +121,10 @@ int	check_empty_cmd(t_ast *node)
 			node->n_args--;
 			return (0);
 		}
+		else if ((node->input_list) || (node->output_list) || (node->heredoc_list))
+			return (0);
+		else
+			return (1);
 	}
 	else
 		return (0);
@@ -132,8 +134,8 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 {
 	if (check_var_expansion(node, shell) == 1)
 		return (1);
-	// if (check_wc_expansion(node, shell) == 1)
-	// 	return (1);
+	if (check_wc_expansion(node, shell) == 1)
+		return (1);
 	if (cmd_only_quote(node->cmd) == 0)
 	{
 		shell->exit_status = 127;
@@ -146,6 +148,7 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 	}
 	if (remove_quote_node(node) == 1)
 		return (1);
+
 	if (get_docs(node, shell) == 1)
 		return (1);
 	if (get_infile(node, shell) == 1)

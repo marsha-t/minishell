@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:35:36 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/19 00:30:49 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/20 14:59:32 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 		}
 		if (!S_ISDIR(file_stat.st_mode))
 		{
-			free(path);
 			err_printf("cd: %s: Not a directory\n", path);
+			free(path);
 			return (1);
 		}
 		else
@@ -74,20 +74,23 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 			else
 			{
 				shell->exit_shell = 1;
+				err_printf("cd: error calling chdir\n");
 				free(path);
-				return (err_printf("cd: error calling chdir\n"), 1);
+				return (1);
 			}
 		}
 	}
 	else if (errno == EACCES)
 	{
+		err_printf("%s: Permission denied\n", path);
 		free(path);
-		return (err_printf("%s: Permission denied\n", path), 126);
+		return (126);
 	}
 	else if (errno == ENAMETOOLONG)
 	{
+		err_printf("cd: %s: File name too long\n", path);
 		free(path);
-		return (err_printf("cd: %s: File name too long\n", path), 126);
+		return (126);
 	}
 	else if (errno == ENOENT)
 	{
@@ -96,8 +99,9 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 	}
 	else if (errno == ENOTDIR)
 	{
+		err_printf("%s: Not a directory\n", path);
 		free(path);
-		return (err_printf("%s: Not a directory\n", path), 1);
+		return (1);
 	}
 	else
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:03:01 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 23:51:03 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/20 15:44:48 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	update_pwd(char *dir, t_shell *shell)
 	pwd_node = check_exist("PWD", shell->var_list);
 	if (!pwd_node)
 		return (0);
+	free(pwd_node->value);
 	pwd_node->value = ft_strdup(dir);
 	if (!pwd_node->value)
 	{

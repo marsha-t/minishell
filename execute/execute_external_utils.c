@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:39:29 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 11:35:03 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,5 +205,6 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		return (err_printf("%s: Permission denied\n", cmd), NULL);
 	}
 	*exit_status = 127;
-	return (err_printf("%s: command not found\n", cmd), NULL);
+	// return (err_printf("%s: command not found\n", cmd), NULL);
+	return (dprintf(2, "%s: command not found\n", cmd), NULL);
 }

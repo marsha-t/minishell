@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:57:08 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/18 10:57:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 15:36:27 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,17 @@ int	get_infile(t_ast *node, t_shell *shell)
 	{
 		if (access(current->file_name, F_OK) != 0)
 		{
-			err_printf("%s: No such file or directory\n", current->file_name);
+			// err_printf("%s: No such file or directory\n", current->file_name);
+			dprintf(2, "%s: No such file or directory\n", current->file_name);
+
 			return (1);
 		}
 		current = current ->next;
 	}
 	if(access(current->file_name, F_OK) != 0)
 	{
-		err_printf("%s: No such file or directory\n", current->file_name);
+		// err_printf("%s: No such file or directory\n", current->file_name);
+		dprintf(2, "%s: No such file or directory\n", current->file_name);
 		return (1);
 	}
 	fd = open(current ->file_name, O_RDONLY);

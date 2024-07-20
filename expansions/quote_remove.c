@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:08:13 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 12:26:16 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,20 +110,21 @@ int	remove_quote_file(t_file *file)
 	- removed from cmd, arg, input_file, output_file and heredoc_file*/
 int	remove_quote_node(t_ast *node)
 {
-	int	i;
+	t_list	*curr_arg;
 
 	node->cmd = remove_quote_str(node->cmd);
 	if (!node->cmd)
 		return (1);
 	if (node->n_args > 0)
 	{
-		i = 0;
-		while (i < node->n_args)
+		curr_arg = node->args;
+		while (curr_arg)
 		{
-			node->args->content = remove_quote_str(node->args->content);
-			if (!node->args->content)
+			curr_arg->content = remove_quote_str(curr_arg->content);
+
+			if (!curr_arg->content)
 				return (1);
-			i++;
+			curr_arg = curr_arg->next;
 		}
 	}
 	if (node->input_list && remove_quote_file(node->input_list) == 1)

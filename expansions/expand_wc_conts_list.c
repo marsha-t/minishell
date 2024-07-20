@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:41:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:46:03 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 14:56:13 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,15 @@ t_dconts	*create_conts_list(char *directory)
 		return (err_printf("error calling opendir\n"), NULL);
 	list = NULL;
 	content = readdir(dd);
-	if (errno)
-		return (err_printf("error calling readdir\n"), NULL);
+	// if (errno)
+	// 	return (err_printf("error calling readdir\n"), NULL);
 	while (content)
 	{
-		if (create_conts_node(content->d_name, &list) == 1)
-			return (NULL);
+		if (content->d_name[0] != '.')
+		{
+			if (create_conts_node(content->d_name, &list) == 1)
+				return (NULL);
+		}
 		content = readdir(dd);
 	}
 	closedir(dd);

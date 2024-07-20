@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:12:13 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 15:33:18 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,22 @@ int	ast_node_append_cmd(t_token **tokens, t_ast *current)
 	return (0);
 }
 
+int	classify_redir_node(t_ast *node)
+{
+	while (node)
+	{
+		if (node->code == 0)
+		{
+			node->code = TOKEN_CMD;
+			node->cmd = ft_strdup("");
+			if (!node->cmd)
+				return (err_printf("malloc error: ft_strdup\n"), 1);
+		}
+		node = node->next;
+	}
+	return (0);
+}
+
 /*	ast_list_new generates nodes in the ast
 	- ast nodes are placed in a linked list
 	- frees linked list
@@ -197,6 +213,8 @@ t_ast	*ast_list_new(t_token **tokens)
 				return (ast_list_free(start), NULL);
 		}
 	}
+	if (classify_redir_node(start) == 1)
+		return (ast_list_free(start), NULL);
 	return (start);
 }
 

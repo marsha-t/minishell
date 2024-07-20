@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:38:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 12:04:15 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 15:03:32 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,6 +327,8 @@ int	add_matched_to_arg(t_dconts *matched, t_list **arg, t_ast *node)
 	t_list	*end_args;
 	int		num_args;
 
+	if (!matched)
+		return (0);
 	new_args = NULL;
 	end_args = NULL;
 	num_args = matched_to_arg(matched, &new_args, &end_args);
