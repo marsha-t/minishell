@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 11:35:03 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 19:53:31 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	check_filepath(char *cmd, t_shell *shell)
 		if (stat(cmd, &file_stat) == -1)
 		{
 			shell->exit_shell = 1;
-			return (err_printf("error calling stat\n"), 1);
+			return (err_printf(" stat\n"), 1);
 		}
 		else if (S_ISDIR(file_stat.st_mode))
 			return (err_printf("%s: Is a directory\n", cmd), 126);
@@ -71,7 +71,7 @@ int	has_current_wd(char *path)
 	}
 }
 
-/*	add_current_wd adds the current working directory to path 
+/*	add_current_wd adds the current working directory to path
 	and does so in the correct order */
 char *add_current_wd(char *path, int i, t_shell *shell)
 {

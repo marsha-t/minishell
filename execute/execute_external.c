@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/19 02:25:18 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/20 17:31:44 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,5 +171,9 @@ int	run_external(t_ast *node, t_shell *shell)
 	free_char_dp(argv);
 	free_char_dp(envp);
 	free(filename);
+	if(exit_status == -1 && errno == EACCES)
+		exit_status = 126;
+	// else if(exit_status == -1 && errno == ENOENT)
+	// 	exit_status = 127;
 	return (exit_status);
 }

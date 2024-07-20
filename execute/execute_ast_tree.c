@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 16:54:05 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 19:22:46 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	cmd_only_quote(char *cmd)
 int	check_empty_cmd(t_ast *node)
 {
 	t_list	*curr_arg;
-	
+
 	if (node->cmd[0] == '\0')
 	{
 		if (node->n_args > 0)
@@ -244,7 +244,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 int execute_pipe(t_ast *node, t_shell *shell, int flag)
 {
 	int	pipefd[2];
-	int	status;
+	// int	status;
 
 	pipe(pipefd);
 	pid_t pid_left;
@@ -292,10 +292,6 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 	}
 	else
 	{
-		// wait(NULL);
-
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
 		// waitpid(pid_left, &status, 0);
 		shell->pipe_data = 1;
 		if(shell->old_read_fd != -2)
@@ -310,9 +306,11 @@ int	execute_pipeline(t_ast *node, t_shell *shell)
 {
 	int flag;
 	int count;
+	int status;
 
 	flag = 0;
 	count = 0;
+	status = 0;
 	while (node->pipe)
 	{
 		execute_pipe(node, shell,flag);
@@ -320,10 +318,13 @@ int	execute_pipeline(t_ast *node, t_shell *shell)
 		flag++;
 		count++;
 	}
+	count++;
 	execute_pipe(node, shell,-1);
 	while(count)
 	{
-		wait(NULL);
+		if (wait(&status))
+			if (WIFEXITED(status))
+				shell->exit_status = WEXITSTATUS(status);
 		count --;
 	}
 	close(shell->old_read_fd);

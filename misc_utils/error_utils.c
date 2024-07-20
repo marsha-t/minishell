@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 06:22:29 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/18 16:09:38 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 19:54:09 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	err_syscall(t_shell *shell, char *cmd)
 }
 
 /*	err_syntax for syntax errors
-	- prints error message with token that is causing error 
+	- prints error message with token that is causing error
 	- returns n*/
 int	err_syntax(char *token, int n)
 {

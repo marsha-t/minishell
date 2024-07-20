@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:11:04 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/18 10:37:21 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 20:39:53 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,19 @@ int	get_outfile(t_ast *node, t_shell *shell)
 	}
 	else if (access(current ->file_name, F_OK) == 0)
 	{
+		if (access(current->file_name, R_OK | W_OK | X_OK) == -1)
+		{
+			// if (errno == EACCES)
+			// {
+				printf("yeah i did this!\n");
+				shell->exit_status = 1;
+			// }
+		}
+		else
+		{
+			printf("no dude permission granted!\n");
+		}
+
 		if (stat(current->file_name, &f_stat) == -1)
 			return (err_syscall(shell, "stat"));
 		if (S_ISDIR(f_stat.st_mode))
