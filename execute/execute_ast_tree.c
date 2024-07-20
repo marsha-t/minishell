@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/19 02:57:09 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/19 20:43:46 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 int	execute_cmd_node(t_ast *node, t_shell *shell)
 {
 	int id;
-	// int	status;
+	int	status;
 	int	setup_return;
   	// if (check_var_expansion(node, shell) == 1)
 	// {
@@ -203,6 +203,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	{
 		return (shell->exit_status);
 	}
+	// printf("this is the argument after expansion %s\n",(char*)node->args->content);
 	if (check_builtin(node->cmd) == 0 || ft_strchr(node->cmd, '=') != NULL)
 		shell->exit_status = execute_cmd_builtin(node, shell);
 	else if (shell->pipe_data != 0)
@@ -222,9 +223,9 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		}
 		else
 		{
-			waitpid(id, &shell->exit_status, 0);
-			// if (WIFEXITED(status))
-			// 	shell->exit_status = WEXITSTATUS(status);
+			waitpid(id, &status, 0);
+			if (WIFEXITED(status))
+				shell->exit_status = WEXITSTATUS(status);
 		}
 	}
 	if (node->input_list && dup2(node->tmp_stdin_fd, STDIN_FILENO)== -1)
@@ -239,7 +240,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 int execute_pipe(t_ast *node, t_shell *shell, int flag)
 {
 	int	pipefd[2];
-	// int	status;
+	int	status;
 
 	pipe(pipefd);
 	pid_t pid_left;
@@ -287,9 +288,11 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 	}
 	else
 	{
-		// if (WIFEXITED(status))
-		// 	shell->exit_status = WEXITSTATUS(status);
-		waitpid(pid_left, &shell->exit_status, 0);
+		// wait(NULL);
+
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		// waitpid(pid_left, &status, 0);
 		shell->pipe_data = 1;
 		if(shell->old_read_fd != -2)
 			close(shell->old_read_fd);
@@ -302,15 +305,23 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 int	execute_pipeline(t_ast *node, t_shell *shell)
 {
 	int flag;
+	int count;
 
 	flag = 0;
+	count = 0;
 	while (node->pipe)
 	{
 		execute_pipe(node, shell,flag);
 		node = node->pipe;
 		flag++;
+		count++;
 	}
 	execute_pipe(node, shell,-1);
+	while(count)
+	{
+		wait(NULL);
+		count --;
+	}
 	close(shell->old_read_fd);
 	return (shell->exit_status);
 }

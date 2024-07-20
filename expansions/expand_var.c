@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:27:29 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/18 17:47:20 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 10:08:58 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_strjoin2(char const *s1, char const *s2)
 	return (ptr);
 }
 
-/*	expand_var searches for var in variable list 
+/*	expand_var searches for var in variable list
 	- returns duplicate of value if found
 	- returns duplicate of empty string if nothing found
 	- malloc protection in split_expand_join()*/
@@ -116,10 +116,10 @@ char	*split_expand_join_var(char *str, int start, int *i, t_shell *shell)
 	return (var);
 }
 
-/*	split_expand_join 
+/*	split_expand_join
 	- splits the str into temp (before $), var and the rest
 	- expands var
-	- joins everything back together 
+	- joins everything back together
 */
 char	*split_expand_join(char *str, int i, t_shell *shell)
 {
@@ -146,7 +146,7 @@ char	*split_expand_join(char *str, int i, t_shell *shell)
 }
 
 /*	expand_str expands $
-	- returns 1 if error 
+	- returns 1 if error
 	- restarts at i = 0 after expanding to cater for nested expansions */
 char	*expand_str(char *str, t_shell *shell)
 {
@@ -219,7 +219,7 @@ int	file_list_check_var(t_file *file, t_shell *shell)
 	return (0);
 }
 
-/*	check_var_expand_arg checks for var expansion in args 
+/*	check_var_expand_arg checks for var expansion in args
 	- returns 1 if error */
 int	check_var_expand_arg(t_ast *node, t_shell *shell)
 {
@@ -230,7 +230,7 @@ int	check_var_expand_arg(t_ast *node, t_shell *shell)
 	{
 		if (contain_var(curr_arg->content) == 0)
 		{
-			curr_arg->content = expand_str(curr_arg->content, shell);
+						curr_arg->content = expand_str(curr_arg->content, shell);
 			if (!curr_arg->content)
 				return (1);
 		}
