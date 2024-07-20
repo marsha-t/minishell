@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:02:50 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 15:33:18 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:24:54 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current)
 			return (err_printf("malloc error: t_ast for ast_node_append_misc\n"), 1);
 		*current = *start;
 	}
-	else if (*start && (*current)->code != TOKEN_CMD)
+	else if (*start && (*current)->code != TOKEN_CMD && (*current)->code != 0)
 	{
 		(*current)->next = ast_node_init();
 		if (!(*current)->next)

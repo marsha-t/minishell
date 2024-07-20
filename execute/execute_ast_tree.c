@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 15:33:47 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/20 16:54:05 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	execute_cmd_builtin(t_ast *node, t_shell *shell)
 		exit_status = builtin_exit(node, shell);
 	else if (ft_strchr(node->cmd, '=') != NULL)
 		exit_status = run_assign(node, shell);
+	else if (node->cmd[0] == '\0')
+		return (0);
 	if (shell->exit_shell == 1)
 		return (exit_shell(shell, 1), 1);
 	return (exit_status);
@@ -148,7 +150,6 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 	}
 	if (remove_quote_node(node) == 1)
 		return (1);
-
 	if (get_docs(node, shell) == 1)
 		return (1);
 	if (get_infile(node, shell) == 1)
@@ -207,7 +208,7 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		return (shell->exit_status);
 	}
 	// printf("this is the argument after expansion %s\n",(char*)node->args->content);
-	if (check_builtin(node->cmd) == 0 || ft_strchr(node->cmd, '=') != NULL)
+	if (check_builtin(node->cmd) == 0 || ft_strchr(node->cmd, '=') != NULL || node->cmd[0] == '\0')
 		shell->exit_status = execute_cmd_builtin(node, shell);
 	else if (shell->pipe_data != 0)
 	{
