@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/21 10:42:01 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/21 10:49:45 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,7 +368,7 @@ int	init_pipeline(t_ast *node, t_shell *shell) // MT: new code: new function
 	t_ast	*curr;
 
 	curr = node->pipe;
-	tot = 0;
+	tot = 1;
 	while (curr)
 	{
 		tot++;
