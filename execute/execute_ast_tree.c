@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/21 10:49:45 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/21 10:53:44 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,6 +432,7 @@ int	execute_pipeline(t_ast *node, t_shell *shell)
 	// 	count --;
 	// }
 	
+	free(shell->pid);
 	close(shell->old_read_fd);
 	return (shell->exit_status);
 }
