@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 16:59:31 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/21 10:39:02 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct s_shell
 	t_ast	*ast_list;
 	t_ast	*root;
 	int		pipe_data;
+	pid_t		*pid; // MT: new code 
 	int	exit_status;
 	int	exit_shell;
 	int  old_read_fd;

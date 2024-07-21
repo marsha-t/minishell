@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 23:45:34 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/21 10:41:50 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_shell	*init_shell(char **envp)
 	shell->root = 0;
 	shell->exit_status = 0;
 	shell->pipe_data = 0;
+	shell->pid = 0; // MT: new code
 	shell->directory_contents = 0;
 	shell ->old_read_fd = -2;
 	shell->exit_shell = 0;

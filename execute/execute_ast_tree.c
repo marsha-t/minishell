@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 19:22:46 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/21 10:42:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,15 +241,75 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	return (LOC = 1, shell->exit_status);
 }
 
-int execute_pipe(t_ast *node, t_shell *shell, int flag)
+// int execute_pipe(t_ast *node, t_shell *shell, int flag)
+// {
+// 	int	pipefd[2];
+// 	// int	status;
+
+// 	pipe(pipefd);
+// 	pid_t pid_left;
+// 	pid_left = fork();
+// 	if (pid_left == 0) // child process for left
+// 	{
+// 		if(flag == 0)
+// 		{
+// 			close(pipefd[0]);
+// 			dup2(pipefd[1], STDOUT_FILENO);
+// 			close(pipefd[1]);
+// 		}
+// 		else if(flag == -1)
+// 		{
+// 			close(pipefd[0]);
+// 			dup2(shell->old_read_fd, STDIN_FILENO);
+// 			close(shell->old_read_fd);
+// 			close(pipefd[1]);
+// 		}
+// 		else
+// 		{
+// 			close(pipefd[0]);
+// 			dup2(shell->old_read_fd, STDIN_FILENO);
+// 			close(shell->old_read_fd);
+// 			dup2(pipefd[1],STDOUT_FILENO);
+// 			close (pipefd[1]);
+// 		}
+// 		if (!node->left && !node->right)
+// 			exit(execute_cmd_node(node, shell));
+// 		else if (node->code == TOKEN_AND)
+// 		{
+// 			shell->pipe_data = 0;
+// 			if (execute_ast(node->left, shell) == 0)
+// 				exit (execute_ast(node->right, shell));
+// 			else
+// 				exit (1);
+// 		}
+// 		else if (node->code == TOKEN_OR)
+// 		{
+// 			if (execute_ast(node->left, shell) == 0)
+// 				exit (0);
+// 			else
+// 				exit (execute_ast(node->right, shell));
+// 		}
+// 	}
+// 	else
+// 	{
+// 		// waitpid(pid_left, &status, 0);
+// 		shell->pipe_data = 1;
+// 		if(shell->old_read_fd != -2)
+// 			close(shell->old_read_fd);
+// 		shell->old_read_fd = pipefd[0];
+// 		close(pipefd[1]);
+// 	}
+// 	return (shell->exit_status);
+// }
+
+int execute_pipe(t_ast *node, t_shell *shell, int flag, int count) // MT: new code: added count
 {
 	int	pipefd[2];
-	// int	status;
 
 	pipe(pipefd);
-	pid_t pid_left;
-	pid_left = fork();
-	if (pid_left == 0) // child process for left
+	shell->pid[count] = fork(); // MT: new code
+	// pid_left = fork();
+	if (shell->pid[count] == 0) // child process for left
 	{
 		if(flag == 0)
 		{
@@ -302,6 +362,23 @@ int execute_pipe(t_ast *node, t_shell *shell, int flag)
 	return (shell->exit_status);
 }
 
+int	init_pipeline(t_ast *node, t_shell *shell) // MT: new code: new function
+{
+	int	tot;
+	t_ast	*curr;
+
+	curr = node->pipe;
+	tot = 0;
+	while (curr)
+	{
+		tot++;
+		curr = curr->pipe;
+	}
+	shell->pid = malloc(sizeof(pid_t) * tot);
+	if (!shell->pid)
+		return (1);
+	return (0);
+}
 int	execute_pipeline(t_ast *node, t_shell *shell)
 {
 	int flag;
@@ -311,22 +388,50 @@ int	execute_pipeline(t_ast *node, t_shell *shell)
 	flag = 0;
 	count = 0;
 	status = 0;
+	
+	// MT: new code: start
+	if (init_pipeline(node, shell) == 1) 
+		return (1);
 	while (node->pipe)
 	{
-		execute_pipe(node, shell,flag);
+		execute_pipe(node, shell,flag, count);
 		node = node->pipe;
 		flag++;
 		count++;
 	}
-	count++;
-	execute_pipe(node, shell,-1);
-	while(count)
+	execute_pipe(node, shell, -1, count);
+	int i = 0;
+	while (i <= count)
 	{
-		if (wait(&status))
+		if (waitpid(shell->pid[i], &status, 0))
 			if (WIFEXITED(status))
+			{
 				shell->exit_status = WEXITSTATUS(status);
-		count --;
+			}
+		i++;
 	}
+	// MT: new code: end
+	
+	// while (node->pipe)
+	// {
+	// 	execute_pipe(node, shell,flag);
+	// 	node = node->pipe;
+	// 	flag++;
+	// 	count++;
+	// }
+	// count++;
+	// execute_pipe(node, shell, -1);
+	// count++;
+	// while (count)
+	// {
+	// 	if (waitpid(shell->pid[count], &status, 0))
+	// 		if (WIFEXITED(status))
+	// 		{
+	// 			shell->exit_status = WEXITSTATUS(status);
+	// 		}
+	// 	count --;
+	// }
+	
 	close(shell->old_read_fd);
 	return (shell->exit_status);
 }
