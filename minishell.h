@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 18:05:38 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 21:48:51 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,6 +347,7 @@ int	check_exit_arg(char *str);
 int	get_exit_status(char *str);
 void	exit_shell(t_shell *shell, int exit_status);
 int	builtin_exit(t_ast *node, t_shell *shell);
+
 
 // builtin_export.c
 void print_export(t_var *envp);

@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 05:34:55 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:06:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/22 21:35:44 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*	print_envp prints the environment variables 
+/*	print_envp prints the environment variables
 	(prompted by env command)*/
-void print_envp(t_var *envp)
+void	print_envp(t_var *envp)
 {
-	t_var *current;
+	t_var	*current;
 
 	current = envp;
 	while (current)
