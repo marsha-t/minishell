@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:35:36 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 14:59:32 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/22 20:16:40 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,19 @@
 		- file doesn't exist
 		- file is too long
 	- chdir will work with relative and absolute path */
+int	cd_without_args(t_shell *shell, char **path)
+{
+	*path = expand_var("HOME", shell->var_list);
+	if (*path[0] == '\0')
+		return (err_printf("cd: HOME not set"), 1);
+	else if (!*path)
+	{
+		shell->exit_shell = 1;
+		err_printf("malloc error: expand_var in builtin_cd\n");
+		return (1);
+	}
+	return (0);
+}
 int	builtin_cd(t_ast *node, t_shell *shell)
 {
 	int			error;
@@ -29,17 +42,7 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 	char		*path;
 
 	if (node->n_args == 0)
-	{
-		path = expand_var("HOME", shell->var_list);
-		if (path[0] == '\0')
-			return (err_printf("cd: HOME not set"), 1);
-		else if (!path)
-		{
-			shell->exit_shell = 1;
-			err_printf("malloc error: expand_var in builtin_cd\n");
-			return (1);
-		}
-	}
+		return(cd_without_args(shell, &path));
 	else if (node->n_args > 1)
 		return (err_printf("cd: too many arguments\n"), 1);
 	else

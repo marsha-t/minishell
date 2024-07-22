@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 10:53:12 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 18:05:38 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,6 +324,7 @@ int dup_output(t_shell *shell, t_ast *node, int o_fd);
 // here_doc.c
 int open_hd_file(t_file *current, char *uniq_file, t_shell *shell);
 int get_docs(t_ast *node, t_shell *shell);
+int	dup_heredoc(t_ast *node, t_shell *shell, int fd);
 
 // handling signals
 void  control_signals(void);

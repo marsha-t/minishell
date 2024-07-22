@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 14:31:23 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 19:13:10 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 {
 	int input_fd;
 	int output_fd;
+	int here_doc_fd;
 	if (check_var_expansion(node, shell) == 1)
 		return (1);
 	if (check_wc_expansion(node, shell) == 1)
@@ -152,24 +153,43 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 	}
 	if (remove_quote_node(node) == 1)
 		return (1);
-	if (get_docs(node, shell) == 1)
-		return (1);
-	input_fd =get_infile(node, shell);
-	output_fd=get_outfile(node, shell);
-	// printf("this is the input_fd %d \n",input_fd);
-	// printf("this is the output_fd %d \n",output_fd);
-	if (input_fd == 1 || output_fd== 1)
+	here_doc_fd = get_docs(node, shell);
+	input_fd = get_infile(node, shell);
+	output_fd = get_outfile(node, shell);
+	if (input_fd == 1 || output_fd == 1 || here_doc_fd == 1)
 	{
-		if (output_fd == 1 && input_fd != 1 && input_fd != 0)
-			close(input_fd);
+		if (input_fd == 1)
+		{
+			if (here_doc_fd != 1 && here_doc_fd != 0)
+			{
+				printf("im here\n");
+				if (close(here_doc_fd) == -1)
+					dprintf(2, "couldn't close\n");
+				else
+					dprintf(2, "closed successfully\n");
+				unlink("X9f4Tp1");
+			}
+		}
+		if (output_fd == 1)
+		{
+			if (input_fd != 1 && input_fd != 0)
+				close(input_fd);
+			if (here_doc_fd != 1 && here_doc_fd != 0)
+			{
+				close(here_doc_fd);
+				unlink("X9f4Tp1");
+			}
+		}
 		return (1);
 	}
 	else
 	{
-		if(output_fd != 0)
+		if (output_fd != 0)
 			dup_output(shell, node, output_fd);
-		if(input_fd!= 0)
-			dup_input(shell, node, input_fd) ;
+		if (input_fd != 0)
+			dup_input(shell, node, input_fd);
+		if (here_doc_fd != 0)
+			dup_heredoc(node, shell, here_doc_fd);
 	}
 	return (0);
 }
@@ -238,6 +258,10 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		if (id == 0)
 		{
 			control_signals();
+			if(node->tmp_stdin_fd!=0)
+				close(node->tmp_stdin_fd);
+			if(node->tmp_stdout_fd!=1)
+				close(node->tmp_stdout_fd);
 			shell->exit_status = execute_cmd_others(node, shell);
 		}
 		else
@@ -253,6 +277,10 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 		return(1);
 	if (node->heredoc_list && dup2(node->tmp_stdin_fd, STDIN_FILENO)== -1)
 		return(1);
+	if(node->tmp_stdin_fd!=0)
+		close(node->tmp_stdin_fd);
+	if(node->tmp_stdout_fd!=1)
+		close(node->tmp_stdout_fd);
 	return (LOC = 1, shell->exit_status);
 }
 
