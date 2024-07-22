@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 06:19:34 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/22 10:45:16 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ int	check_empty_cmd(t_ast *node)
 
 int	cmd_setup(t_ast *node, t_shell *shell)
 {
+	int input_fd;
+	int output_fd;
 	if (check_var_expansion(node, shell) == 1)
 		return (1);
 	if (check_wc_expansion(node, shell) == 1)
@@ -152,10 +154,23 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 		return (1);
 	if (get_docs(node, shell) == 1)
 		return (1);
-	if (get_infile(node, shell) == 1)
+	output_fd=get_outfile(node, shell);
+	input_fd =get_infile(node, shell);
+	// printf("this is the input_fd %d \n",input_fd);
+	// printf("this is the output_fd %d \n",output_fd);
+	if (input_fd == 1 || output_fd== 1)
+	{
+		// if (input_fd == 1 && output_fd != 1)
+		// 	close(output_fd);
 		return (1);
-	if (get_outfile(node, shell) == 1)
-		return (1);
+	}
+	else
+	{
+		if(input_fd!= 0)
+			dup_input(shell, node, input_fd) ;
+		if(output_fd != 0)
+			dup_output(shell, node, output_fd);
+	}
 	return (0);
 }
 
@@ -388,9 +403,9 @@ int	execute_pipeline(t_ast *node, t_shell *shell)
 	flag = 0;
 	count = 0;
 	status = 0;
-	
+
 	// MT: new code: start
-	if (init_pipeline(node, shell) == 1) 
+	if (init_pipeline(node, shell) == 1)
 		return (1);
 	while (node->pipe)
 	{
@@ -411,7 +426,7 @@ int	execute_pipeline(t_ast *node, t_shell *shell)
 		i++;
 	}
 	// MT: new code: end
-	
+
 	// while (node->pipe)
 	// {
 	// 	execute_pipe(node, shell,flag);
@@ -431,7 +446,7 @@ int	execute_pipeline(t_ast *node, t_shell *shell)
 	// 		}
 	// 	count --;
 	// }
-	
+
 	free(shell->pid);
 	close(shell->old_read_fd);
 	return (shell->exit_status);
@@ -448,7 +463,7 @@ int	execute_ast(t_ast *node, t_shell *shell)
 	if (node->pipe)
 	{
 		shell->pipe_data = 1;
-		return (execute_pipeline(node, shell));
+		return(execute_pipeline(node, shell));
 	}
 	else
 	{

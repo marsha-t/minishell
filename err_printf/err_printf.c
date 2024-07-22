@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   err_printf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 09:35:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/17 06:04:49 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/22 10:43:26 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	err_printf(const char *format, ...)
 	i = 0;
 	outputlength = 0;
 	va_start(args, format);
-	write (2, "minishell: ", 12);
+	write (2, "-minishell: ", 12);
 	while (format[i] != '\0')
 	{
 		if (format[i] == '%')

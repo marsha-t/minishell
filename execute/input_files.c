@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:57:08 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/20 15:36:27 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/22 10:46:25 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,40 @@
 int	get_infile(t_ast *node, t_shell *shell)
 {
 	int 	fd;
-	int 	target_fd;
+	// int 	target_fd;
 	t_file	*current;
 
 	current = node ->input_list;
 	if (!current)
 		return (0);
-	while (current && current->next)
+	while (current && current->next && shell->file_err != 1 )
 	{
 		if (access(current->file_name, F_OK) != 0)
 		{
 			// err_printf("%s: No such file or directory\n", current->file_name);
-			dprintf(2, "%s: No such file or directory\n", current->file_name);
-
-			return (1);
+			err_printf("%s: No such file or directory\n", current->file_name);
+			return (shell->file_err = 1,1);
 		}
 		current = current ->next;
 	}
+	if(shell->file_err == 1 )
+		return(1);
 	if(access(current->file_name, F_OK) != 0)
 	{
-		// err_printf("%s: No such file or directory\n", current->file_name);
-		dprintf(2, "%s: No such file or directory\n", current->file_name);
-		return (1);
+		err_printf("%s: No such file or directory\n", current->file_name);
+		return (shell->file_err = 1,1);
 	}
 	fd = open(current ->file_name, O_RDONLY);
 	if (fd == -1)
 		return (err_syscall(shell, "open"));
+	return(fd);
+
+}
+ int dup_input(t_shell *shell, t_ast *node, int fd)
+ {
+	int target_fd;
+
+	target_fd = 0;
 	node->tmp_stdin_fd = dup(STDIN_FILENO);
 	if (node->tmp_stdin_fd == -1)
 		return (err_syscall(shell, "dup"));
@@ -50,4 +58,5 @@ int	get_infile(t_ast *node, t_shell *shell)
 	if (target_fd == -1)
 		return (err_syscall(shell, "dup2"));
 	return (0);
-}
+
+ }

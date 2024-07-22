@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/21 16:52:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/22 10:53:12 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,10 +137,11 @@ typedef struct s_shell
 	t_ast	*ast_list;
 	t_ast	*root;
 	int		pipe_data;
-	pid_t		*pid; // MT: new code 
+	pid_t		*pid; // MT: new code
 	int	exit_status;
 	int	exit_shell;
 	int  old_read_fd;
+	int file_err;
 }	t_shell;
 
 /*****************************************************************************/
@@ -311,10 +312,13 @@ int		execute_ast(t_ast *node, t_shell *shell);
 
 // input_files.c
 int		get_infile(t_ast *node, t_shell *shell);
+ int dup_input(t_shell *shell, t_ast *node, int fd);
+
 
 // output_files.c
 int  open_files (t_ast *node, t_shell *shell);
 int get_outfile(t_ast *node, t_shell *shell);
+int dup_output(t_shell *shell, t_ast *node, int o_fd);
 // void close_files(t_ast *node);
 
 // here_doc.c

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/21 10:41:50 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/22 13:05:35 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ t_shell	*init_shell(char **envp)
 	shell->directory_contents = 0;
 	shell ->old_read_fd = -2;
 	shell->exit_shell = 0;
+	shell->file_err =0;
 	if (shlvl_increment(shell) == 1)
 		return (free_shell(shell), NULL);
 	return (shell);
@@ -73,6 +74,7 @@ void	free_after_command(t_shell *shell)
 	}
 	shell->pipe_data = 0;
 	shell->old_read_fd = -2;
+	shell->file_err = 0;
 }
 
 /*	free_shell frees everything in shell
