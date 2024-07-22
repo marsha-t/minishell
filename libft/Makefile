@@ -16,7 +16,7 @@ BONUS_OFILES = ${BONUS_CFILES:.c=.o}
 all: $(NAME)
 
 %o: %c
-	gcc ${CFLAGS} -c $< -o ${<:.c=.o}
+	$(CC) ${CFLAGS} -c $< -o ${<:.c=.o}
 
 $(NAME): $(OFILES)
 	ar rcs $(NAME) $(OFILES)

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:36:10 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:14:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/21 16:34:07 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	arg_check_wc(t_ast *node, t_shell *shell)
 	{
 		if (contain_wc(curr_arg->content) == 0)
 		{
-			if (expand_wc_arg(shell->directory_contents, node, curr_arg->content) == 1)
+			if (expand_wc_arg(&shell->directory_contents, node, curr_arg->content) == 1)
 				return (1);
 		}
 		curr_arg = curr_arg->next;
@@ -117,7 +117,7 @@ int	check_wc_expansion(t_ast *node, t_shell *shell)
 	}
 	if (contain_wc(node->cmd) == 0)
 	{
-		if (expand_wc_cmd(shell->directory_contents, node) == 1)
+		if (expand_wc_cmd(&shell->directory_contents, node) == 1)
 		{
 			shell->exit_shell = 1;
 			return (free_conts_list(shell->directory_contents), 1);

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/21 10:39:02 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/21 16:52:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,9 +267,11 @@ int	arg_check_wc(t_ast *node, t_shell *shell);
 int	check_wc_expansion(t_ast *node, t_shell *shell);
 
 // expand_wc.c
-int expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts *list);
-int	expand_wc_cmd(t_dconts *list, t_ast *node);
-int	expand_wc_arg(t_dconts *list, t_ast *node, char *pattern);
+void	rm_dot_dconts(t_dconts **list);
+
+int expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts **list);
+int	expand_wc_cmd(t_dconts **list, t_ast *node);
+int	expand_wc_arg(t_dconts **list, t_ast *node, char *pattern);
 int	expand_wc_file(t_shell *shell, t_ast *node, char *pattern, int code);
 
 // expand_wc_utils.c

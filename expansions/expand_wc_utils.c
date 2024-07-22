@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:38:45 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 15:03:32 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/21 17:06:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,10 @@ int	match_dcont(char *dir, char *pattern, t_dconts **dcont)
 		if (!*dcont)
 			return (free_num(2, dir, pattern), -1);
 		else
+		{
+			rm_dot_dconts(dcont);
 			return (0);
+		}
 	}
 	else if (check_directory(dir) == -1)
 		return (free_num(2, dir, pattern), -1);

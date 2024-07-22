@@ -6,29 +6,67 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 16:01:19 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/17 16:55:12 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/21 17:00:23 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+int	start_dot_wc(char *pattern)
+{
+	if (pattern[0] == '.')
+		return (0);
+	else if (ft_strncmp(pattern, "\".", 2) == 0)
+		return (0);
+	else if (ft_strncmp(pattern, "\'.", 2) == 0)
+		return (0);
+	return (1);
+}
+
+void	rm_dot_dconts(t_dconts **list)
+{
+	t_dconts	*curr;
+	t_dconts	*temp;
+	t_dconts	*prev;
+	
+	curr = *list;
+	prev = NULL;
+	while (curr)
+	{
+		if (curr->cont_name[0] == '.')
+		{
+			if (!prev)
+				*list = curr->next;
+			else
+				prev->next = curr->next;
+			temp = curr;
+			curr = curr->next;
+			free(temp->cont_name);
+			free(temp);
+		}
+		else
+		{
+			prev = curr;
+			curr = curr->next;
+		}
+	}
+}
+
 /*	expand_wc_setup
-	- removes quotes from pattern
+	- removes . or .. files from dir contents list 
+		if pattern starts with dot (quoted or unquoted)
 	- generate list of matches
 	- returns number of matches
 	- returns -1 if error removing quote or generating matches
 		- error handling for match_pattern_list done by
 			function that calls expand_wc_setup */
-int	expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts *list)
+int	expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts **list)
 {
 	int		match_count;
-	char	*unquoted;
 
-	unquoted = remove_quote_str(ft_strdup(pattern));
-	if (!unquoted)
-		return (-1);
-	match_count = match_pattern_list(unquoted, list, matched_list);
-	free(unquoted);
+	if (start_dot_wc(pattern) == 1)
+		rm_dot_dconts(list);
+	match_count = match_pattern_list(pattern, *list, matched_list);
 	return (match_count);
 }
 
@@ -40,7 +78,7 @@ int	expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts *list)
 	- returns 1 if malloc error,
 		0 otherwise (matches or no matches both return 0) */
 		// work in progresS: need to free wc_info struct
-int	expand_wc_cmd(t_dconts *list, t_ast *node)
+int	expand_wc_cmd(t_dconts **list, t_ast *node)
 {
 	t_dconts	*next;
 	int			match_count;
@@ -55,7 +93,7 @@ int	expand_wc_cmd(t_dconts *list, t_ast *node)
 		if (ft_strncmp(node->cmd, "./", 2) == 0)
 		{
 			if (match_dir(wc_info, slash, ft_strdup(".")) == 1)
-				return (free_wc_info(wc_info),1);
+				return (free_wc_info(wc_info), 1);
 		}
 		else if (ft_strncmp(node->cmd, "../", 3) == 0)
 		{
@@ -87,7 +125,7 @@ int	expand_wc_cmd(t_dconts *list, t_ast *node)
 	- adds expanded matches into args in order
 	- returns 1 if malloc error,
 		0 otherwise (matches or no matches both return 0) */
-int	expand_wc_arg(t_dconts *list, t_ast *node, char *pattern)
+int	expand_wc_arg(t_dconts **list, t_ast *node, char *pattern)
 {
 	int			match_count;
 	t_dconts	*matched_list;
@@ -128,7 +166,7 @@ int	expand_wc_file(t_shell *shell, t_ast *node, char *pattern, int code)
 	int			match_count;
 	t_file		*curr_file;
 
-	match_count = expand_wc_setup(&matched_list, pattern, shell->directory_contents);
+	match_count = expand_wc_setup(&matched_list, pattern, &shell->directory_contents);
 	if (match_count == -1)
 	{
 		shell->exit_shell = 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/21 10:53:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/22 06:19:34 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -448,7 +448,7 @@ int	execute_ast(t_ast *node, t_shell *shell)
 	if (node->pipe)
 	{
 		shell->pipe_data = 1;
-		execute_pipeline(node, shell);
+		return (execute_pipeline(node, shell));
 	}
 	else
 	{
