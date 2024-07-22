@@ -33,13 +33,7 @@ LIBFT_DIR = libft
 FT_PRINTF =	libftprintf.a
 FT_PRINTF_DIR = printf
 
-# CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
-
-# yousef addition for readline
-# PREFIX = /Users/$(USER)/.brew/opt/readline
 CFLAGS = -Wall -Wextra -Werror
-# -g3 -fsanitize=address
-#-I$(PREFIX)/include -g3  -Werror -Wextra -Wall
 
 ERR_PRINTF = err_printf.a
 ERR_PRINTF_DIR = err_printf
@@ -49,16 +43,16 @@ all: $(NAME)
 %o: %c
 	cc ${CFLAGS} -c $< -o ${<:.c=.o}
 
-$(NAME): $(OFILES) $(LIBFT) $(FT_PRINTF) $(ERR_PRINTF)
+$(NAME): $(OFILES) $(LIBFT_DIR)/$(LIBFT) $(ERR_PRINTF_DIR)/$(ERR_PRINTF) $(FT_PRINTF_DIR)/$(FT_PRINTF)
 	cc $(CFLAGS) $(OFILES) $(LIBFT_DIR)/$(LIBFT) $(FT_PRINTF_DIR)/$(FT_PRINTF) $(ERR_PRINTF_DIR)/$(ERR_PRINTF) -o $(NAME) -lreadline
 
-$(LIBFT):
+$(LIBFT_DIR)/$(LIBFT):
 	make bonus -C $(LIBFT_DIR)
 
-$(FT_PRINTF):
+$(FT_PRINTF_DIR)/$(FT_PRINTF):
 	make -C $(FT_PRINTF_DIR)
 
-$(ERR_PRINTF):
+$(ERR_PRINTF_DIR)/$(ERR_PRINTF):
 	make -C $(ERR_PRINTF_DIR)
 
 clean:
