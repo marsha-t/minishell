@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 13:30:17 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 14:31:23 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,22 +154,22 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 		return (1);
 	if (get_docs(node, shell) == 1)
 		return (1);
-	output_fd=get_outfile(node, shell);
 	input_fd =get_infile(node, shell);
+	output_fd=get_outfile(node, shell);
 	// printf("this is the input_fd %d \n",input_fd);
 	// printf("this is the output_fd %d \n",output_fd);
 	if (input_fd == 1 || output_fd== 1)
 	{
-		if (input_fd == 1 && output_fd != 1 && output_fd != 0)
-			close(output_fd);
+		if (output_fd == 1 && input_fd != 1 && input_fd != 0)
+			close(input_fd);
 		return (1);
 	}
 	else
 	{
-		if(input_fd!= 0)
-			dup_input(shell, node, input_fd) ;
 		if(output_fd != 0)
 			dup_output(shell, node, output_fd);
+		if(input_fd!= 0)
+			dup_input(shell, node, input_fd) ;
 	}
 	return (0);
 }
