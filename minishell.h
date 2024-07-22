@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 10:53:12 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 18:19:38 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,15 +215,25 @@ int		check_quote(int quote, char input);
 // t_ast	*parse_tokens(t_token **tokens);
 int	parse_tokens(t_shell *shell);
 
-// parse_ast_list.c
-t_ast	*ast_node_init(void);
-int		ast_node_add(t_token **tokens, t_ast **start, t_ast **current);
-int		count_args(t_token *tokens);
-int	ast_node_append_cmd(t_token **tokens, t_ast *current);
-int		ast_node_append_arg(t_token **tokens, t_ast *current);
-int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current);
+// parse_ast_list1.c
+int	classify_redir_node(t_ast *node);
+int	ast_list_new_while(t_token **tokens, t_ast **current, t_ast **start);
 t_ast	*ast_list_new(t_token **tokens);
+
+// parse_ast_list2.c
+int		ast_node_add(t_token **tokens, t_ast **start, t_ast **current);
+int		ast_node_append_arg(t_token **tokens, t_ast *current);
+int	ast_node_append_misc_setup(t_ast **start, t_ast **current);
+int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current);
+int	ast_node_append_cmd(t_token **tokens, t_ast *current);
+
+// parse_ast_list_utils.c
+t_ast	*ast_node_init(void);
+t_list	*create_arg_node(char *str);
+
+// ast_list_free.c
 void	file_list_free(t_file *file);
+void	arg_list_free(t_ast *current);
 void	ast_list_free(t_ast *node);
 
 // create_redir_lists.c
@@ -233,7 +243,14 @@ int create_output_append_list(int code, t_token *token, t_ast **node);
 
 // parse_ast_tree.c
 int	is_logical_op(int code);
+void	ast_pipeline_new_cmd(t_ast **node, t_ast **left, t_ast **head);
+void	ast_pipeline_new_obracket(t_ast **node, t_ast **left, t_ast **head);
 t_ast	*ast_pipeline_new(t_ast **node);
+
+// parse_ast_pipeline.c
+void	ast_tree_setup(t_ast **node, t_ast **root);
+void	ast_tree_new_cmd(t_ast **node, t_ast **root);
+void	ast_tree_new_obracket(t_ast **node, t_ast **root);
 t_ast	*ast_tree_new(t_ast **node);
 
 /*****************************************************************************/
