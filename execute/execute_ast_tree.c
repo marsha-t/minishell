@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 18:04:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 10:45:16 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 13:30:17 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,8 +160,8 @@ int	cmd_setup(t_ast *node, t_shell *shell)
 	// printf("this is the output_fd %d \n",output_fd);
 	if (input_fd == 1 || output_fd== 1)
 	{
-		// if (input_fd == 1 && output_fd != 1)
-		// 	close(output_fd);
+		if (input_fd == 1 && output_fd != 1 && output_fd != 0)
+			close(output_fd);
 		return (1);
 	}
 	else
