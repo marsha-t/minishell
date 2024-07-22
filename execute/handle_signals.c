@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:55:30 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/19 00:08:45 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 14:57:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ void handle_cc_signal(int sig)
 	if (LOC == 1)
 	{
 		write(1,"^C\n",3);
+		rl_replace_line("",0);
 		rl_on_new_line();
-		// rl_replace_line("",0);
+		rl_redisplay();
 		// rl_done = 1;
 	}
 }

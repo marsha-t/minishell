@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   output_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:11:04 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/22 14:52:28 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 15:03:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	check_and_open(t_shell *shell, t_file*current)
+int	check_and_open(t_shell *shell, t_file*current, int *opened)
 {
 	struct stat	f_stat;
 
@@ -25,32 +25,36 @@ int	check_and_open(t_shell *shell, t_file*current)
 	if (current->fd == -1)
 		return (shell->file_err = 1,
 			err_printf("%s\n", strerror(errno)), 1);
+	*opened = 1;
 	return (0);
 }
 
 int	open_files(t_ast *node, t_shell *shell)
 {
 	t_file		*current;
+	int			opened;
 
 	current = node->output_list;
 	while (current->next && shell->file_err != 1)
 	{
+		opened = 0;
 		if (access(current->file_name, F_OK) != 0)
 		{
 			current->fd = open(current ->file_name, O_CREAT, 0777);
 			if (current->fd == -1)
 				return (shell->file_err = 1,
 					err_printf("%s\n", strerror(errno)), 1);
+			opened = 1;
 		}
 		else if (current->flag == TOKEN_OUTPUT
 			&& access(current ->file_name, F_OK) == 0)
 		{
-			if (check_and_open(shell, current) == 1)
+			if (check_and_open(shell, current, &opened) == 1)
 				return (1);
 		}
 		if (shell->file_err == 1)
 			return (1);
-		if (close(current->fd) == -1)
+		if (opened == 1 && close(current->fd) == -1)
 			return (err_syscall(shell, "close"));
 		current = current -> next;
 	}
