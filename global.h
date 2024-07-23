@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   global.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 11:52:23 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/07 11:53:51 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 16:23:44 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef GLOBAL_H
-#  define GLOBAL_H
-extern int LOC;
+#ifndef GLOBAL_H
+# define GLOBAL_H
+
+extern int	LOC;
+
 #endif

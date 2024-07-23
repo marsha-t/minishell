@@ -6,12 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:10:09 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:13:39 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 16:05:02 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 void	print_var_list(t_var *var)
 {
@@ -40,9 +39,9 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
-
 /*	file_list_print prints a file linked list
-	Depending on the type and file->flag, it will display "input/heredoc/output/append"
+	Depending on the type and file->flag, 
+		it will display "input/heredoc/output/append"
 	*/
 void	file_list_print(t_file *file, int type)
 {
@@ -67,27 +66,31 @@ void	file_list_print(t_file *file, int type)
 	}
 }
 
+void	arg_list_print(t_ast *node)
+{
+	t_list	*c;
+
+	c = node->args;
+	while (c)
+	{
+		ft_printf("%s, ", c->content);
+		c = c->next;
+	}
+}
+
 /*	ast_list_print prints the ast nodes that are connected in a list
 	- prints other components in cmd node depending on whether it is filled */
 void	ast_list_print(t_ast *node)
 {
-	t_list *c;
-
 	ft_printf("\nprinting ast_list\n");
 	while (node)
 	{
 		if (node->code == TOKEN_CMD)
 		{
-			ft_printf("NODE: cmd: %s\nn_args: %d, args: ", node->cmd, node->n_args);
+			ft_printf("NODE: cmd: %s\nn_args: %d, args: ", \
+				node->cmd, node->n_args);
 			if (node->args)
-			{
-				c = node->args;
-				while (c)
-				{
-					ft_printf("%s, ", c->content);
-					c = c->next;
-				}
-			}
+				arg_list_print(node);
 			ft_printf("\n");
 			if (node->input_list)
 				file_list_print(node->input_list, 1);
@@ -102,4 +105,3 @@ void	ast_list_print(t_ast *node)
 		node = node->next;
 	}
 }
-

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 04:03:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 06:08:47 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 16:12:41 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,25 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (ptr);
 }
 
+int	strjoin_num_free_first(va_list strs, int num, char **arg, char **temp)
+{
+	*arg = va_arg(strs, char *);
+	if (!*arg)
+	{
+		while (--num)
+		{
+			*arg = va_arg(strs, char *);
+			free(arg);
+		}
+		return (err_printf("malloc error: ft_strdup\n"), 1);
+	}
+	*temp = ft_strdup(*arg);
+	if (!*temp)
+		return (err_printf("malloc error: strjoin temp\n"), 1);
+	free(*arg);
+	return (0);
+}
+
 /*	strjoin_num_free joins multiple strings 
 	and frees the strings given as arguments
 	- if error allocating for strings, the arguments are not freed
@@ -52,20 +71,8 @@ char	*strjoin_num_free(int num, ...)
 	char	*arg;
 
 	va_start(strs, num);
-	arg = va_arg(strs, char *);
-	if (!arg)
-	{
-		while (--num)
-		{
-			arg = va_arg(strs, char *);
-			free(arg);
-		}
-		return (err_printf("malloc error: ft_strdup\n"), NULL);
-	}
-	temp = ft_strdup(arg);
-	if (!temp)
-		return (err_printf("malloc error: strjoin temp\n"), NULL);
-	free(arg);
+	if (strjoin_num_free_first(strs, num, &arg, &temp) == 1)
+		return (NULL);
 	while (--num)
 	{
 		arg = va_arg(strs, char *);
