@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 18:26:12 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 18:43:17 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	run_command(t_shell *shell)
 	{
 		shell->exit_status = 2;
 		free(shell->line);
-		return (0) ;
+		return (0);
 	}
 	tok_status = tokenise(shell->line, &shell->tokens);
 	if (tok_status == 1)
@@ -47,7 +47,7 @@ int	run_command(t_shell *shell)
 	{
 		shell->exit_status = 2;
 		free_after_command(shell);
-		return (0) ;
+		return (0);
 	}
 	if (parse_tokens(shell) == 1)
 		return (exit_shell(shell, 1), 1);
