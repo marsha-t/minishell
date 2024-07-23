@@ -6,11 +6,41 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:40:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 14:53:03 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 16:01:21 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	match_pattern_str_quote(char **pattern, char **str)
+{
+	(*pattern)++;
+	while (**pattern != '\"')
+	{
+		if (**pattern == **str)
+		{
+			(*pattern)++;
+			(*str)++;
+		}
+		else
+			return (1);
+	}
+	(*pattern)++;
+	return (0);
+}
+
+int	match_pattern_str_star(char **pattern, char **str)
+{
+	(*pattern)++;
+	if (**pattern == '\0')
+		return (0);
+	while (**str)
+	{
+		if (match_pattern_str(*pattern, (*str)++) == 0)
+			return (0);
+	}
+	return (1);
+}
 
 /*	match_pattern_str checks whether str matches pattern
 	- returns 0 if match; 1 otherwise */
@@ -22,31 +52,11 @@ int	match_pattern_str(char *pattern, char *str)
 	{
 		if (*pattern == '\"')
 		{
-			pattern++;
-			while (*pattern != '\"')
-			{
-				if (*pattern == *str)
-				{
-					pattern++;
-					str++;
-				}
-				else
-					return (1);
-			}
-			pattern++;
+			if (match_pattern_str_quote(&pattern, &str) == 1)
+				return (1);
 		}
 		else if (*pattern == '*')
-		{
-			pattern++;
-			if (*pattern == '\0')
-				return (0);
-			while (*str)
-			{
-				if (match_pattern_str(pattern, str++) == 0)
-					return (0);
-			}
-			return (1);
-		}
+			return (match_pattern_str_star(&pattern, &str));
 		else if (*pattern == *str)
 		{
 			pattern++;
