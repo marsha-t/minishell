@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/22 19:18:00 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 19:12:07 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	open_file(t_file *current, int flag, t_shell *shell)
 	if (flag == 1)
 		current -> fd = open("X9f4Tp1", O_CREAT | O_RDWR, 0777);
 	line = readline(">");
-	if (!line || LOC == 1)
+	if (!line || g_loc == 1)
 		return (shell->file_err = 1, 1);
-	while (ft_strcmp(current->file_name, line) && LOC != 1)
+	while (ft_strcmp(current->file_name, line) && g_loc != 1)
 	{
 		if (flag == 1)
 		{
@@ -33,12 +33,12 @@ int	open_file(t_file *current, int flag, t_shell *shell)
 			ft_putstr_fd(line, current -> fd);
 			ft_putstr_fd("\n", current -> fd);
 		}
-		if (LOC != 1)
+		if (g_loc != 1)
 			line = readline(">");
 		if (!line)
 			return (shell->file_err = 1, 1);
 	}
-	if (LOC == 1)
+	if (g_loc == 1)
 		return (shell->file_err = 1, 1);
 	return (0);
 }
@@ -47,7 +47,7 @@ int	get_docs(t_ast *node, t_shell *shell)
 {
 	t_file	*current;
 
-	LOC = 2;
+	g_loc = 2;
 	current = node -> heredoc_list;
 	if (!current)
 		return (0);

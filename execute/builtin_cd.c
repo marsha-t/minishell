@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:35:36 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 21:32:01 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 18:38:01 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ int	cd_without_args(t_shell *shell, char **path)
 	return (0);
 }
 
-int	approved_path(char	*path, t_shell *shell, struct stat file_stat)
+int	approved_path(char	*path, t_shell *shell)
 {
+	struct stat	file_stat;
+
 	if (stat(path, &file_stat) == -1)
 	{
 		shell->exit_shell = 1;
@@ -47,8 +49,7 @@ int	approved_path(char	*path, t_shell *shell, struct stat file_stat)
 	if (!S_ISDIR(file_stat.st_mode))
 	{
 		err_printf("cd: %s: Not a directory\n", path);
-		free(path);
-		return (1);
+		return (free(path), 1);
 	}
 	else
 	{
@@ -58,8 +59,7 @@ int	approved_path(char	*path, t_shell *shell, struct stat file_stat)
 		{
 			shell->exit_shell = 1;
 			err_printf("cd: error calling chdir\n");
-			free(path);
-			return (1);
+			return (free(path), 1);
 		}
 	}
 	return (0);
@@ -96,7 +96,6 @@ int	disapproved_path(t_shell *shell, char *path)
 int	builtin_cd(t_ast *node, t_shell *shell)
 {
 	int			error;
-	struct stat	file_stat;
 	char		*path;
 
 	if (node->n_args == 0)
@@ -114,7 +113,7 @@ int	builtin_cd(t_ast *node, t_shell *shell)
 	}
 	error = access(path, F_OK);
 	if (error == 0)
-		return (approved_path(path, shell, file_stat));
+		return (approved_path(path, shell));
 	else
 		return (disapproved_path(shell, path));
 	return (0);

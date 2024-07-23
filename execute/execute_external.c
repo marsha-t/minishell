@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 17:31:44 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 15:14:29 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*	count_env counts number of env var in linked list */
 int	count_env(t_var *env)
 {
-	int	count;
+	int		count;
 	t_var	*current;
 
 	count = 0;
@@ -29,7 +29,8 @@ int	count_env(t_var *env)
 	return (count);
 }
 
-/*	envp_array converts env var linked list into a null-terminated array for execve
+/*	envp_array converts env var
+linked list into a null-terminated array for execve
 	- includes all variables listed in export (even if they are not in env)*/
 char	**envp_array(t_var *env)
 {
@@ -46,24 +47,21 @@ char	**envp_array(t_var *env)
 	{
 		if (current->env == 1)
 		{
-			envp[i] = ft_strjoin_free(ft_strjoin_free(ft_strdup(current->key), ft_strdup("=")), ft_strdup(current->value));
+			envp[i] = ft_strjoin_free(ft_strjoin_free(ft_strdup(current->key),
+						ft_strdup("=")), ft_strdup(current->value));
 			if (!envp[i])
-			{
-				while (i--)
-					free(envp[i]);
-				free(envp);
-				return (err_printf("malloc error: envp[i] for envp_array\n"), NULL);
-			}
+				return (free_array(envp, i),
+					err_printf("malloc error:e_array\n"), NULL);
 			i++;
 		}
 		current = current->next;
 	}
-	envp[i] = NULL;
-	return (envp);
+	return (envp[i] = NULL, envp);
 }
 
-/*	argv_array converts cmd and arg in node into null-terminated array for execve*/
-char **argv_array(t_ast *node)
+/*	argv_array converts cmd and arg
+in node into null-terminated array for execve*/
+char	**argv_array(t_ast *node)
 {
 	char	**argv;
 	t_list	*current;
@@ -75,27 +73,19 @@ char **argv_array(t_ast *node)
 		return (err_printf("malloc error: argv for argv_array\n"), NULL);
 	argv[0] = ft_strdup(node->cmd);
 	if (!argv[0])
-	{
-		free(argv);
-		return (err_printf("malloc error: argv[i] for argv_array\n"), NULL);
-	}
+		return (free(argv), err_printf("malloc error: a_array\n"), NULL);
 	i = 1;
 	current = node->args;
 	while (current)
 	{
 		argv[i] = ft_strdup(current->content);
 		if (!argv[i])
-		{
-			while (i--)
-				free(argv[i]);
-			free(argv);
-			return (err_printf("malloc error: argv[i] for argv_array\n"), NULL);
-		}
+			return (free_array(argv, i),
+				err_printf("malloc error: argv[i] for argv_array\n"), NULL);
 		i++;
 		current = current->next;
 	}
-	argv[i] = NULL;
-	return (argv);
+	return (argv[i] = NULL, argv);
 }
 
 /*	get_filepath extracts the correct filepath for execve
@@ -117,16 +107,15 @@ char	*get_filepath(char *cmd, int *exit_status, t_shell *shell)
 			{
 				*exit_status = 1;
 				shell->exit_shell = 1;
-				return (err_printf("malloc error: filepath in get_filepath\n"), NULL);
+				return (err_printf("malloc error: filepath in get_filepath\n"),
+					NULL);
 			}
 		}
 		else
 			filepath = 0;
 	}
 	else
-	{
 		filepath = find_cmd(cmd, exit_status, shell);
-	}
 	return (filepath);
 }
 
@@ -150,30 +139,12 @@ int	run_external(t_ast *node, t_shell *shell)
 	}
 	envp = envp_array(shell->var_list);
 	if (!envp)
-	{
-		shell->exit_shell = 1;
-		return (1);
-	}
-	// for (int i = 0; argv[i] != NULL; i++) {
-	// 	dprintf(2, "argv[%d]: %s\n", i, argv[i]);
-	// }
-
-	// if (close(3) == -1)
-	// 	dprintf(2, "I couldn't close\n");
-	// else
-	// 	dprintf(2, "I closed succesfully\n");
-	// if (close(4) == -1)
-	// 	dprintf(2, "I couldn't close\n");
-	// else
-	// 	dprintf(2, "I closed succesfully\n");
-
+		return (shell->exit_shell = 1, 1);
 	exit_status = execve(filename, argv, envp);
 	free_char_dp(argv);
 	free_char_dp(envp);
 	free(filename);
-	if(exit_status == -1 && errno == EACCES)
+	if (exit_status == -1 && errno == EACCES)
 		exit_status = 126;
-	// else if(exit_status == -1 && errno == ENOENT)
-	// 	exit_status = 127;
-	return (exit_status);
+	return (err_printf("%s\n", strerror(errno)), exit_status);
 }

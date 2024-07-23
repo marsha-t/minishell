@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/20 19:19:07 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 19:18:02 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+	g_loc = 1;
 	shell = init_shell(envp);
 	control_signals();
 	if (!shell)
