@@ -59,23 +59,6 @@ int	add_token(t_token **tokens, char *str, int code)
 }
 
 /*	free_tokens frees nodes in tokens linked list
-	and the str inside the nodes */
-// void	free_tokens(t_token *tokens)
-// {
-// 	t_token	*current;
-// 	t_token	*next;
-
-// 	current = tokens;
-// 	while (current)
-// 	{
-// 		next = current->next;
-// 		free_num(2, current->str, current);
-// 		current = next;
-// 	}
-// 	// tokens=NULL;
-// }
-
-/*	free_tokens frees nodes in tokens linked list
 	and the str inside the nodes 
 	- and sets pointer to NULL (hence double pointer) */
 void	free_tokens_null(t_token **tokens)

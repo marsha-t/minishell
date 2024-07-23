@@ -189,17 +189,17 @@ int	check_op_para_count(char *line, int *i, int *op_count);
 /*	tokenise																 */
 /*****************************************************************************/
 // tokenise.c
+int	tokenise_pipe(char **input, t_token **tokens);
+int tokenise_redirects(char **input, t_token **tokens);
 int		tokenise_op(char **input, t_token **tokens);
 int		tokenise_misc(char **input, t_token **tokens);
 int		check_syntax_tokens(t_token *tokens);
 void	sort_temp_tokens(t_token *tokens);
-// t_token	*tokenise(char *input);
 int	tokenise(char *input, t_token **tokens);
 
 // tokenise_token_utils.c
 t_token	*new_token(char *str, int code);
 int		add_token(t_token **tokens, char *str, int code);
-// void	free_tokens(t_token *tokens);
 void	free_tokens_null(t_token **tokens);
 
 // tokenise_misc_utils.c

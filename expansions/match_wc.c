@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   match_wc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:40:07 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/21 17:00:13 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 07:11:49 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,6 @@
 // 			while (*str)
 // 			{
 // 				if (match_pattern_str(pattern, str++) == 0)
-// 					return (0);
-// 			}
-// 			return (1);
-// 		}
-// 		else
-// 			return (1);
-// 	}
-// 	return (!(*str == '\0'));
-// }
 
 int	match_pattern_str(char *pattern, char *str)
 {
@@ -86,6 +77,7 @@ int	match_pattern_str(char *pattern, char *str)
 	}
 	return (!(*str == '\0'));
 }
+
 /*	match_pattern_list iterates through list and checks for matches
 	- matched nodes are duplicated and added to a linked list 
 	- returns -1 if malloc error

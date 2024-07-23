@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_remove.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 05:54:12 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 12:26:16 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 07:10:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,11 @@ char	*remove_quote_join(char *str, char *before_quote, int *start, int *i)
 }
 
 /*	remove_quote removes quotes from a given string
-	- retains quotes that are quoted e.g., single quote inside double or double inside single
+	- retains quotes that are quoted
+	 e.g., single quote inside double or double inside single
 	- frees original str
-	- malloc error from strdup or strjoin will result in unquoted_str being NULL */
+	- malloc error from strdup or strjoin will 
+	result in unquoted_str being NULL */
 char	*remove_quote_str(char *str)
 {
 	char	quote;
@@ -121,7 +123,6 @@ int	remove_quote_node(t_ast *node)
 		while (curr_arg)
 		{
 			curr_arg->content = remove_quote_str(curr_arg->content);
-
 			if (!curr_arg->content)
 				return (1);
 			curr_arg = curr_arg->next;

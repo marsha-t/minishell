@@ -12,24 +12,24 @@
 
 #include "../minishell.h"
 
-/*	tokenise_op tokenises operators (pipes and redirects)
-	- returns rval = 1 if error adding token; 0 if successful */
-int	tokenise_op(char **input, t_token **tokens)
+int	tokenise_pipe(char **input, t_token **tokens)
 {
 	int	rval;
 
-	rval = 0;
-	if (**input == '|')
+	if (*(*input + 1) == '|')
 	{
-		if (*(*input + 1) == '|')
-		{
-			rval = add_token(tokens, ft_strdup("||"), TOKEN_OR);
-			(*input)++;
-		}
-		else
-			rval = add_token(tokens, ft_strdup("|"), TOKEN_PIPE);
+		rval = add_token(tokens, ft_strdup("||"), TOKEN_OR);
+		(*input)++;
 	}
-	else if (**input == '<')
+	else
+		rval = add_token(tokens, ft_strdup("|"), TOKEN_PIPE);
+	return (rval);
+}
+
+int tokenise_redirects(char **input, t_token **tokens)
+{
+	int	rval;
+	if (**input == '<')
 	{
 		if (*(*input + 1) == '<')
 		{
@@ -49,6 +49,22 @@ int	tokenise_op(char **input, t_token **tokens)
 		else
 			rval = add_token(tokens, ft_strdup(">"), TOKEN_OUTPUT);
 	}
+	return (rval);
+}
+
+/*	tokenise_op tokenises operators (pipes and redirects)
+	- returns rval = 1 if error adding token; 0 if successful */
+int	tokenise_op(char **input, t_token **tokens)
+{
+	int	rval;
+
+	rval = 0;
+	if (**input == '|')
+		rval = tokenise_pipe(input, tokens);
+	else if (**input == '<')
+		rval = tokenise_redirects(input, tokens);
+	else if (**input == '>')
+		rval = tokenise_redirects(input, tokens);
 	else if (**input == '&' && *(*input + 1) == '&')
 	{
 		rval = add_token(tokens, ft_strdup("&&"), TOKEN_AND);
@@ -78,7 +94,8 @@ int	tokenise_misc(char **input, t_token **tokens)
 	{
 		quote = check_quote(quote, **input);
 		if (quote == 0 && ft_strchr(" \t|<>&()", **input))
-			return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
+			return (add_token(tokens, strdup_range(start, (*input) - 1), \
+			TOKEN_TEMP));
 		(*input)++;
 	}
 	return (add_token(tokens, strdup_range(start, (*input) - 1), TOKEN_TEMP));
@@ -91,7 +108,6 @@ int	tokenise_misc(char **input, t_token **tokens)
 	- redirection tokens must be followed by another TOKEN_TEMP
 	- input cannot end with &&, ||, | or (
 	- returns 1 if any of the above happens */
-// work in progress: here, incomplete commands (ending with &&, || or |) are errors
 int	check_syntax_tokens(t_token *tokens)
 {
 	t_token	*start;
@@ -111,8 +127,9 @@ int	check_syntax_tokens(t_token *tokens)
 			if (!start)
 				return (err_syntax(tokens->str, 1));
 		}
-		else if (tokens->code == TOKEN_CBRACKET && tokens->next && is_cmdorder_op(tokens->next->code) != 1)
-			return(err_syntax(tokens->next->str, 1));
+		else if (tokens->code == TOKEN_CBRACKET && tokens->next \
+			&& is_cmdorder_op(tokens->next->code) != 1)
+			return (err_syntax(tokens->next->str, 1));
 		tokens = tokens->next;
 	}
 	return (0);
@@ -155,7 +172,8 @@ void	sort_temp_tokens(t_token *tokens)
 /*	tokenise creates linked list of tokens from input str
 	- separate tokens in input str based on whitespace, pipe or redirect
 	- categorises non-operator tokens into commands, arguments, files
-	- returns 1 if error creating any of the tokens (tokens freed by main function)
+	- returns 1 if error creating any of the tokens 
+		(tokens freed by main function)
 	- checks syntax of tokens and returns 2 if syntax error*/
 int	tokenise(char *input, t_token **tokens)
 {

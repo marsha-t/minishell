@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_var_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 21:57:29 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/15 07:45:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 07:12:22 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ int	is_quote(char c)
 
 /*	contain_var checks whether str contains a variable expansion 
 	i.e., a $ followed by valid variable name character 
-	- if $ is followed by a starting quote, it is counted as a variable expansion (that expands into empty str)
-	- if $ followed by number of special character, it doesn't count as variable expansion
+	- if $ is followed by a starting quote, 
+	it is counted as a variable expansion (that expands into empty str)
+	- if $ followed by number of special character, 
+	it doesn't count as variable expansion
 	- if $ is inside single quotes, it isn't a variable expansion
 	- if there is variable expansion, return (0)
 */
