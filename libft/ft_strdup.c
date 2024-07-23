@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 23:35:32 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 16:22:15 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 18:33:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(const char *src)
 	size_t		n;
 	int			i;
 
+	if (!src)
+		return (NULL);
 	n = ft_strlen(src);
 	ptr = (char *)malloc(sizeof(char) * (n + 1));
 	if (!ptr)

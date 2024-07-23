@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 15:10:02 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 15:10:53 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 18:40:14 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /*	expand_var searches for var in variable list
 	- returns duplicate of value if found
 	- returns duplicate of empty string if nothing found
+		or if value is NULL 
 	- malloc protection in split_expand_join()*/
 char	*expand_var(char *var, t_var *env)
 {
@@ -24,7 +25,12 @@ char	*expand_var(char *var, t_var *env)
 	while (current)
 	{
 		if (ft_strcmp(current->key, var) == 0)
-			return (ft_strdup(current->value));
+		{
+			if (current->value)
+				return (ft_strdup(current->value));
+			else
+				return (ft_strdup(""));
+		}
 		current = current -> next;
 	}
 	return (ft_strdup(""));
@@ -86,7 +92,7 @@ char	*split_expand_join_var(char *str, int start, int *i, t_shell *shell)
 		free(var);
 		var = expanded;
 		if (!expanded)
-			return (err_printf("malloc error: expand_var\n"), NULL);
+			return (err_printf("malloc error: ft_strdup\n"), NULL);
 	}
 	return (var);
 }
