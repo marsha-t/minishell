@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_var_utils.c                                 :+:      :+:    :+:   */
+/*   expand_var_utils1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 21:57:29 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 07:12:22 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/23 15:19:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,18 @@ int	is_quote(char c)
 	return (1);
 }
 
+int	contain_var_dquote(int *i, char *str)
+{
+	(*i)++;
+	while (str[*i] != '\0' && str[*i] != '\"')
+	{
+		if (str[*i] == '$' && is_valid_varstart(str[*i + 1]) == 0)
+			return (0);
+		(*i)++;
+	}
+	return (1);
+}
+
 /*	contain_var checks whether str contains a variable expansion 
 	i.e., a $ followed by valid variable name character 
 	- if $ is followed by a starting quote, 
@@ -71,13 +83,8 @@ int	contain_var(char *str)
 		}
 		else if (str[i] == '\"')
 		{
-			i++;
-			while (str[i] != '\0' && str[i] != '\"')
-			{
-				if (str[i] == '$' && is_valid_varstart(str[i + 1]) == 0)
-					return (0);
-				i++;
-			}
+			if (contain_var_dquote(&i, str) == 0)
+				return (0);
 		}
 		else if (str[i] == '$' && is_quote(str[i + 1]) == 0)
 			return (0);

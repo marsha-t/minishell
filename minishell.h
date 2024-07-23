@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 14:51:53 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 15:19:38 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,20 +270,33 @@ int	remove_quote_str_init(char *str, char *quote, int *i, int *start);
 int	remove_quote_str_quoted(int i, char **before_quote, char *str, int *start);
 int	remove_quote_str_while(char **str, int i, char quote, int *start);
 
-// expand_var.c
-char	*ft_strjoin2(char const *s1, char const *s2);
-char  *expand_var(char *var, t_var *env);
-char *join_expand(char *temp, char *var, char *str, int i);
-char	*split_expand_join(char *str, int i, t_shell *shell);
-char	*expand_str(char *str, t_shell *shell);
+// expand_var1.c
 int	file_list_check_var(t_file *file, t_shell *shell);
+int	check_var_expand_arg(t_ast *node, t_shell *shell);
 int	check_var_expansion(t_ast *node, t_shell *shell);
 
-// expand_var_utils2.c
+// expand_var2.c
+int	expand_str_dquote(int *i, char **str, t_shell *shell);
+int	expand_str_dollar(char **str, int *i, t_shell *shell);
+int	expand_str_while(char **str, int *i, t_shell *shell);
+char	*expand_str(char *str, t_shell *shell);
+
+// expand_var3.c
+char  *expand_var(char *var, t_var *env);
+char *join_expand(char *temp, char *var, char *str, int i);
+int	split_expand_join_temp(char *str, int i, char **temp);
+char	*split_expand_join_var(char *str, int start, int *i, t_shell *shell);
+char	*split_expand_join(char *str, int i, t_shell *shell);
+
+// expand_var_utils1.c
 int	is_valid_varstart(char c);
 int	is_valid_varchar(char c);
 int	is_quote(char c);
+int	contain_var_dquote(int *i, char *str);
 int contain_var(char *str);
+
+//expand_var_utils2.c
+char	*ft_strjoin2(char const *s1, char const *s2);
 
 // check_wc.c
 int contain_wc(char *str);
