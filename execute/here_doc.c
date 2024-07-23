@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 19:12:07 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 23:32:01 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	open_file(t_file *current, int flag, t_shell *shell)
 			return (shell->file_err = 1, 1);
 	}
 	if (g_loc == 1)
-		return (shell->file_err = 1, 1);
+		return (shell->file_err = 1,shell->exit_status=130, 1);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:17:52 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 19:12:07 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 23:17:59 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	setup_return = cmd_setup(node, shell);
 	if (setup_return == 1)
 	{
-		shell->exit_status = 1;
+		if (shell->exit_status != 130)
+			shell->exit_status = 1;
 		if (shell->exit_shell == 1)
 			return (exit_shell(shell, 1), 1);
 		else
