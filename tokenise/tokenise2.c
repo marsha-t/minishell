@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 14:34:58 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 14:35:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:39:16 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	tokenise_redirects(char **input, t_token **tokens)
 {
 	int	rval;
 
+	rval = 0;
 	if (**input == '<')
 	{
 		if (*(*input + 1) == '<')

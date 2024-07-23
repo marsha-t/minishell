@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 14:36:17 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:51:53 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,10 +259,16 @@ t_ast	*ast_tree_new(t_ast **node);
 /*	expand																	 */
 /*****************************************************************************/
 // quote_remove.c
-char	*remove_quote_join(char *str, char *before_quote, int *start, int *i);
 char	*remove_quote_str(char *str);
 int	remove_quote_file(t_file *file);
 int	remove_quote_node(t_ast *node);
+
+// quote_remove2.c
+int	remove_quote_inquote(int *start, int *i, char *str, char **in_quote);
+char	*remove_quote_join(char *str, char *before_quote, int *start, int *i);
+int	remove_quote_str_init(char *str, char *quote, int *i, int *start);
+int	remove_quote_str_quoted(int i, char **before_quote, char *str, int *start);
+int	remove_quote_str_while(char **str, int i, char quote, int *start);
 
 // expand_var.c
 char	*ft_strjoin2(char const *s1, char const *s2);
