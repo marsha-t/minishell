@@ -31,14 +31,14 @@ OFILES = ${CFILES:.c=.o}
 
 LIBFT = libft.a
 LIBFT_DIR = libft
-
 FT_PRINTF =	libftprintf.a
 FT_PRINTF_DIR = printf
+ERR_PRINTF = err_printf.a
+ERR_PRINTF_DIR = err_printf
 
 CFLAGS = -Wall -Wextra -Werror
 
-ERR_PRINTF = err_printf.a
-ERR_PRINTF_DIR = err_printf
+BONUS_NAME = minishell_bonus
 
 all: $(NAME)
 
@@ -67,9 +67,14 @@ fclean: clean
 	make fclean -C $(LIBFT_DIR)
 	make fclean -C $(FT_PRINTF_DIR)
 	make fclean -C $(ERR_PRINTF_DIR)
-	rm -f $(NAME)
+	rm -f $(NAME) $(BONUS_NAME)
 
 re: fclean all
+
+bonus: $(BONUS_NAME)
+
+$(BONUS_NAME): $(OFILES) $(LIBFT_DIR)/$(LIBFT) $(ERR_PRINTF_DIR)/$(ERR_PRINTF) $(FT_PRINTF_DIR)/$(FT_PRINTF)
+	cc $(CFLAGS) $(OFILES) $(LIBFT_DIR)/$(LIBFT) $(FT_PRINTF_DIR)/$(FT_PRINTF) $(ERR_PRINTF_DIR)/$(ERR_PRINTF) -o $(BONUS_NAME) -lreadline
 
 .PHONY: all clean fclean re
 
