@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 15:55:49 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 18:26:37 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,10 +145,16 @@ typedef struct s_shell
 }	t_shell;
 
 /*****************************************************************************/
+/*	main																	 */
+/*****************************************************************************/
+int	prep_readline(t_shell *shell);
+int	run_command(t_shell *shell);
+
+/*****************************************************************************/
 /*	initialise																 */
 /*****************************************************************************/
 // shell.c
-t_shell	*init_shell(char **envp);
+t_shell	*init_shell(int ac, char **av, char **envp);
 void	free_after_command(t_shell *shell);
 void	free_shell(t_shell *shell);
 

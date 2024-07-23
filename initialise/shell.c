@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 16:40:20 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 18:11:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ int	shlvl_increment(t_shell *shell)
 /*	init_shell initialises t_shell
 	- creates linked list of environment variables
 	- initialises the rest to 0/NULL */
-t_shell	*init_shell(char **envp)
+t_shell	*init_shell(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
 
+	(void)ac;
+	(void)av;
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (err_printf("malloc error for shell structure\n"), NULL);
@@ -56,6 +58,7 @@ t_shell	*init_shell(char **envp)
 	shell->file_err = 0;
 	if (shlvl_increment(shell) == 1)
 		return (free_shell(shell), NULL);
+	control_signals();
 	return (shell);
 }
 
