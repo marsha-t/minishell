@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/22 18:19:38 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:36:17 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,14 +188,16 @@ int	check_op_para_count(char *line, int *i, int *op_count);
 /*****************************************************************************/
 /*	tokenise																 */
 /*****************************************************************************/
-// tokenise.c
-int	tokenise_pipe(char **input, t_token **tokens);
-int tokenise_redirects(char **input, t_token **tokens);
-int		tokenise_op(char **input, t_token **tokens);
+// tokenise1.c
 int		tokenise_misc(char **input, t_token **tokens);
 int		check_syntax_tokens(t_token *tokens);
 void	sort_temp_tokens(t_token *tokens);
 int	tokenise(char *input, t_token **tokens);
+
+// tokenise2.c
+int	tokenise_pipe(char **input, t_token **tokens);
+int tokenise_redirects(char **input, t_token **tokens);
+int		tokenise_op(char **input, t_token **tokens);
 
 // tokenise_token_utils.c
 t_token	*new_token(char *str, int code);

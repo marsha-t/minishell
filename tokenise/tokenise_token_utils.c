@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:11:36 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:35:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,5 @@ void	free_tokens_null(t_token **tokens)
 		free_num(2, current->str, current);
 		current = next;
 	}
-	// tokens=NULL;
 	*tokens = NULL;
 }
