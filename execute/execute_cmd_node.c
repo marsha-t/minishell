@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:17:52 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/24 12:00:59 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 16:26:46 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	forking(t_shell *shell, t_ast *node)
 		if (change_status(shell))
 			if (WIFEXITED(status))
 				shell->exit_status = WEXITSTATUS(status);
+		if (shell -> exit_status == 2)
+			shell -> exit_status = 1;
 	}
 }
 
