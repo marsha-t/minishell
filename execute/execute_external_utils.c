@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 18:50:04 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 16:00:28 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ char *path_cmd, int *exit_status, t_shell *shell)
 		else if (!S_ISDIR(file_stat.st_mode))
 			return (free_char_dp(paths), *exit_status = 0, path_cmd);
 	}
+	free_char_dp(paths);
 	free(path_cmd);
 	return (NULL);
 }
@@ -74,7 +75,7 @@ char	*get_direc(t_shell *shell, int *exit_status, char *cmd)
 
 	value = expand_var("PATH", shell->var_list);
 	if (value[0] == '\0')
-		return (*exit_status = 127,
+		return (*exit_status = 127, free(value),
 			err_printf("%s: No such file or directory\n", cmd), NULL);
 	else if (!value)
 	{
@@ -99,6 +100,7 @@ char	**get_pathes(t_shell *shell, int *exit_status, char *cmd)
 	value = get_direc(shell, exit_status, cmd);
 	if (!value)
 		return (NULL);
+	dprintf(2, "value: %s\n", value);
 	paths = ft_split(value, ':');
 	free(value);
 	if (!paths)
@@ -119,6 +121,7 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	int		denied;
 	int		paths_index;
 
+	dprintf(2, "cmd: %s\n", cmd);
 	paths = get_pathes(shell, exit_status, cmd);
 	if (!paths)
 		return (NULL);
@@ -131,7 +134,12 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		if (!path_cmd || access(path_cmd, X_OK) == 0)
 			return (check_path_validity(paths, path_cmd, exit_status, shell));
 		else if (errno == EACCES)
+		{
 			denied = 1;
+			free(path_cmd);
+		}
+		else
+			free(path_cmd);
 	}
 	free_char_dp(paths);
 	if (denied == 1)

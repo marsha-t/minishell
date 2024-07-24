@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 15:14:29 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 14:42:54 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,21 +130,24 @@ int	run_external(t_ast *node, t_shell *shell)
 
 	filename = get_filepath(node->cmd, &exit_status, shell);
 	if (!filename)
-		return (exit_status);
+		exit_shell (shell, exit_status);
 	argv = argv_array(node);
 	if (!argv)
 	{
 		shell->exit_shell = 1;
-		return (1);
+		return (1); // need to update?
 	}
 	envp = envp_array(shell->var_list);
 	if (!envp)
-		return (shell->exit_shell = 1, 1);
+		return (shell->exit_shell = 1, 1); // need to update?
 	exit_status = execve(filename, argv, envp);
 	free_char_dp(argv);
 	free_char_dp(envp);
 	free(filename);
 	if (exit_status == -1 && errno == EACCES)
 		exit_status = 126;
-	return (err_printf("%s\n", strerror(errno)), exit_status);
+	// return (err_printf("%s\n", strerror(errno)), exit_status);
+	err_printf("%s\n", strerror(errno));
+	exit_shell (shell, exit_status);
+	return (exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:11:04 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 19:06:10 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 15:32:18 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,7 @@ int	get_outfile(t_ast *node, t_shell *shell)
 		current = current->next;
 	if (shell->file_err == 1)
 		return (1);
-	stat(current->file_name, &f_stat);
-	if (S_ISDIR(f_stat.st_mode))
+	if (stat(current->file_name, &f_stat) == 0 && S_ISDIR(f_stat.st_mode))
 		return (shell->file_err = 1
 			, err_printf("%s: Is a directory\n", current->file_name), 1);
 	if (current->flag == TOKEN_OUTPUT)
