@@ -6,11 +6,27 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:41:51 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 12:41:59 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:50:59 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	**get_pathes(t_shell *shell, int *exit_status, char *cmd)
+{
+	char	**paths;
+	char	*value;
+
+	value = get_direc(shell, exit_status, cmd);
+	if (!value)
+		return (NULL);
+	paths = ft_split(value, ':');
+	free(value);
+	if (!paths)
+		return (*exit_status = 1, shell->exit_shell = 1,
+			err_printf("malloc error: ft_split in find_cmd\n"), NULL);
+	return (paths);
+}
 
 void	free_array(char **arr, int i)
 {

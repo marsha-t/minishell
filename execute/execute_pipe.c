@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 14:24:38 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/24 17:41:07 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 18:00:47 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ void	executing(t_shell *shell, t_ast *node)
 		if (execute_ast(node->left, shell) == 0)
 			exit_shell (shell, 0);
 		else
-		{
-			shell->exit_status = execute_ast(node->right, shell);
-			exit_shell(shell, shell->exit_status);
-		}
+			exit_exit_status_modif(node, shell);
 	}
 }
 

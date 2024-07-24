@@ -13,7 +13,7 @@ EXPANSIONS_CFILES = expand_var1.c expand_var2.c expand_var3.c expand_var_utils1.
 	match_wc.c expand_wc_conts_list.c quote_remove1.c quote_remove2.c
 EXECUTE_DIR = execute
 EXECUTE_CFILES = execute_ast_tree.c execute_cmd_node.c execute_setup.c execute_external.c execute_external_utils.c execute_external_cmd_path_utils.c \
-	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_signals.c execute_pipe.c\
+	builtin_echo.c builtin_exit.c  builtin_pwd.c input_files.c output_files.c here_doc.c handle_signals.c execute_pipe.c execute_pipe_utils.c\
 	execute_assign.c execute_assign_utils.c builtin_cd.c builtin_env.c builtin_export.c builtin_unset.c builtin_exit_utils.c builtin_export_print.c
 MISC_UTILS_DIR = misc_utils
 MISC_UTILS_CFILES = free_utils.c str_utils.c print_utils.c print_utils2.c error_utils.c

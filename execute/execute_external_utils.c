@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/24 16:58:23 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 17:50:42 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,22 +90,6 @@ char	*get_direc(t_shell *shell, int *exit_status, char *cmd)
 			return (*exit_status = 1, shell->exit_shell = 1, NULL);
 	}
 	return (value);
-}
-
-char	**get_pathes(t_shell *shell, int *exit_status, char *cmd)
-{
-	char	**paths;
-	char	*value;
-
-	value = get_direc(shell, exit_status, cmd);
-	if (!value)
-		return (NULL);
-	paths = ft_split(value, ':');
-	free(value);
-	if (!paths)
-		return (*exit_status = 1, shell->exit_shell = 1,
-			err_printf("malloc error: ft_split in find_cmd\n"), NULL);
-	return (paths);
 }
 
 char	*find_cmd_return(char **paths, int denied, int *exit_status, char *cmd)

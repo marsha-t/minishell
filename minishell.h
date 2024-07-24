@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/24 13:07:48 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 18:02:44 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -466,10 +466,12 @@ int					run_assign_str(char *cmd, t_shell *shell);
 int					run_assign_cmd(t_ast *node, t_shell *shell);
 int					check_builtin(char *cmd);
 int					check_empty_cmd(t_ast *node);
+char				**get_pathes(t_shell *shell, int *exit_status, char *cmd);
 
 // execute pipes
 int					execute_pipeline(t_ast *node, t_shell *shell);
 void				piping(int *pipefd, t_shell *shell, int flag);
+void				exit_exit_status_modif(t_ast *node, t_shell *shell);
 
 /*****************************************************************************/
 /*	misc utils																*/
