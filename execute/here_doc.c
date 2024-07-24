@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 23:32:01 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 12:02:08 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	open_file(t_file *current, int flag, t_shell *shell)
 	if (flag == 1)
 		current -> fd = open("X9f4Tp1", O_CREAT | O_RDWR, 0777);
 	line = readline(">");
-	if (!line || g_loc == 1)
-		return (shell->file_err = 1, 1);
-	while (ft_strcmp(current->file_name, line) && g_loc != 1)
+	if (!line || g_loc == 130)
+		return (g_loc = 1, shell->file_err = 1, 1);
+	while (ft_strcmp(current->file_name, line) && g_loc != 130)
 	{
 		if (flag == 1)
 		{
@@ -38,8 +38,8 @@ int	open_file(t_file *current, int flag, t_shell *shell)
 		if (!line)
 			return (shell->file_err = 1, 1);
 	}
-	if (g_loc == 1)
-		return (shell->file_err = 1,shell->exit_status=130, 1);
+	if (g_loc == 130)
+		return (g_loc = 1, shell->file_err = 1, shell->exit_status = 130, 1);
 	return (0);
 }
 

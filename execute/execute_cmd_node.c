@@ -6,11 +6,28 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:17:52 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 23:17:59 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 12:00:59 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	change_status(t_shell *shell)
+{
+	if (g_loc == 130)
+	{
+		shell -> exit_status = 130;
+		g_loc = 1;
+		return (0);
+	}
+	if (g_loc == 131)
+	{
+		shell -> exit_status = 131;
+		g_loc = 1;
+		return (0);
+	}
+	return (1);
+}
 
 int	check_lists(t_ast *node, t_shell *shell)
 {
@@ -47,8 +64,9 @@ void	forking(t_shell *shell, t_ast *node)
 	else
 	{
 		waitpid(id, &status, 0);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
+		if (change_status(shell))
+			if (WIFEXITED(status))
+				shell->exit_status = WEXITSTATUS(status);
 	}
 }
 
@@ -71,8 +89,8 @@ int	execute_cmd_node(t_ast *node, t_shell *shell)
 	setup_return = cmd_setup(node, shell);
 	if (setup_return == 1)
 	{
-		if (shell->exit_status != 130)
-			shell->exit_status = 1;
+		if (shell->exit_status != 130 && shell->exit_status != 131)
+			shell -> exit_status = 1;
 		if (shell->exit_shell == 1)
 			return (exit_shell(shell, 1), 1);
 		else

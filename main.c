@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 23:32:18 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 11:08:23 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ int main(int ac, char **av, char **envp)
 		shell->line = readline("minishell$");
 		if (shell->line == NULL)
 			return (exit_shell(shell, 0), 1);
-		// if(g_loc == 130)
-		// {	shell->exit_status = 130;
-		// 	g_loc = 1;
-		// 	continue ;
-		// }
+		if(g_loc == 130)
+		{	shell->exit_status = 130;
+			g_loc = 1;
+			continue ;
+		}
 		int i;
 		i  = 0;
 		while(shell->line[i] == ' ' || shell->line[i] == '\t')
