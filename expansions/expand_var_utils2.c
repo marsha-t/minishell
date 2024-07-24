@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   expand_var_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/03 23:35:32 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 18:33:12 by mateo            ###   ########.fr       */
+/*   Created: 2024/07/23 15:19:17 by mateo             #+#    #+#             */
+/*   Updated: 2024/07/23 15:19:24 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
-char	*ft_strdup(const char *src)
+char	*ft_strjoin2(char const *s1, char const *s2)
 {
-	char		*ptr;
-	size_t		n;
-	int			i;
+	char	*ptr;
+	size_t	tot_len;
+	int		i;
 
-	if (!src)
-		return (NULL);
-	n = ft_strlen(src);
-	ptr = (char *)malloc(sizeof(char) * (n + 1));
+	if (!s1 && s2)
+		return (ft_strdup(s2));
+	else if (!s2 && s1)
+		return (ft_strdup(s1));
+	else if (!s1 && !s2)
+		return (0);
+	tot_len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	ptr = (char *)malloc(sizeof(char) * tot_len);
 	if (!ptr)
 		return (0);
-	i = -1;
-	while (src[++i] != '\0')
-		ptr[i] = src[i];
+	i = 0;
+	while (*s1)
+		ptr[i++] = *(s1)++;
+	while (*s2)
+		ptr[i++] = *(s2)++;
 	ptr[i] = '\0';
 	return (ptr);
 }

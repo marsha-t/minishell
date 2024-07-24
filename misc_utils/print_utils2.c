@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:13:11 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:13:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 16:05:25 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	ast_pipeline_print(t_ast *node)
 		node = node->pipe;
 	}
 }
+
 /*	ast_tree_print prints all the nodes in a tree
 	- prints node, left, right
 	- before going to left and doing the same

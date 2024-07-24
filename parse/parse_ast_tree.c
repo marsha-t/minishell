@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_ast_tree.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/22 16:58:24 by mateo             #+#    #+#             */
+/*   Updated: 2024/07/22 17:19:26 by mateo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	is_logical_op(int code)
@@ -7,103 +19,61 @@ int	is_logical_op(int code)
 	return (0);
 }
 
-t_ast	*ast_pipeline_new(t_ast **node)
+void	ast_tree_setup(t_ast **node, t_ast **root)
 {
-	t_ast	*head;
-	t_ast	*left;
-
-	head = NULL;
-	left = NULL;
-
-	while (*node)
-	{
-		if ((*node)->code == TOKEN_PIPE)
-			*node = (*node)->next;
-		else if ((*node)->code == TOKEN_CMD)
-		{
-			if (!left)
-				left = *node;
-			else
-			{
-				left->pipe = *node;
-				left = *node;
-			}
-			if (!head)
-			{
-				head = left;
-			}
-			*node = (*node)->next;
-		}
-		else if ((*node)->code == TOKEN_OBRACKET)
-		{
-			*node = (*node)->next;
-			if (!left)
-				left = (ast_tree_new(node));
-			else
-			{
-				left->pipe = ast_tree_new(node);
-				left = left->pipe;
-			}
-			if (!head)
-			{
-				head = left;
-			}
-		}
-		else if ((*node)->code == TOKEN_CBRACKET)
-			break;
-		else if (is_logical_op((*node)->code) == 1)
-			break;
-	}
-	return (head);
-}
-
-t_ast	*ast_tree_new(t_ast **node)
-{
-	t_ast	*root;
-
 	if ((*node)->code == TOKEN_CMD)
 	{
 		if ((*node)->next && (*node)->next->code == TOKEN_PIPE)
-			root = ast_pipeline_new(node);
+			*root = ast_pipeline_new(node);
 		else
 		{
-			root = *node;
+			*root = *node;
 			*node = (*node)->next;
 		}
 	}
 	else if ((*node)->code == TOKEN_OBRACKET)
 	{
 		*node = (*node)->next;
-		root = ast_tree_new(node);
+		*root = ast_tree_new(node);
 		if ((*node) && (*node)->code == TOKEN_PIPE)
-		{
-			root->pipe = ast_pipeline_new(node);
-		}
+			(*root)->pipe = ast_pipeline_new(node);
 	}
+}
+
+void	ast_tree_new_cmd(t_ast **node, t_ast **root)
+{
+	if ((*node)->next && (*node)->next->code == TOKEN_PIPE)
+		(*root)->right = ast_pipeline_new(node);
+	else
+	{
+		(*root)->right = *node;
+		*node = (*node)->next;
+	}
+}
+
+void	ast_tree_new_obracket(t_ast **node, t_ast **root)
+{
+	*node = (*node)->next;
+	(*root)->right = ast_tree_new(node);
+	if ((*node) && (*node)->code == TOKEN_PIPE)
+		(*root)->right->pipe = ast_pipeline_new(node);
+}
+
+/*	ast_tree_new generates binary tree for command
+	- nodes are commands, && or ||
+	- pipelines are linked lists 
+	- ast_tree_setup starts the root for the tree */
+t_ast	*ast_tree_new(t_ast **node)
+{
+	t_ast	*root;
+
+	ast_tree_setup(node, &root);
 	while (*node)
 	{
 		if ((*node)->code == TOKEN_CMD)
-		{
-			if ((*node)->next && (*node)->next->code == TOKEN_PIPE)
-			{
-				root->right = ast_pipeline_new(node);
-			}
-			else
-			{
-				root->right = *node;
-				*node = (*node)->next;
-			}
-		}
+			ast_tree_new_cmd(node, &root);
 		else if ((*node)->code == TOKEN_OBRACKET)
-		{
-			*node = (*node)->next;
-			root->right = ast_tree_new(node);
-			if ((*node) && (*node)->code == TOKEN_PIPE)
-			{
-				root->right->pipe = ast_pipeline_new(node);
-				// root = root->right;
-			}
-		}
+			ast_tree_new_obracket(node, &root);
 		else if (is_logical_op((*node)->code) == 1)
 		{
 			(*node)->left = root;

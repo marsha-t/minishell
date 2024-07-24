@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   err_printf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 09:35:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/22 10:43:26 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 16:20:12 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ int	err_printf(const char *format, ...)
 		{
 			while (format[i] != '\0' && format[i] != '%')
 			{
-				outputlength += err_putchar(format[i]);
-				i++;
+				outputlength += err_putchar(format[i++]);
 			}
 		}
 	}
