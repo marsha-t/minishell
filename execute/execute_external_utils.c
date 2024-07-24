@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/24 16:32:49 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 16:40:54 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ char *path_cmd, int *exit_status, t_shell *shell)
 	}
 	free_char_dp(paths);
 	free(path_cmd);
+	*exit_status = 1;
 	return (NULL);
 }
 

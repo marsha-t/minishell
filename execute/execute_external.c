@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:19:03 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/24 14:42:54 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 16:44:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,20 +133,16 @@ int	run_external(t_ast *node, t_shell *shell)
 		exit_shell (shell, exit_status);
 	argv = argv_array(node);
 	if (!argv)
-	{
-		shell->exit_shell = 1;
-		return (1); // need to update?
-	}
+		exit_shell(shell, 1);
 	envp = envp_array(shell->var_list);
 	if (!envp)
-		return (shell->exit_shell = 1, 1); // need to update?
+		exit_shell(shell, 1);
 	exit_status = execve(filename, argv, envp);
 	free_char_dp(argv);
 	free_char_dp(envp);
 	free(filename);
 	if (exit_status == -1 && errno == EACCES)
 		exit_status = 126;
-	// return (err_printf("%s\n", strerror(errno)), exit_status);
 	err_printf("%s\n", strerror(errno));
 	exit_shell (shell, exit_status);
 	return (exit_status);
