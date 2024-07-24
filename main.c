@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 19:58:00 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 18:43:17 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 12:42:36 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ int	prep_readline(t_shell *shell)
 	shell->line = readline("minishell$");
 	if (shell->line == NULL)
 		return (exit_shell(shell, 0), 1);
+	if (g_loc == 130)
+	{	shell->exit_status = 130;
+		g_loc = 1;
+		continue ;
+	}
 	i = 0;
 	while (shell->line[i] == ' ' || shell->line[i] == '\t')
 		i++;
@@ -63,6 +68,7 @@ int	main(int ac, char **av, char **envp)
 	shell = init_shell(ac, av, envp);
 	if (!shell)
 		return (1);
+	g_loc = 1;
 	while (1)
 	{
 		if (prep_readline(shell) == 1)
@@ -77,3 +83,4 @@ int	main(int ac, char **av, char **envp)
 	}
 	exit_shell(shell, 0);
 }
+	

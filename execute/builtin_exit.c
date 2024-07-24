@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:54:54 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 23:27:52 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/22 21:46:11 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ unsigned long long	ft_atoi_ull(char *str)
 /*	check_ll_limit converts str to unsigned long long (ft_atoi_ull)
 	and returns 1 if number is outside long long limits
 	*/
-int check_ll_limit(char *str, int sign)
+int	check_ll_limit(char *str, int sign)
 {
 	unsigned long long	num;
 
@@ -71,36 +71,6 @@ int	check_exit_arg(char *str)
 	return (check_ll_limit(str, sign));
 }
 
-/*	get_exit_status converts str to long long
-	and applies modulo of 256 to get exit status
-	- for negative values, need to deduct from 256 to get same values as bash */
-int	get_exit_status(char *str)
-{
-	long long	num;
-	int			sign;
-
-	sign = 1;
-	if (*str == '-')
-		sign = -1;
-	num = (long long) ft_atoi_ull(str) * sign;
-	num = num % 256;
-	if (num < 0)
-		num = 256 - (-1 * num);
-	return ((int) num);
-}
-
-/*	exit_shell does final clean-up before shell is exited
-	- free shell
-	- clear history */
-// work in progress: error running rl_clear_history on Mac (error: implicit declaration)
-void	exit_shell(t_shell *shell, int exit_status)
-{
-	free_shell(shell);
-	// rl_clear_history();
-
-	exit(exit_status);
-}
-
 /*	builtin_exit runs the exit command
 	- checks validity of arguments
 	- determines value (exit status) to return
@@ -114,7 +84,8 @@ int	builtin_exit(t_ast *node, t_shell *shell)
 	int	exit_status;
 
 	if (node->n_args > 0 && check_exit_arg(node->args->content) == 1)
-		return (err_printf("exit: %s: numeric argument required\n", node->args->content), 2);
+		return (err_printf("exit: %s: numeric argument required\n",
+				node->args->content), 2);
 	if (node->n_args > 1)
 		return (err_printf("exit: too many arguments\n"), 1);
 	if (node->n_args == 0)

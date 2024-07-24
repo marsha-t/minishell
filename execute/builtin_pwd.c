@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:03:01 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/20 15:44:48 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 08:20:24 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	update_pwd(char *dir, t_shell *shell)
 	- but it also updates size of buffer if getcwd fails due to buffer size
 	- doubles dir size if not enough space initially
 	- updates PWD*/
-// work in progress - should we set a max limit for dir size e.g., while (size < 10240)?
 char	*ft_getcwd(t_shell *shell)
 {
 	char	*dir;
@@ -49,10 +48,8 @@ char	*ft_getcwd(t_shell *shell)
 	{
 		dir = malloc(sizeof(char) * size);
 		if (!dir)
-		{
-			shell->exit_shell = 1;
-			return (err_printf("malloc error: dir\n"), NULL);
-		}
+			return (shell->exit_shell = 1,
+				err_printf("malloc error: dir\n"), NULL);
 		if (getcwd(dir, size) != NULL)
 			break ;
 		else if (errno == ERANGE)
@@ -61,11 +58,8 @@ char	*ft_getcwd(t_shell *shell)
 			size *= 2;
 		}
 		else
-		{
-			free(dir);
-			shell->exit_shell = 1;
-			return (err_printf("error calling getcwd\n"), NULL);
-		}
+			return (free(dir), shell->exit_shell = 1,
+				err_printf("error calling getcwd\n"), NULL);
 	}
 	if (update_pwd(dir, shell) == 1)
 		return (NULL);
@@ -81,9 +75,8 @@ char	*ft_getcwd(t_shell *shell)
 int	builtin_pwd(t_ast *node, t_shell *shell)
 {
 	char	*dir;
+
 	(void)node;
-	// if (node->n_args > 0 && ft_strncmp(node->args->content, "-", 1))
-	// 	return (err_printf("pwd: does not support options"), 1);
 	dir = ft_getcwd(shell);
 	if (!dir)
 	{

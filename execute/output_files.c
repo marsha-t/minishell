@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:11:04 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/22 15:03:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 19:06:10 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,13 @@ int	open_files(t_ast *node, t_shell *shell)
 					err_printf("%s\n", strerror(errno)), 1);
 			opened = 1;
 		}
-		else if (current->flag == TOKEN_OUTPUT
-			&& access(current ->file_name, F_OK) == 0)
-		{
+		else if (current->flag == TOKEN_OUTPUT)
 			if (check_and_open(shell, current, &opened) == 1)
 				return (1);
-		}
 		if (shell->file_err == 1)
 			return (1);
 		if (opened == 1 && close(current->fd) == -1)
-			return (err_syscall(shell, "close"));
+			return (err_printf("%s \n", strerror(errno)), 1);
 		current = current -> next;
 	}
 	return (0);
@@ -90,20 +87,18 @@ int	get_outfile(t_ast *node, t_shell *shell)
 	return (current->fd);
 }
 
-int	dup_output(t_shell *shell, t_ast *node, int o_fd)
+int	dup_output(t_ast *node, int o_fd)
 {
 	int	target_fd ;
 
 	target_fd = 0;
 	node->tmp_stdout_fd = dup(STDOUT_FILENO);
 	if (node->tmp_stdout_fd == -1)
-		return (err_syscall(shell, "dup2"));
+		return (err_printf("%s \n", strerror(errno)), 1);
 	target_fd = dup2(o_fd, STDOUT_FILENO);
 	if (close(o_fd) == -1)
-		return (err_syscall(shell, "close"));
+		return (err_printf("%s \n", strerror(errno)), 1);
 	if (target_fd == -1)
-		return (err_syscall(shell, "dup2"));
+		return (err_printf("%s \n", strerror(errno)), 1);
 	return (0);
 }
-
-

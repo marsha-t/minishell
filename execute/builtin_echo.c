@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 07:43:19 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/18 11:48:36 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/22 21:33:00 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 	"-n" and "-nnnnnn" are newline arguments */
 int	is_newline_arg(char *arg)
 {
-	int i;
+	int	i;
 
 	if (arg[0] != '-')
 		return (0);
@@ -48,7 +48,8 @@ int	builtin_echo(t_ast *node)
 			curr_arg = curr_arg->next;
 		while (curr_arg)
 		{
-			write(STDOUT_FILENO, curr_arg->content, ft_strlen(curr_arg->content));
+			write(STDOUT_FILENO, curr_arg->content,
+				ft_strlen(curr_arg->content));
 			if (curr_arg->next)
 				write(STDOUT_FILENO, " ", 1);
 			curr_arg = curr_arg->next;
