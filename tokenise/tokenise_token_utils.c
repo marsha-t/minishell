@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:01:59 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/17 16:11:36 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:35:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,23 +59,6 @@ int	add_token(t_token **tokens, char *str, int code)
 }
 
 /*	free_tokens frees nodes in tokens linked list
-	and the str inside the nodes */
-// void	free_tokens(t_token *tokens)
-// {
-// 	t_token	*current;
-// 	t_token	*next;
-
-// 	current = tokens;
-// 	while (current)
-// 	{
-// 		next = current->next;
-// 		free_num(2, current->str, current);
-// 		current = next;
-// 	}
-// 	// tokens=NULL;
-// }
-
-/*	free_tokens frees nodes in tokens linked list
 	and the str inside the nodes 
 	- and sets pointer to NULL (hence double pointer) */
 void	free_tokens_null(t_token **tokens)
@@ -90,6 +73,5 @@ void	free_tokens_null(t_token **tokens)
 		free_num(2, current->str, current);
 		current = next;
 	}
-	// tokens=NULL;
 	*tokens = NULL;
 }

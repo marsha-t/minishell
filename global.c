@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   global.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:02:12 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/07 12:02:36 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/23 16:22:50 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "global.h"
-int LOC = 1;
+
+int	LOC = 1;

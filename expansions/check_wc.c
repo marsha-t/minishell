@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_wc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:36:10 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/21 16:34:07 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/23 07:06:24 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ int	arg_check_wc(t_ast *node, t_shell *shell)
 	{
 		if (contain_wc(curr_arg->content) == 0)
 		{
-			if (expand_wc_arg(&shell->directory_contents, node, curr_arg->content) == 1)
+			if (expand_wc_arg(&shell->directory_contents, \
+			node, curr_arg->content) == 1)
 				return (1);
 		}
 		curr_arg = curr_arg->next;
