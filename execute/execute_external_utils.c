@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/24 16:00:28 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 16:32:49 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ char	**get_pathes(t_shell *shell, int *exit_status, char *cmd)
 	value = get_direc(shell, exit_status, cmd);
 	if (!value)
 		return (NULL);
-	dprintf(2, "value: %s\n", value);
 	paths = ft_split(value, ':');
 	free(value);
 	if (!paths)
@@ -121,7 +120,6 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 	int		denied;
 	int		paths_index;
 
-	dprintf(2, "cmd: %s\n", cmd);
 	paths = get_pathes(shell, exit_status, cmd);
 	if (!paths)
 		return (NULL);
