@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 06:26:27 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/24 16:40:54 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 16:58:23 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ char *path_cmd, int *exit_status, t_shell *shell)
 	}
 	free_char_dp(paths);
 	free(path_cmd);
-	*exit_status = 1;
-	return (NULL);
+	return (*exit_status = 1, NULL);
 }
 
 char	*get_direc(t_shell *shell, int *exit_status, char *cmd)
@@ -109,6 +108,16 @@ char	**get_pathes(t_shell *shell, int *exit_status, char *cmd)
 	return (paths);
 }
 
+char	*find_cmd_return(char **paths, int denied, int *exit_status, char *cmd)
+{
+	free_char_dp(paths);
+	if (denied == 1)
+		return (*exit_status = 126,
+			err_printf("%s: Permission denied\n", cmd), NULL);
+	return (*exit_status = 127,
+		err_printf("%s: command not found\n", cmd), NULL);
+}
+
 /*	find_cmd finds the command across the PATH directories
 	and checks whether it exists and permissions are granted
 	- it also updates exit_status
@@ -140,10 +149,5 @@ char	*find_cmd(char *cmd, int *exit_status, t_shell *shell)
 		else
 			free(path_cmd);
 	}
-	free_char_dp(paths);
-	if (denied == 1)
-		return (*exit_status = 126,
-			err_printf("%s: Permission denied\n", cmd), NULL);
-	return (*exit_status = 127,
-		err_printf("%s: command not found\n", cmd), NULL);
+	return (find_cmd_return(paths, denied, exit_status, cmd));
 }

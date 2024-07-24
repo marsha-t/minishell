@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 17:39:16 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/23 18:11:01 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 17:35:08 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	free_after_command(t_shell *shell)
 		ast_list_free(shell->ast_list);
 		shell->ast_list = NULL;
 	}
+	shell->pid = 0;
 	shell->pipe_data = 0;
 	shell->old_read_fd = -2;
 	shell->file_err = 0;
@@ -92,5 +93,7 @@ void	free_shell(t_shell *shell)
 		ast_list_free(shell->ast_list);
 	if (shell->var_list)
 		free_var_list(shell->var_list);
+	if (shell->pid)
+		free(shell->pid);
 	free(shell);
 }

@@ -6,15 +6,33 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:56:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/24 15:40:13 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 17:40:11 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+int	open_file_while(int flag, char *line, t_shell *shell, t_file *current)
+{
+	if (flag == 1)
+	{
+		if (contain_var(line) == 0)
+			expand_str(line, shell);
+		ft_putstr_fd(line, current -> fd);
+		ft_putstr_fd("\n", current -> fd);
+	}
+	if (g_loc != 1)
+	{
+		free(line);
+		line = readline(">");
+	}
+	if (!line)
+		return (shell->file_err = 1, 1);
+	return (0);
+}
+
 /*	returns 1 if error
 	0 otherwise*/
-
 int	open_file(t_file *current, int flag, t_shell *shell)
 {
 	char	*line;
@@ -26,20 +44,8 @@ int	open_file(t_file *current, int flag, t_shell *shell)
 		return (free(line), g_loc = 1, shell->file_err = 1, 1);
 	while (ft_strcmp(current->file_name, line) && g_loc != 130)
 	{
-		if (flag == 1)
-		{
-			if (contain_var(line) == 0)
-				expand_str(line, shell);
-			ft_putstr_fd(line, current -> fd);
-			ft_putstr_fd("\n", current -> fd);
-		}
-		if (g_loc != 1)
-		{
-			free(line);
-			line = readline(">");
-		}
-		if (!line)
-			return (shell->file_err = 1, 1);
+		if (open_file_while(flag, line, shell, current) == 1)
+			return (1);
 	}
 	free(line);
 	if (g_loc == 130)

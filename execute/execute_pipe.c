@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 14:24:38 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 15:25:13 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:41:07 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,30 @@ void	piping(int	*pipefd, t_shell *shell, int flag)
 void	executing(t_shell *shell, t_ast *node)
 {
 	if (!node->left && !node->right)
-		exit(execute_cmd_node(node, shell));
+	{
+		shell->exit_status = execute_cmd_node(node, shell);
+		exit_shell(shell, shell->exit_status);
+	}
 	else if (node->code == TOKEN_AND)
 	{
 		shell->pipe_data = 0;
 		if (execute_ast(node->left, shell) == 0)
-			exit (execute_ast(node->right, shell));
+		{
+			shell->exit_status = execute_ast(node->right, shell);
+			exit_shell(shell, shell->exit_status);
+		}
 		else
-			exit (1);
+			exit_shell (shell, 1);
 	}
 	else if (node->code == TOKEN_OR)
 	{
 		if (execute_ast(node->left, shell) == 0)
-			exit (0);
+			exit_shell (shell, 0);
 		else
-			exit (execute_ast(node->right, shell));
+		{
+			shell->exit_status = execute_ast(node->right, shell);
+			exit_shell(shell, shell->exit_status);
+		}
 	}
 }
 
