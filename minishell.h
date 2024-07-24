@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/24 12:56:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 13:07:48 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,8 @@ typedef struct s_shell
 /*****************************************************************************/
 /*	main																	 */
 /*****************************************************************************/
-int	prep_readline(t_shell *shell);
-int	run_command(t_shell *shell);
+int					prep_readline(t_shell *shell);
+int					run_command(t_shell *shell);
 
 /*****************************************************************************/
 /*	initialise																*/
@@ -195,18 +195,17 @@ void				sort_temp_tokens(t_token *tokens);
 int					tokenise(char *input, t_token **tokens);
 
 // tokenise2.c
-int	tokenise_pipe(char **input, t_token **tokens);
-int tokenise_redirects(char **input, t_token **tokens);
-int		tokenise_op(char **input, t_token **tokens);
+int					tokenise_pipe(char **input, t_token **tokens);
+int					tokenise_redirects(char **input, t_token **tokens);
+int					tokenise_op(char **input, t_token **tokens);
 
 // tokenise_token_utils.c
 t_token				*new_token(char *str, int code);
 int					add_token(t_token **tokens, char *str, int code);
-// void	free_tokens(t_token *tokens);
 void				free_tokens_null(t_token **tokens);
-t_token	*new_token(char *str, int code);
-int		add_token(t_token **tokens, char *str, int code);
-void	free_tokens_null(t_token **tokens);
+t_token				*new_token(char *str, int code);
+int					add_token(t_token **tokens, char *str, int code);
+void				free_tokens_null(t_token **tokens);
 
 // tokenise_misc_utils.c
 char				*strdup_range(char *start, char *end);
@@ -218,29 +217,31 @@ int					check_quote(int quote, char input);
 /*	parse																	*/
 /*****************************************************************************/
 // parse.c
-// t_ast	*parse_tokens(t_token **tokens);
 int					parse_tokens(t_shell *shell);
 
 // parse_ast_list1.c
-int	classify_redir_node(t_ast *node);
-int	ast_list_new_while(t_token **tokens, t_ast **current, t_ast **start);
-t_ast	*ast_list_new(t_token **tokens);
+int					classify_redir_node(t_ast *node);
+int					ast_list_new_while(t_token **tokens,
+						t_ast **current, t_ast **start);
+t_ast				*ast_list_new(t_token **tokens);
 
 // parse_ast_list2.c
-int		ast_node_add(t_token **tokens, t_ast **start, t_ast **current);
-int		ast_node_append_arg(t_token **tokens, t_ast *current);
-int	ast_node_append_misc_setup(t_ast **start, t_ast **current);
-int	ast_node_append_misc(t_token **tokens, t_ast **start, t_ast **current);
-int	ast_node_append_cmd(t_token **tokens, t_ast *current);
+int					ast_node_add(t_token **tokens, t_ast **start,
+						t_ast **current);
+int					ast_node_append_arg(t_token **tokens, t_ast *current);
+int					ast_node_append_misc_setup(t_ast **start, t_ast **current);
+int					ast_node_append_misc(t_token **tokens, t_ast **start,
+						t_ast **current);
+int					ast_node_append_cmd(t_token **tokens, t_ast *current);
 
 // parse_ast_list_utils.c
-t_ast	*ast_node_init(void);
-t_list	*create_arg_node(char *str);
+t_ast				*ast_node_init(void);
+t_list				*create_arg_node(char *str);
 
 // ast_list_free.c
-void	file_list_free(t_file *file);
-void	arg_list_free(t_ast *current);
-void	ast_list_free(t_ast *node);
+void				file_list_free(t_file *file);
+void				arg_list_free(t_ast *current);
+void				ast_list_free(t_ast *node);
 
 // create_redir_lists.c
 int					create_in_list(t_token *token, t_ast **node);
@@ -249,59 +250,67 @@ int					create_output_append_list(int code, t_token *token,
 						t_ast **node);
 
 // parse_ast_tree.c
-int	is_logical_op(int code);
-void	ast_pipeline_new_cmd(t_ast **node, t_ast **left, t_ast **head);
-void	ast_pipeline_new_obracket(t_ast **node, t_ast **left, t_ast **head);
-t_ast	*ast_pipeline_new(t_ast **node);
+int					is_logical_op(int code);
+void				ast_pipeline_new_cmd(t_ast **node, t_ast **left,
+						t_ast **head);
+void				ast_pipeline_new_obracket(t_ast **node, t_ast **left,
+						t_ast **head);
+t_ast				*ast_pipeline_new(t_ast **node);
 
 // parse_ast_pipeline.c
-void	ast_tree_setup(t_ast **node, t_ast **root);
-void	ast_tree_new_cmd(t_ast **node, t_ast **root);
-void	ast_tree_new_obracket(t_ast **node, t_ast **root);
-t_ast	*ast_tree_new(t_ast **node);
+void				ast_tree_setup(t_ast **node, t_ast **root);
+void				ast_tree_new_cmd(t_ast **node, t_ast **root);
+void				ast_tree_new_obracket(t_ast **node, t_ast **root);
+t_ast				*ast_tree_new(t_ast **node);
 
 /*****************************************************************************/
 /*	expand																	*/
 /*****************************************************************************/
 // quote_remove.c
-char	*remove_quote_str(char *str);
-int	remove_quote_file(t_file *file);
-int	remove_quote_node(t_ast *node);
+char				*remove_quote_str(char *str);
+int					remove_quote_file(t_file *file);
+int					remove_quote_node(t_ast *node);
 
 // quote_remove2.c
-int	remove_quote_inquote(int *start, int *i, char *str, char **in_quote);
-char	*remove_quote_join(char *str, char *before_quote, int *start, int *i);
-int	remove_quote_str_init(char *str, char *quote, int *i, int *start);
-int	remove_quote_str_quoted(int i, char **before_quote, char *str, int *start);
-int	remove_quote_str_while(char **str, int i, char quote, int *start);
+int					remove_quote_inquote(int *start, int *i, char *str,
+						char **in_quote);
+char				*remove_quote_join(char *str, char *before_quote,
+						int *start, int *i);
+int					remove_quote_str_init(char *str, char *quote, int *i,
+						int *start);
+int					remove_quote_str_quoted(int i, char **before_quote,
+						char *str, int *start);
+int					remove_quote_str_while(char **str, int i, char quote,
+						int *start);
 
 // expand_var1.c
-int	file_list_check_var(t_file *file, t_shell *shell);
-int	check_var_expand_arg(t_ast *node, t_shell *shell);
-int	check_var_expansion(t_ast *node, t_shell *shell);
+int					file_list_check_var(t_file *file, t_shell *shell);
+int					check_var_expand_arg(t_ast *node, t_shell *shell);
+int					check_var_expansion(t_ast *node, t_shell *shell);
 
 // expand_var2.c
-int	expand_str_dquote(int *i, char **str, t_shell *shell);
-int	expand_str_dollar(char **str, int *i, t_shell *shell);
-int	expand_str_while(char **str, int *i, t_shell *shell);
-char	*expand_str(char *str, t_shell *shell);
+int					expand_str_dquote(int *i, char **str, t_shell *shell);
+int					expand_str_dollar(char **str, int *i, t_shell *shell);
+int					expand_str_while(char **str, int *i, t_shell *shell);
+char				*expand_str(char *str, t_shell *shell);
 
 // expand_var3.c
-char  *expand_var(char *var, t_var *env);
-char *join_expand(char *temp, char *var, char *str, int i);
-int	split_expand_join_temp(char *str, int i, char **temp);
-char	*split_expand_join_var(char *str, int start, int *i, t_shell *shell);
-char	*split_expand_join(char *str, int i, t_shell *shell);
+char				*expand_var(char *var, t_var *env);
+char				*join_expand(char *temp, char *var, char *str, int i);
+int					split_expand_join_temp(char *str, int i, char **temp);
+char				*split_expand_join_var(char *str, int start, int *i,
+						t_shell *shell);
+char				*split_expand_join(char *str, int i, t_shell *shell);
 
 // expand_var_utils1.c
-int	is_valid_varstart(char c);
-int	is_valid_varchar(char c);
-int	is_quote(char c);
-int	contain_var_dquote(int *i, char *str);
-int contain_var(char *str);
+int					is_valid_varstart(char c);
+int					is_valid_varchar(char c);
+int					is_quote(char c);
+int					contain_var_dquote(int *i, char *str);
+int					contain_var(char *str);
 
 //expand_var_utils2.c
-char	*ft_strjoin2(char const *s1, char const *s2);
+char				*ft_strjoin2(char const *s1, char const *s2);
 
 // check_wc.c
 int					contain_wc(char *str);
@@ -311,35 +320,44 @@ int					arg_check_wc(t_ast *node, t_shell *shell);
 int					check_wc_expansion(t_ast *node, t_shell *shell);
 
 // expand_wc.c
-int expand_wc_setup(t_dconts **matched_list, char *pattern, t_dconts **list);
-int	expand_wc_cmd(t_dconts **list, t_ast *node);
-int	expand_wc_arg(t_dconts **list, t_ast *node, char *pattern);
-int	expand_wc_file_add(int code, t_ast *node, char *pattern, t_dconts *matched);
-int	expand_wc_file(t_shell *shell, t_ast *node, char *pattern, int code);
+int					expand_wc_setup(t_dconts **matched_list, char *pattern,
+						t_dconts **list);
+int					expand_wc_cmd(t_dconts **list, t_ast *node);
+int					expand_wc_arg(t_dconts **list, t_ast *node, char *pattern);
+int					expand_wc_file_add(int code, t_ast *node,
+						char *pattern, t_dconts *matched);
+int					expand_wc_file(t_shell *shell, t_ast *node,
+						char *pattern, int code);
 
 // expand_wc_match_dir1.c
-int	check_directory(char *directory);
-int	match_dir_end(char *dir, t_dconts **matched);
-int	match_dir(t_wc *wc_info, char *slash, char *dir);
-int	expand_wc_cmd_slash(t_ast *node, t_wc *wc_info, char *slash);
+int					check_directory(char *directory);
+int					match_dir_end(char *dir, t_dconts **matched);
+int					match_dir(t_wc *wc_info, char *slash, char *dir);
+int					expand_wc_cmd_slash(t_ast *node, t_wc *wc_info,
+						char *slash);
 
 // expand_wc_match_dir2.c
-int	match_dcont(char *dir, char *pattern, t_dconts **dcont);
-int	match_dir_matched(t_wc *wc_info, char *next_slash, char *new_directory);
-int	match_dir_while2(char *dir, t_dconts *curr, t_wc *wc_info, char *next_slash);
-int	match_dir_while(char *dir, char *pattern, char *next_slash, t_wc *wc_info);
+int					match_dcont(char *dir, char *pattern, t_dconts **dcont);
+int					match_dir_matched(t_wc *wc_info, char *next_slash,
+						char *new_directory);
+int					match_dir_while2(char *dir, t_dconts *curr,
+						t_wc *wc_info, char *next_slash);
+int					match_dir_while(char *dir, char *pattern,
+						char *next_slash, t_wc *wc_info);
 
 // expand_wc_utils1.c
-int	start_dot_wc(char *pattern);
-void	rm_dot_dconts(t_dconts **list);
-int	count_matches(t_dconts *matched);
-int	init_wc(t_wc **wc_info, char *cmd);
-void	free_wc_info(t_wc *wc_info);
+int					start_dot_wc(char *pattern);
+void				rm_dot_dconts(t_dconts **list);
+int					count_matches(t_dconts *matched);
+int					init_wc(t_wc **wc_info, char *cmd);
+void				free_wc_info(t_wc *wc_info);
 
 // expand_wc_utils2.c
-t_list	*create_arg(char *arg_str);
-int	matched_to_arg(t_dconts *matched, t_list **new_args, t_list **end_args);
-int add_matched_to_arg(t_dconts *matched, t_list **arg, t_ast *node);
+t_list				*create_arg(char *arg_str);
+int					matched_to_arg(t_dconts *matched, t_list **new_args,
+						t_list **end_args);
+int					add_matched_to_arg(t_dconts *matched,
+						t_list **arg, t_ast *node);
 
 // match_wc.c
 int					match_pattern_str(char *pattern, char *str);
