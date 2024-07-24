@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:24:32 by ryagoub           #+#    #+#             */
-/*   Updated: 2024/07/23 18:53:05 by ryagoub          ###   ########.fr       */
+/*   Updated: 2024/07/24 12:54:57 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	non_existing_var(t_shell *shell, char *curr_content, char *equal)
 	- if no args, prints environment variable list
 	- if there are args,
 		- checks whether there is an equal sign
-			- if there is no equal sign, variable is listed in export but not in env
+			- if there is no equal sign, 
+			variable is listed in export but not in env
 		- checks whether key is a valid variable name
 		- if key is invalid, returns error
 		- if key already exists (as env or normal),

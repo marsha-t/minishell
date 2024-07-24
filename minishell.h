@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 05:43:53 by mateo             #+#    #+#             */
-/*   Updated: 2024/07/24 12:44:49 by mateo            ###   ########.fr       */
+/*   Updated: 2024/07/24 12:56:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 # define TOKEN_IONUM 13
 
 int					g_loc;
+
 typedef struct s_token
 {
 	char			*str;
@@ -70,19 +71,6 @@ typedef struct s_file
 	int				fd;
 	struct s_file	*next;
 }					t_file;
-
-// struct to save the contents of the current directory
-// typedef struct s_dconts
-// {
-// 	char *cont_name;
-// 	struct s_dconts *next;
-// } t_dconts;
-
-// typedef struct s_list
-// {
-// 	char *arg_str;
-// 	struct s_list*next;
-// } t_list;
 
 // struct to save the contents of the current directory
 typedef struct s_dconts
@@ -199,13 +187,12 @@ int					tokenise_op(char **input, t_token **tokens);
 int					tokenise_misc(char **input, t_token **tokens);
 int					check_syntax_tokens(t_token *tokens);
 void				sort_temp_tokens(t_token *tokens);
-// t_token	*tokenise(char *input);
 int					tokenise(char *input, t_token **tokens);
 // tokenise1.c
-int		tokenise_misc(char **input, t_token **tokens);
-int		check_syntax_tokens(t_token *tokens);
-void	sort_temp_tokens(t_token *tokens);
-int	tokenise(char *input, t_token **tokens);
+int					tokenise_misc(char **input, t_token **tokens);
+int					check_syntax_tokens(t_token *tokens);
+void				sort_temp_tokens(t_token *tokens);
+int					tokenise(char *input, t_token **tokens);
 
 // tokenise2.c
 int	tokenise_pipe(char **input, t_token **tokens);
