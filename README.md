@@ -42,8 +42,8 @@ Each non-empty input line moves through the following stages:
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./minishell_pipeline_dark.svg">
-    <img src="./assets/minishell_pipeline_light.svg" width="100%" />
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/minishell_pipeline_dark.svg">
+    <img src="./assets/minishell_pipeline_light.svg" width="700" />
   </picture>
 </p>
 
@@ -157,5 +157,5 @@ Shell scripting, job control, background processes, command substitution, arithm
 
 ## Authors
 
-- Marsha Teo
+- Marsha Teo — [Portfolio case study](https://www.marshateo.com/projects/minishell)
 - [Raghda Yagoub](https://github.com/Raghda165)
